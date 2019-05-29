@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <style>
         header {
-            background-color: #f2f2f2;
+          background: #fff;
         }
 
         header ul li {
@@ -20,19 +20,24 @@
             position: relative;
             font-size: 0.5rem;
             font-weight:bold;
+            padding:0.3rem 0;
         }
 
         header ul li.active {
             display: block;
         }
 
+        #footer{
+          z-index:999;
+        }
+
         #footer ul li {
             height: auto;
-            padding-top: 1.25rem;
-            padding-bottom: 0.3rem;
+            padding-top: 0.8rem;
+            padding-bottom: 0.2rem;
             background: url() no-repeat center 2px;
-            font-size: 0.35rem;
-            background-size: auto 1.1rem;
+            font-size: 0.3rem;
+            background-size: auto 0.66rem;
             text-align: center;
         }
 
@@ -40,48 +45,54 @@
             color: #f52737;
         }
 
-        #footer ul li:nth-child(1) {
+        #footer ul li#icon1 {
             background-image: url(./image/shouye.png);
         }
 
-        #footer ul li:nth-child(2) {
+        #footer ul li#icon2 {
             background-image: url(./image/zhibo.png);
         }
 
-        #footer ul li:nth-child(3) {
-            background-image: url(./image/meng.png);
-            background-size: 2rem;
-        }
-
-        #footer ul li:nth-child(4) {
+        #footer ul li#icon4 {
             background-image: url(./image/faxian.png);
         }
 
-        #footer ul li:nth-child(5) {
+        #footer ul li#icon5 {
             background-image: url(./image/wode.png);
         }
 
-        #footer ul li:nth-child(1).active {
+        #footer ul li#icon1.active {
             background-image: url(./image/shouye2.png);
         }
 
-        #footer ul li:nth-child(2).active {
+        #footer ul li#icon2.active {
             background-image: url(./image/zhibo2.png);
         }
 
-        #footer ul li:nth-child(3).active {
-            background-image: url(./image/meng.png);
-            background-size: 2rem;
-        }
-
-        #footer ul li:nth-child(4).active {
+        #footer ul li#icon4.active {
             background-image: url(./image/faxian2.png);
         }
 
-        #footer ul li:nth-child(5).active {
+        #footer ul li#icon5.active {
             background-image: url(./image/wode2.png);
         }
 
+        #footer ul li#icon3{
+          position: relative;
+          overflow: visible;
+          text-align: center;
+        }
+        #footer ul li#icon3 img{
+          position: absolute;
+          z-index:99999;
+          overflow: visible;
+          top:-0.4rem;
+          left:0;
+          right:0;
+          bottom:0;
+          width:1.3rem;
+          margin:0 auto;
+        }
         .flex-con {
             overflow: auto;
             background-color: #fff;
@@ -95,7 +106,7 @@
             <ul>
                 <li class="border-b active">聚合视频</li>
                 <li class="border-b">直播</li>
-                <li class="border-b">小视频</li>
+                <li class="border-b" v-if="show">宅男专区</li>
                 <li class="border-b">娱乐</li>
                 <li class="border-b">我的</li>
             </ul>
@@ -105,11 +116,11 @@
         </div>
         <div id="footer" class="border-t">
             <ul class="flex-wrap" style="font-weight:bold">
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">视频</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">直播</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con"></li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐商城</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
+                <li id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">视频</li>
+                <li id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">直播</li>
+                <li id="icon3" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" v-if="show"><img src="./image/meng.png"></li>
+                <li id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐商城</li>
+                <li id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
             </ul>
         </div>
     </div>
@@ -117,13 +128,22 @@
 
 </html>
 <script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript" src="script/vue.js"></script>
 <script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
+    var vue = new Vue({
+      el: '#wrap',
+      data:{
+        show:true
+      },
+      mounted(){
+      }
+    })
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
         api.setStatusBarStyle({
             style: 'dark',
-            color: '#6ab494'
+            color: '#fff'
         });
         funIniGroup();
     }
@@ -136,7 +156,7 @@
                 name: 'frame' + i,
                 url: './html/frame' + i + '.html',
                 bgColor: 'rgba(0,0,0,.2)',
-                bounces: true
+                bounces: false
             })
         }
         api.openFrameGroup({
