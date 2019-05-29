@@ -11,7 +11,7 @@
         .login-third {
             width: 13rem;
             margin: 0 auto;
-            margin-top:4rem;
+            margin-top: 4rem;
         }
 
         .aui-text-center {
@@ -71,8 +71,9 @@
         .aui-input {
             color: #fff!important;
         }
-        input{
-          color:#fff!important;
+
+        input {
+            color: #fff!important;
         }
 
         .code-btn {
@@ -107,11 +108,13 @@
         .aui-title {
             font-size: 1rem;
         }
-        .aui-col-xs-4{
-          border-radius: 1rem;
+
+        .aui-col-xs-4 {
+            border-radius: 1rem;
         }
-        .aui-col-xs-4:active{
-          background: rgba(0,0,0,0.2)!important;
+
+        .aui-col-xs-4:active {
+            background: rgba(0, 0, 0, 0.2)!important;
         }
     </style>
 </head>
@@ -119,7 +122,7 @@
 <body>
     <header class="aui-bar aui-bar-nav aui-bar-light">
         <div class="aui-pull-left">
-            <span tapmode="hover" onclick="api.closeWin();" class="aui-iconfont aui-icon-left"></span>
+            <span tapmode="hover" onclick="closeWin();" class="aui-iconfont aui-icon-left"></span>
         </div>
         <div class="aui-title">会员登录</div>
     </header>
@@ -167,8 +170,26 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light',
+            color: 'rgba(0,0,0,0)'
+        });
         api.parseTapmode();
+        api.addEventListener({
+            name: 'keyback'
+        }, closeWin)
     };
+
+    function closeWin() {
+        setTimeout(function() {
+            api.setStatusBarStyle({
+                style: 'dark',
+                color: '#fff'
+            });
+        }, 300)
+        api.closeWin();
+    }
 </script>
 
 </html>
