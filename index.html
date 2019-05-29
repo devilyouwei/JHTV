@@ -18,9 +18,9 @@
             display: none;
             color: #323237;
             position: relative;
-            font-size: 0.5rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            padding: 0.3rem 0;
+            padding: 1rem 0;
         }
 
         header ul li.active {
@@ -28,16 +28,16 @@
         }
 
         #footer {
-          border:none;
+            border: none;
         }
 
         #footer ul li {
             height: auto;
-            padding-top: 0.8rem;
-            padding-bottom: 0.2rem;
+            padding-top: 2.1rem;
+            padding-bottom: 0.5rem;
             background: url() no-repeat center 2px;
-            font-size: 0.3rem;
-            background-size: auto 0.66rem;
+            font-size: 1rem;
+            background-size: auto 2rem;
             text-align: center;
         }
 
@@ -111,7 +111,7 @@
 </html>
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript" src="script/vue.js"></script>
-<script type="text/javascript" src="script/flexible.js"></script>
+<script type="text/javascript" src="script/app.js"></script>
 <script type="text/javascript">
     var vue = new Vue({
         el: '#wrap',
@@ -149,7 +149,7 @@
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },
-            preload:4,
+            preload: 4,
             index: 0,
             frames: frames
         }, function(ret, err) {
@@ -159,6 +159,10 @@
 
     // 随意切换按钮
     function randomSwitchBtn(tag) {
+        // 点击我的
+        if (tag && tag.id == 'icon5') {
+            if (!$.getUserInfo()) return $.toLogin();
+        }
         if (tag == $api.dom('#footer li.active')) return;
         var eFootLis = $api.domAll('#footer li'),
             eHeaderLis = $api.domAll('header li'),

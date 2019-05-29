@@ -1,21 +1,204 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>聚合视频</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-    <style>
-        .empty{ text-align: center; padding: 120px 0; }
+    <title>视频</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-slide.css" />
+    <style type="text/css">
+        img.icon {
+            display: block;
+            margin: 0 auto;
+            width: 60%;
+        }
+
+        .aui-grid-label {
+            padding-top: 0.5rem;
+            font-size: 0.7rem !important;
+        }
+
+        .goods-item {
+            border: 1px solid #eee;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .goods-item img {
+            display: block;
+            width: 100%;
+            height: 7rem;
+        }
+
+        .title {
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .title p {
+            font-size: 0.6rem;
+            color: #ccc;
+        }
+
+        .goods-title {
+            font-size: 0.7rem;
+            color: #333 !important;
+        }
+
+        .hot img {
+            width: 3rem;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
+
 <body>
-    <div class="frame-0">
-      <div class="table">
-        <div class="row"></div>
-      </div>
+    <section class="aui-content">
+        <div id="aui-slide">
+            <div class="aui-slide-wrap">
+                <div class="aui-slide-node">
+                    <img src="../image/demo/b1.jpg" />
+                </div>
+                <div class="aui-slide-node">
+                    <img src="../image/demo/b2.jpg" />
+                </div>
+                <div class="aui-slide-node">
+                    <img src="../image/demo/b3.jpg" />
+                </div>
+            </div>
+            <div class="aui-slide-page-wrap">
+                <!--分页容器-->
+            </div>
+        </div>
+    </section>
+    <section class="aui-content aui-margin-b-15">
+        <div class="aui-grid aui-padded-l-10 aui-padded-r-10">
+            <div class="aui-row aui-row-padded">
+                <div class="aui-col-5">
+                    <img src="../image/demo/i1.png" class="icon">
+                    <div class="aui-grid-label">分类</div>
+                </div>
+                <div class="aui-col-5">
+                    <img src="../image/demo/i3.png" class="icon">
+                    <div class="aui-grid-label">积分</div>
+                </div>
+                <div class="aui-col-5">
+                    <img src="../image/demo/i2.png" class="icon">
+                    <div class="aui-grid-label">抽奖</div>
+                </div>
+                <div class="aui-col-5">
+                    <img src="../image/demo/i4.png" class="icon">
+                    <div class="aui-grid-label">赚积分</div>
+                </div>
+                <div class="aui-col-5">
+                    <img src="../image/demo/i5.png" class="icon">
+                    <div class="aui-grid-label">兑换</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="aui-content aui-margin-b-15" style="background-color: #fff;">
+        <div class="aui-row aui-row-padded hot">
+            <div class="aui-col-xs-4 aui-padded-15 aui-border-r" style="height: 10rem;">
+                <h3 class="aui-text-danger">淘抢购</h3>
+                <p>可爱的你会喜欢</p>
+                <img src="../image/f1.jpg" style="width: 4.5rem;">
+            </div>
+            <div class="aui-col-xs-8 aui-padded-b-0 aui-padded-l-0">
+                <div class="aui-col-xs-12 aui-border-b" style="overflow: hidden; height: 4rem">
+                    <div class="aui-col-xs-9">
+                        <h3 class="aui-text-info">有好货</h3>
+                        <p>好品味从挑剔开始</p>
+                    </div>
+                    <div class="aui-col-xs-3"><img src="../image/f2.jpg"></div>
+                </div>
+                <div class="aui-col-xs-6 aui-border-r" style="height: 5.875rem;">
+                    <h5 class="aui-text-warning">爱逛街</h5>
+                    <p>疯狂赛车来袭</p>
+                    <img src="../image/f3.jpg">
+                </div>
+                <div class="aui-col-xs-6">
+                    <h5 class="aui-text-success">必买清单</h5>
+                    <p>都帮你整理好啦</p>
+                    <img src="../image/f5.jpg">
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="aui-content">
+        <div class="aui-card-list">
+            <div class="aui-card-list-header">
+                <div></div>
+                <div class="title">
+                    /&nbsp;&nbsp;精品推荐&nbsp;&nbsp;/
+                    <p>Recommend</p>
+                </div>
+                <div></div>
+            </div>
+            <div class="aui-card-list-content-padded">
+                <div class="aui-row aui-row-padded">
+                    <div class="aui-col-xs-6">
+                        <div class=" goods-item">
+                            <img src="http://img10.360buyimg.com/n1/s450x450_jfs/t4276/257/2416766721/125228/ba72a107/58d1d078N20e18b62.jpg">
+                            <p class="aui-border-t aui-margin-t-10 aui-padded-t-10 goods-title aui-ellipsis-2">Apple iPhone 7 128G 红色特别版 移动联通电信4G手机</p>
+                            <p class="aui-padded-t-5">积分：<span class="aui-text-danger">888</span></p>
+                        </div>
+                    </div>
+                    <div class="aui-col-xs-6">
+                        <div class=" goods-item">
+                            <img src="http://img13.360buyimg.com/n7/jfs/t5101/321/1616508778/88817/d90a07bb/5912b257Nc3b6430a.jpg">
+                            <p class="aui-border-t aui-margin-t-10 aui-padded-t-10 goods-title aui-ellipsis-2">乐视（LeEco）乐Pro3 双摄AI版 （LEX651） 4GB+32GB 原力金 移动</p>
+                            <p class="aui-padded-t-5">积分：<span class="aui-text-danger">888</span></p>
+                        </div>
+                    </div>
+                    <div class="aui-col-xs-6">
+                        <div class=" goods-item">
+                            <img src="http://img14.360buyimg.com/n7/jfs/t5431/160/1630814540/47653/2245d825/5912c06cN65c353ca.jpg">
+                            <p class="aui-border-t aui-margin-t-10 aui-padded-t-10 goods-title aui-ellipsis-2">vivo X9 全网通 4GB+64GB 活力蓝 移动联通电信4G手机 双卡双待</p>
+                            <p class="aui-padded-t-5">积分：<span class="aui-text-danger">888</span></p>
+                        </div>
+                    </div>
+                    <div class="aui-col-xs-6">
+                        <div class=" goods-item">
+                            <img src="http://img13.360buyimg.com/n7/jfs/t3751/279/1864217108/170619/d1a6ad51/58343dc1Nbb3d4722.jpg">
+                            <p class="aui-border-t aui-margin-t-10 aui-padded-t-10 goods-title aui-ellipsis-2">一加手机3T (A3010) 6GB+64GB 枪灰版 全网通 双卡双待 移动联通电信4G</p>
+                            <p class="aui-padded-t-5">积分：<span class="aui-text-danger">888</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-slide.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var slide = new auiSlide({
+            container: document.getElementById("aui-slide"),
+            "height": 160,
+            "speed": 300,
+            "pageShow": true,
+            "pageStyle": 'dot',
+            "loop": true,
+            'dotPosition': 'center'
+        });
+        api.setRefreshHeaderInfo({
+            visible: true,
+            loadingImg: '',
+            bgColor: '#fff',
+            textColor: '#000',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            showTime: true
+        }, function(ret, err) {
+        });
+    }
+</script>
+
 </html>
