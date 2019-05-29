@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <style>
         header {
-          background: #fff;
+            background: #fff;
         }
 
         header ul li {
@@ -19,16 +19,16 @@
             color: #323237;
             position: relative;
             font-size: 0.5rem;
-            font-weight:bold;
-            padding:0.3rem 0;
+            font-weight: bold;
+            padding: 0.3rem 0;
         }
 
         header ul li.active {
             display: block;
         }
 
-        #footer{
-          z-index:999;
+        #footer {
+          border:none;
         }
 
         #footer ul li {
@@ -77,22 +77,6 @@
             background-image: url(./image/wode2.png);
         }
 
-        #footer ul li#icon3{
-          position: relative;
-          overflow: visible;
-          text-align: center;
-        }
-        #footer ul li#icon3 img{
-          position: absolute;
-          z-index:99999;
-          overflow: visible;
-          top:-0.4rem;
-          left:0;
-          right:0;
-          bottom:0;
-          width:1.3rem;
-          margin:0 auto;
-        }
         .flex-con {
             overflow: auto;
             background-color: #fff;
@@ -106,7 +90,6 @@
             <ul>
                 <li class="border-b active">聚合视频</li>
                 <li class="border-b">直播</li>
-                <li class="border-b" v-if="show">宅男专区</li>
                 <li class="border-b">娱乐</li>
                 <li class="border-b">我的</li>
             </ul>
@@ -118,7 +101,6 @@
             <ul class="flex-wrap" style="font-weight:bold">
                 <li id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">视频</li>
                 <li id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">直播</li>
-                <li id="icon3" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" v-if="show"><img src="./image/meng.png"></li>
                 <li id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐商城</li>
                 <li id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
             </ul>
@@ -132,12 +114,11 @@
 <script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
     var vue = new Vue({
-      el: '#wrap',
-      data:{
-        show:true
-      },
-      mounted(){
-      }
+        el: '#wrap',
+        data: {
+            show: true
+        },
+        mounted() {}
     })
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
@@ -155,7 +136,7 @@
             frames.push({
                 name: 'frame' + i,
                 url: './html/frame' + i + '.html',
-                bgColor: 'rgba(0,0,0,.2)',
+                bgColor: 'rgba(255,255,255,0)',
                 bounces: false
             })
         }
@@ -168,6 +149,7 @@
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },
+            preload:4,
             index: 0,
             frames: frames
         }, function(ret, err) {
