@@ -1,19 +1,116 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>小视频</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <title>娱乐城</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
+        .icon {
+            width: 2rem;
+            margin: 0 auto;
+        }
+
+        #aui-slide {
+            padding: 10px;
+        }
+
+        .aui-slide-wrap {
+            border-radius: 0.5rem;
+            box-shadow: 0.1rem 0.1rem 0.4rem rgba(99, 99, 99, 0.3);
+        }
+
+        .aui-title {
+            font-size: 0.7rem;
+            color: #444;
+            background: #fff;
+            text-align: left;
+            padding: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="frame">
-
+        <section class="aui-content" style="background:#fff;">
+            <div id="aui-slide">
+                <div class="aui-slide-wrap">
+                    <div class="aui-slide-node">
+                        <img src="../image/demo/b1.jpg" />
+                    </div>
+                    <div class="aui-slide-node">
+                        <img src="../image/demo/b2.jpg" />
+                    </div>
+                    <div class="aui-slide-node">
+                        <img src="../image/demo/b3.jpg" />
+                    </div>
+                </div>
+                <div class="aui-slide-page-wrap">
+                    <!--分页容器-->
+                </div>
+            </div>
+        </section>
+        <section class="aui-grid aui-margin-b-15">
+            <div class="aui-title"><i class="iconfont icon-zuirehotchunse" style="color:#ff7600;font-size: 0.8rem"></i>视频看累了？逛逛娱乐城</div>
+            <div class="aui-row">
+                <div class="aui-col-xs-4" tapmode>
+                    <div class="aui-badge">88</div>
+                    <img class="icon" src="../image/lip.png" alt="">
+                    <div class="aui-grid-label">天天赢口红</div>
+                </div>
+                <div class="aui-col-xs-4">
+                    <div class="aui-badge">88</div>
+                    <img class="icon" src="../image/lip.png" alt="">
+                    <div class="aui-grid-label">我要赢口红</div>
+                </div>
+                <div class="aui-col-xs-4">
+                    <div class="aui-badge">88</div>
+                    <img class="icon" src="../image/lip.png" alt="">
+                    <div class="aui-grid-label">牛牛</div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-slide.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var vue = new Vue({
+            el: '.frame',
+            data: {
+                show: true
+            },
+            mounted() {}
+        })
+        var slide = new auiSlide({
+            container: document.getElementById("aui-slide"),
+            "height": 160,
+            "speed": 300,
+            "pageShow": true,
+            "pageStyle": 'dot',
+            "loop": true,
+            'dotPosition': 'center'
+        });
+        /*
+        api.setRefreshHeaderInfo({
+            visible: true,
+            loadingImg: '',
+            bgColor: '#fff',
+            textColor: '#000',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            showTime: true
+        }, function(ret, err) {
+        });
+        */
+    }
+</script>
+
 </html>

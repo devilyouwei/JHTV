@@ -18,9 +18,9 @@
             display: none;
             color: #323237;
             position: relative;
-            font-size: 1.5rem;
+            font-size: 0.5rem;
             font-weight: bold;
-            padding: 1rem 0;
+            padding: 0.35rem 0;
         }
 
         header ul li.active {
@@ -33,11 +33,11 @@
 
         #footer ul li {
             height: auto;
-            padding-top: 2.1rem;
-            padding-bottom: 0.5rem;
+            padding-top: 0.8rem;
+            padding-bottom: 0.2rem;
             background: url() no-repeat center 2px;
-            font-size: 1rem;
-            background-size: auto 2rem;
+            font-size: 0.35rem;
+            background-size: auto 0.8rem;
             text-align: center;
         }
 
@@ -101,7 +101,7 @@
             <ul class="flex-wrap" style="font-weight:bold">
                 <li id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">视频</li>
                 <li id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">直播</li>
-                <li id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐商城</li>
+                <li id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐城</li>
                 <li id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
             </ul>
         </div>
@@ -112,15 +112,16 @@
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript" src="script/vue.js"></script>
 <script type="text/javascript" src="script/app.js"></script>
+<script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
-    var vue = new Vue({
-        el: '#wrap',
-        data: {
-            show: true
-        },
-        mounted() {}
-    })
     apiready = function() {
+        var vue = new Vue({
+            el: '#wrap',
+            data: {
+                show: true
+            },
+            mounted() {}
+        });
         $api.fixStatusBar($api.dom('header'));
         api.setStatusBarStyle({
             style: 'dark',
@@ -137,8 +138,12 @@
                 name: 'frame' + i,
                 url: './html/frame' + i + '.html',
                 bgColor: 'rgba(255,255,255,0)',
-                bounces: false
-            })
+                bounces: false,
+                scrollToTop: true,
+                scrollEnabled: true,
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false
+            });
         }
         api.openFrameGroup({
             name: 'group',

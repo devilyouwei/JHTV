@@ -1,12 +1,12 @@
-var API = 'http://node.diet.devil.ren';
+var API = 'http://h5.shuiguoji.caoyujie.com/index';
 window.$ = {
     log: function(msg) {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
         else console.log(msg)
     },
-    post: function(ctl, act, data, callback) {
-        if (!ctl || !act) return;
-        var url = API + '/' + ctl + '/' + act
+    post: function(ctl, data, callback) {
+        if (!ctl) return;
+        var url = API + '/' + ctl
         $.log('请求：' + url);
         $.log('数据：' + JSON.stringify(data));
         if (data) {
@@ -71,13 +71,13 @@ window.$ = {
     toLogin: function() {
         api.openWin({
             name: 'login',
-            url: api.wgtRootDir+'/html/login.html',
-            slidBackEnabled:true,
-            slidBackType:'edge',
-            animation:{
-              type:'movein',
-              subType:'from_right',
-              duration:300
+            url: api.wgtRootDir + '/html/login.html',
+            slidBackEnabled: true,
+            slidBackType: 'edge',
+            animation: {
+                type: 'movein',
+                subType: 'from_right',
+                duration: 300
             }
         });
     }

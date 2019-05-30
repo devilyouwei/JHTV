@@ -1,19 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>直播</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" href="../css/zhibo.css">
+    <link rel="stylesheet" href="../css/aui.css">
+    <link rel="stylesheet" href="../css/aui-flex.css">
+    <title>全网直播</title>
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
+    .banner{
+      width:95%;
+      margin:0 auto;
+      padding:0.5rem 0;
+    }
     </style>
 </head>
-<body>
-    <div class="frame">
 
-    </div>
+<body>
+    <section class="aui-flexView">
+        <section class="aui-scrollView">
+            <a href="javascript:;">
+                <img src="http://video.caoyujie.com/zb.gif" class="banner">
+            </a>
+            <div class="aui-tab">
+                <div class="tab-panel">
+                    <div class="tab-panel-item tab-active">
+                        <div class="tab-item">
+                            <a onClick="location.href='http://m.zhiboo.net/'" class="aui-flex b-line">
+                                <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
+                                <div class="aui-flex-box">
+                                    <p><em class="aui-group-three">全国电视直播</em></p>
+                                    <h3>在线收看高清CCTV、卫视</h3>
+                                    <p><em class="aui-group-one">实时更新</em><em class="aui-group-two">电视TV</em></p>
+                                </div>
+                                <div class="aui-flex-support">看直播</div>
+                            </a>
+
+                            <a onClick="gameList()" class="aui-flex b-line">
+                                <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
+                                <div class="aui-flex-box">
+                                    <p><em class="aui-group-three">游戏在线直播</em></p>
+                                    <h3>各类游戏在线直播</h3>
+                                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
+                                </div>
+                                <div class="aui-flex-support">看直播</div>
+                            </a>
+
+                            <a onClick="girlList()" class="aui-flex b-line">
+                                <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
+                                <div class="aui-flex-box">
+                                    <p><em class="aui-group-three">美女在线直播</em></p>
+                                    <h3>海量美女在线直播</h3>
+                                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
+                                </div>
+                                <div class="aui-flex-support-no">暂时下线</div>
+                            </a>
+
+                            <a onClick="vList()" class="aui-flex b-line">
+                                <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
+                                <div class="aui-flex-box">
+                                    <p><em class="aui-group-three">最新热门电影</em></p>
+                                    <h3>当下最火热大片推荐</h3>
+                                    <p><em class="aui-group-one">不定时更新</em><em class="aui-group-two">经典热门大片</em></p>
+                                </div>
+                                <div class="aui-flex-support">看大片</div>
+                            </a>
+
+                            <a onClick="girlxiezhenList()" class="aui-flex b-line">
+                                <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
+                                <div class="aui-flex-box">
+                                    <p><em class="aui-group-three">美女写真视频</em></p>
+                                    <h3>海量美女写真视频</h3>
+                                    <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
+                                </div>
+                                <div class="aui-flex-support">观看</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
 </body>
+
 </html>

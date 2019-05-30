@@ -1,17 +1,57 @@
-html,body {  font-size:14px; height:100%;  }
-.hover{ opacity: .8; }
+html, body {
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+}
 
-.flex-wrap{ display: -webkit-box;	display: -webkit-flex;	display: flex; }
-.flex-con{     -webkit-box-flex: 1;     -webkit-flex: 1;    flex: 1;}
-.flex-vertical{ -webkit-box-orient: vertical;-webkit-flex-flow: column;flex-flow: column;}
+.hover {
+    opacity: .8;
+}
 
-.border-t,
-.border-b{ position:relative;  }
-.border-t:before,
-.border-b:after{     content: '';     position: absolute;     left: 0;  top:0;     background: #ddd;   right:0;    height: 1px;     -webkit-transform: scaleY(0.5);             transform: scaleY(0.5);     -webkit-transform-origin: 0 0;             transform-origin: 0 0; }
-.border-b:after{ top:auto; bottom:0;  }
+.flex-wrap {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
 
-#wrap{ height: 100%; }
+.flex-con {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.flex-vertical {
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+}
+
+.border-t, .border-b {
+    position: relative;
+}
+
+.border-t:before, .border-b:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #ddd;
+    right: 0;
+    height: 1px;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+.border-b:after {
+    top: auto;
+    bottom: 0;
+}
+
+#wrap {
+    height: 100%;
+}
 
 .table {
     display: table;
@@ -188,8 +228,7 @@ html,body {  font-size:14px; height:100%;  }
     list-style: none;
 }
 
-[class*="avg-"]:before,
-[class*="avg-"]:after {
+[class*="avg-"]:before, [class*="avg-"]:after {
     content: " ";
     display: table;
 }
@@ -346,4 +385,36 @@ html,body {  font-size:14px; height:100%;  }
 
 .avg-12>li:nth-of-type(12n+1) {
     clear: both;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+img {
+    border: none;
+    transition: all 0.4s;
+}
+
+img[lazy=loading] {
+    background: #e5e5e5;
+}
+
+img[lazy=error] {
+    background: #fff url('../image/error_video.png') no-repeat center;
+    background-size: 30%;
+}
+
+img[lazy=loaded] {
+    animation: fade 0.5s;
+    background: none;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
