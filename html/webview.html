@@ -55,7 +55,7 @@
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
         initWebviewFrame();
-        $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle+'&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
+        $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle + '&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
         if ($.getOS() == 'ios') $api.dom('#back').style.display = 'block'; // ios显示返回按钮
 
         // 监听frame变化
@@ -70,11 +70,13 @@
             name: 'keyback'
         }, historyBack)
 
-    };
+    }
 
     // frame返回上一页
     function historyBack() {
-        api.historyBack({
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.historyBack({
             frameName: 'webviewFrame'
         }, function(ret, err) {
             if (!ret.status) closeWin();
@@ -82,20 +84,18 @@
     }
     // 刷新frame
     function refresh() {
-        api.openFrame({
-            name: 'webviewFrame',
-            reload: true
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.loadScript({
+            script: 'location.reload();'
         });
-    }
-    // 关闭win
-    function closeWin() {
-        api.closeWin();
     }
 
     //初始化frame
     function initWebviewFrame() {
-        api.openFrame({
-            name: 'webviewFrame',
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.openView({
             url: api.pageParam.url,
             rect: {
                 x: 0,
@@ -104,13 +104,16 @@
                 h: $api.dom('#main').offsetHeight
             },
             progress: {
-                type: 'page',
                 color: '#ff5e3e'
             },
-            bgColor: 'rgba(0,0,0,0)',
-            vScrollBarEnabled: false,
-            hScrollBarEnabled: false
+        },function(res,err){
+          $.log(res)
         });
+    }
+
+    // 关闭win
+    function closeWin() {
+        api.closeWin();
     }
 </script>
 

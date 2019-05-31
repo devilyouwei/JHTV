@@ -94,6 +94,9 @@
             color: #ff7600;
             font-size: 0.8rem;
         }
+        .more{
+          padding:0.1rem 0.8rem;
+        }
     </style>
 </head>
 
@@ -157,14 +160,14 @@
                 <div class="aui-card-list-header" style="padding-bottom:0rem;">
                     <div></div>
                     <div class="title">
-                        /&nbsp;&nbsp;视频推荐&nbsp;&nbsp;/
+                        /&nbsp;&nbsp;聚合推荐&nbsp;&nbsp;/
                         <p>Recommend</p>
                     </div>
                     <div></div>
                 </div>
                 <div class="aui-card-list-content-padded">
                     <div class="aui-row aui-row-padded">
-                        <div class="aui-col-xs-6" v-for="(item,index) in rec" tapmode @click="goRec(item.video_url)">
+                        <div class="aui-col-xs-6" v-for="(item,index) in rec" tapmode @click="goRec(item.video_title,item.video_url)">
                             <div class="goods-item">
                                 <img v-lazy="'http:'+item.video_bg_url" :key="item.video_bg_url">
                                 <p class="goods-title">{{item.video_title}}</p>
@@ -172,6 +175,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="more">
+                <div class="aui-btn aui-btn-block aui-btn-outlined aui-btn-sm">更多热门视频</div>
                 </div>
             </div>
         </div>
@@ -235,7 +241,8 @@
                 goAdv(url) {
                     $.openWebview('平台推广', url);
                 },
-                goRec(url) {
+                goRec(title,url) {
+                  $.openWebview(title,url);
                 }
             }
         })
