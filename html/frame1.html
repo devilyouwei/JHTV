@@ -5,84 +5,328 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <link rel="stylesheet" href="../css/zhibo.css">
     <link rel="stylesheet" href="../css/aui.css">
     <link rel="stylesheet" href="../css/aui-flex.css">
     <title>全网直播</title>
     <style>
-    .banner{
-      width:95%;
-      margin:0 auto;
-      padding:0.5rem 0;
-    }
+        body {
+            background: #fff;
+        }
+
+        .poster {
+            width: 92%;
+            height: auto;
+            margin: 0 auto;
+            padding: 0.5rem 0;
+        }
+
+        .b-line {
+            position: relative;
+        }
+
+        .b-line:after {
+            content: '';
+            position: absolute;
+            z-index: 2;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px solid #e2e2e2;
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+            -webkit-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+        }
+
+        .aui-flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            padding: 15px;
+            position: relative;
+        }
+
+        .aui-flex-box {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            min-width: 0;
+            font-size: 12px;
+            color: #ccc9c9;
+        }
+        /* 蹇呰甯冨眬鏍峰紡css */
+
+        .aui-flexView {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .aui-flex-iphone {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .aui-flex-iphone img {
+            width: 60%;
+            height: auto;
+            border: none;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .aui-flex-box h3 {
+            padding-bottom: 5px;
+            font-size: 0.6rem;
+            font-weight: normal;
+        }
+
+        .aui-flex-box p {
+            font-size: 0.6rem;
+            color: #837e81;
+            width: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-wrap: normal;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .aui-flex-support {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #fff;
+            background-image: -webkit-gradient(linear, left top, right top, from(#ff6144), to(#ff0072));
+            background-image: -webkit-linear-gradient(left, #ff6144, #ff0072);
+            background-image: -moz-linear-gradient(left, #ff6144, #ff0072);
+            background-image: linear-gradient(to right, #ff6144, #ff0072);
+            background-color: #ff6144;
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 0.8rem;
+            /*  box-shadow: 0 3px 17px #c1c1c1; */
+            box-shadow: 0 1px 12px #ddd;
+        }
+
+        .aui-flex-support-no {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #fff;
+            background-image: -webkit-gradient(linear, left top, right top, from(#ccc9c9), to(#929292));
+            background-image: -webkit-linear-gradient(left, #ff6144, #929292);
+            background-image: -moz-linear-gradient(left, #ccc9c9, #929292);
+            background-image: linear-gradient(to right, #ccc9c9, #929292);
+            background-color: #ff6144;
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 0.8rem;
+            /*  box-shadow: 0 3px 17px #c1c1c1; */
+            box-shadow: 0 1px 12px #ddd;
+        }
+
+        .aui-flex-support-open {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #fff;
+            background-image: -webkit-gradient(linear, left top, right top, from(#9C27B0), to(#673AB7));
+            background-image: -webkit-linear-gradient(left, #9C27B0, #673AB7);
+            background-image: -moz-linear-gradient(left, #9C27B0, #673AB7);
+            background-image: linear-gradient(to right, #9C27B0, #673AB7);
+            background-color: #ff6144;
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 0.8rem;
+            /*  box-shadow: 0 3px 17px #c1c1c1; */
+            box-shadow: 0 1px 12px #ddd;
+        }
+
+        .aui-group-one {
+            background: #ffebeb;
+            color: #ff1e64;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 2px 4px;
+        }
+
+        .aui-group-one-open {
+            background: #673ab7;
+            color: #fff;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 2px 4px;
+        }
+
+        .aui-group-one-no {
+            background: #929292;
+            color: #fff;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 2px 4px;
+        }
+
+        .aui-group-two {
+            border: 1px solid #ffebeb;
+            color: #ff1e64;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 0 4px;
+        }
+
+        .aui-group-two-open {
+            border: 1px solid #673ab7;
+            color: #673ab7;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 0 4px;
+        }
+
+        .aui-group-two-no {
+            border: 1px solid #929292;
+            color: #929292;
+            font-size: 0.6rem;
+            font-style: normal;
+            border-radius: 2px;
+            padding: 0 4px;
+        }
+
+        .aui-group-three {
+            font-size: 1rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #ff6144, #ff0072);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-style: normal;
+        }
+
+        .aui-group-three-open {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #9C27B0, #673AB7);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-style: normal;
+        }
+
+        .aui-group-three-no {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #ccc9c9, #929292);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-style: normal;
+        }
+
+        .aui-group-three i {
+            font-style: normal;
+            font-size: 0.8rem;
+            font-weight: normal;
+            margin-right: -3px;
+        }
+
+        .aui-group-five {
+            font-style: normal;
+            font-size: 0.6rem;
+            color: #636363;
+            text-decoration: line-through;
+        }
     </style>
 </head>
 
 <body>
+    <section class="aui-content">
+        <a href="javascript:;">
+            <img src="http://video.caoyujie.com/zb.gif" class="poster">
+        </a>
+    </section>
+
     <section class="aui-flexView">
-        <section class="aui-scrollView">
-            <a href="javascript:;">
-                <img src="http://video.caoyujie.com/zb.gif" class="banner">
-            </a>
-            <div class="aui-tab">
-                <div class="tab-panel">
-                    <div class="tab-panel-item tab-active">
-                        <div class="tab-item">
-                            <a onClick="location.href='http://m.zhiboo.net/'" class="aui-flex b-line">
-                                <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
-                                <div class="aui-flex-box">
-                                    <p><em class="aui-group-three">全国电视直播</em></p>
-                                    <h3>在线收看高清CCTV、卫视</h3>
-                                    <p><em class="aui-group-one">实时更新</em><em class="aui-group-two">电视TV</em></p>
-                                </div>
-                                <div class="aui-flex-support">看直播</div>
-                            </a>
-
-                            <a onClick="gameList()" class="aui-flex b-line">
-                                <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
-                                <div class="aui-flex-box">
-                                    <p><em class="aui-group-three">游戏在线直播</em></p>
-                                    <h3>各类游戏在线直播</h3>
-                                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
-                                </div>
-                                <div class="aui-flex-support">看直播</div>
-                            </a>
-
-                            <a onClick="girlList()" class="aui-flex b-line">
-                                <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
-                                <div class="aui-flex-box">
-                                    <p><em class="aui-group-three">美女在线直播</em></p>
-                                    <h3>海量美女在线直播</h3>
-                                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
-                                </div>
-                                <div class="aui-flex-support-no">暂时下线</div>
-                            </a>
-
-                            <a onClick="vList()" class="aui-flex b-line">
-                                <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
-                                <div class="aui-flex-box">
-                                    <p><em class="aui-group-three">最新热门电影</em></p>
-                                    <h3>当下最火热大片推荐</h3>
-                                    <p><em class="aui-group-one">不定时更新</em><em class="aui-group-two">经典热门大片</em></p>
-                                </div>
-                                <div class="aui-flex-support">看大片</div>
-                            </a>
-
-                            <a onClick="girlxiezhenList()" class="aui-flex b-line">
-                                <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
-                                <div class="aui-flex-box">
-                                    <p><em class="aui-group-three">美女写真视频</em></p>
-                                    <h3>海量美女写真视频</h3>
-                                    <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
-                                </div>
-                                <div class="aui-flex-support">观看</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <a onClick="tvList()" class="aui-flex b-line">
+            <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
+            <div class="aui-flex-box">
+                <p><em class="aui-group-three">全国电视直播</em></p>
+                <h3>在线收看高清CCTV、卫视</h3>
+                <p><em class="aui-group-one">实时更新</em><em class="aui-group-two">电视TV</em></p>
             </div>
-        </section>
+            <div class="aui-flex-support">看直播</div>
+        </a>
+
+        <a onClick="gameList()" class="aui-flex b-line">
+            <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
+            <div class="aui-flex-box">
+                <p><em class="aui-group-three">游戏在线直播</em></p>
+                <h3>各类游戏在线直播</h3>
+                <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
+            </div>
+            <div class="aui-flex-support">看直播</div>
+        </a>
+
+        <a onClick="girlList()" class="aui-flex b-line">
+            <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
+            <div class="aui-flex-box">
+                <p><em class="aui-group-three">美女在线直播</em></p>
+                <h3>海量美女在线直播</h3>
+                <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
+            </div>
+            <div class="aui-flex-support-no">暂时下线</div>
+        </a>
+
+        <a onClick="vList()" class="aui-flex b-line">
+            <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
+            <div class="aui-flex-box">
+                <p><em class="aui-group-three">最新热门电影</em></p>
+                <h3>当下最火热大片推荐</h3>
+                <p><em class="aui-group-one">不定时更新</em><em class="aui-group-two">经典热门大片</em></p>
+            </div>
+            <div class="aui-flex-support">看大片</div>
+        </a>
+
+        <a onClick="girlxiezhenList()" class="aui-flex b-line">
+            <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
+            <div class="aui-flex-box">
+                <p><em class="aui-group-three">美女写真视频</em></p>
+                <h3>海量美女写真视频</h3>
+                <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
+            </div>
+            <div class="aui-flex-support">观看</div>
+        </a>
     </section>
 </body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-slide.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+      api.setFrameAttr({
+          bounces: true,
+      });
+
+    }
+</script>
 
 </html>

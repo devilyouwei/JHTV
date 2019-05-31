@@ -4,7 +4,7 @@ window.$ = {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
         else console.log(msg)
     },
-    post: function(ctl, data, callback) {
+    post: function(ctl, data, callback, load) {
         if (!ctl) return;
         var url = API + '/' + ctl
         $.log('请求：' + url);
@@ -21,11 +21,13 @@ window.$ = {
                 data = data;
             }
         }
+        if (load) this.load(true, load);
         api.ajax({
             url: url,
             method: 'post',
             data: data
-        }, function(res, err) {
+        }, (res, err) => {
+            if(load) this.load(false);
             $.log('结果：' + JSON.stringify(res));
             if (err) return $.toast(err);
             if (callback && typeof callback == 'function') return callback(res);
@@ -38,11 +40,11 @@ window.$ = {
             location: 'bottom'
         });
     },
-    load: function(flag) {
+    load: function(flag, msg) {
         if (flag) {
             api.showProgress({
                 title: '(~￣▽￣)~',
-                text: '加载中...',
+                text: msg || '加载中...',
                 modal: true
             });
         } else {
@@ -72,13 +74,48 @@ window.$ = {
         api.openWin({
             name: 'login',
             url: api.wgtRootDir + '/html/login.html',
-            slidBackEnabled: true,
-            slidBackType: 'edge',
+            slideBackEnabled: true,
+            slideBackType: 'edge',
             animation: {
                 type: 'movein',
                 subType: 'from_right',
                 duration: 300
             }
         });
+    },
+    openWebview: function(navTitle, url) {
+        api.openWin({
+            name: 'webview',
+            url: api.wgtRootDir + '/html/webview.html',
+            slideBackEnabled: false,
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false,
+            bounces: false,
+            animation: {
+                type: 'movein',
+                subType: 'from_right',
+                duration: 200
+            },
+            pageParam: {
+                navTitle: navTitle,
+                url: url
+            }
+        });
+    },
+    getOS: function() {　　
+        var n = navigator.userAgent;　　
+        if (n.indexOf('Android') > -1 || n.indexOf('Linux') > -1) {　　　　
+            return 'android';
+        } else if (n.indexOf('iPhone') > -1) {　　　　
+            return 'ios';
+        } else if (n.indexOf('Windows Phone') > -1) {　　　　
+            return 'windows';
+        } else if (n.indexOf('Google Phone') > -1) {　　　　
+            return 'unknown';
+        }
+    },
+    valPhone: function(phone) {
+        var filter = /^1[34578]\d{9}$/;
+        return filter.test(phone);
     }
 }

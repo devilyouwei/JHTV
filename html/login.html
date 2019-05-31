@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>Hello APP</title>
+    <title>登录</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <style>
         .login-third {
@@ -77,8 +77,10 @@
         }
 
         .code-btn {
+            width: 100%;
             font-size: 0.7rem;
             color: #fff;
+            text-align: center;
         }
 
         .aui-icon-left {
@@ -120,55 +122,60 @@
 </head>
 
 <body>
-    <header class="aui-bar aui-bar-nav aui-bar-light">
-        <div class="aui-pull-left">
-            <span tapmode="hover" onclick="closeWin();" class="aui-iconfont aui-icon-left"></span>
-        </div>
-        <div class="aui-title">会员登录</div>
-    </header>
-    <section class="aui-content aui-margin-t-15">
-        <ul class="aui-list aui-form-list">
-            <li class="aui-list-item">
-                <div class="aui-list-item-inner">
-                    <div class="aui-list-item-input">
-                        <input type="number" pattern="[0-9]*" placeholder="输入手机号" id="mobile">
+    <div id="vue" v-cloak>
+        <header class="aui-bar aui-bar-nav aui-bar-light">
+            <div class="aui-pull-left">
+                <span tapmode="hover" onclick="closeWin();" class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">会员登录</div>
+        </header>
+        <section class="aui-content aui-margin-t-15">
+            <ul class="aui-list aui-form-list">
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-input">
+                            <input type="number" pattern="[0-9]*" placeholder="输入手机号" id="mobile" v-model="phone">
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-inner">
-                    <div class="aui-list-item-input" style="width:6rem;">
-                        <input type="number" pattern="^1[345678][0-9]{9}$" placeholder="输入验证码" id="code">
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-input" style="width:6rem;">
+                            <input type="number" pattern="^1[345678][0-9]{9}$" placeholder="输入验证码" id="code" v-model="code">
+                        </div>
+                        <div class="aui-list-item-label aui-margin-r-15">
+                            <div class="code-btn" tapmode @click="sendCode">{{time}}</div>
+                        </div>
                     </div>
-                    <div class="aui-list-item-label aui-margin-r-15">
-                        <div class="code-btn">获取验证码</div>
+                </li>
+            </ul>
+        </section>
+        <section class="aui-content-padded">
+            <div class="aui-btn-block aui-btn" tapmode @click="submit">立即登录</div>
+        </section>
+        <section class="aui-content-padded login-third">
+            <p class="aui-font-size-12 aui-text-center aui-margin-b-15">第三方账号登录</p>
+            <div class="aui-grid" style="background: none;">
+                <div class="aui-row">
+                    <div class="aui-col-xs-4">
+                        <i class="aui-iconfont aui-icon-qq"></i>
                     </div>
-                </div>
-            </li>
-        </ul>
-    </section>
-    <section class="aui-content-padded">
-        <div class="aui-btn-block aui-btn" tapmode>立即登录</div>
-    </section>
-    <section class="aui-content-padded login-third">
-        <p class="aui-font-size-12 aui-text-center aui-margin-b-15">第三方账号登录</p>
-        <div class="aui-grid" style="background: none;">
-            <div class="aui-row">
-                <div class="aui-col-xs-4">
-                    <i class="aui-iconfont aui-icon-qq"></i>
-                </div>
-                <div class="aui-col-xs-4">
-                    <i class="aui-iconfont aui-icon-wechat"></i>
-                </div>
-                <div class="aui-col-xs-4">
-                    <i class="aui-iconfont aui-icon-weibo"></i>
+                    <div class="aui-col-xs-4">
+                        <i class="aui-iconfont aui-icon-wechat"></i>
+                    </div>
+                    <div class="aui-col-xs-4">
+                        <i class="aui-iconfont aui-icon-weibo"></i>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
+    var TIME = 60;
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
         api.setStatusBarStyle({
@@ -179,6 +186,54 @@
         api.addEventListener({
             name: 'keyback'
         }, closeWin)
+
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                time: '获取验证码',
+                phone: '',
+                code: '',
+                interval: null
+            },
+            mounted() {},
+            methods: {
+                submit() {
+                    if (!this.phone) return $.toast('号码还没输入呢！ Σ( ° △ °|||)︴');
+                    if (!$.valPhone(this.phone)) return $.toast('号码格式不正确哦~ (。﹏。*)');
+                    if (!this.code) return $.toast('验证码怎么没有了？ Σ(⊙▽⊙"a ');
+                    $.post('Login/exeBindingPhone',{
+                      phone:this.phone,
+                      verify:this.code
+                    },function(res){
+                      $.toast(res.msg);
+                      if(res.status==1){
+
+                      }
+                    },'正在登陆哦~');
+                },
+                sendCode() {
+                    if (this.time != '获取验证码') return;
+                    if (!this.phone) return $.toast('号码还没输入呢！ Σ( ° △ °|||)︴');
+                    if (!$.valPhone(this.phone)) return $.toast('号码格式不正确哦~ (。﹏。*)');
+                    $.post('Login/exePhoneVerify', {
+                        phone: this.phone
+                    }, res => {
+                        if (res.status == 1) {
+                            this.time = TIME;
+                            this.interval = setInterval(() => {
+                                if (this.time <= 0) {
+                                    clearInterval(interval);
+                                    this.time = '获取验证码';
+                                } else {
+                                    $.log(this.time);
+                                    this.time--;
+                                }
+                            }, 1000);
+                        }
+                    }, '短信正在路上跑~');
+                }
+            }
+        })
     };
 
     function closeWin() {
