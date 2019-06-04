@@ -10,7 +10,7 @@
     <preference name="appBackground" value="rgba(255,255,255,1)"/>
     <preference name="windowBackground" value="rgba(255,255,255,1)"/>
     <preference name="frameBackgroundColor" value="rgba(255,255,255,1)"/>
-    <preference name="autoLaunch" value="true"/>
+    <preference name="autoLaunch" value="false"/>
     <preference name="fullScreen" value="false"/>
     <preference name="autoUpdate" value="true"/>
     <preference name="smartUpdate" value="false"/>

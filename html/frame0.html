@@ -94,8 +94,9 @@
             color: #ff7600;
             font-size: 0.8rem;
         }
-        .more{
-          padding:0.1rem 0.8rem;
+
+        .more {
+            padding: 0.1rem 0.8rem;
         }
     </style>
 </head>
@@ -177,7 +178,7 @@
                     </div>
                 </div>
                 <div class="more">
-                <div class="aui-btn aui-btn-block aui-btn-outlined aui-btn-sm">更多热门视频</div>
+                    <div class="aui-btn aui-btn-block aui-btn-outlined aui-btn-sm">更多热门视频</div>
                 </div>
             </div>
         </div>
@@ -197,7 +198,8 @@
                 banner: [], //轮播图l
                 adv: [], //广告
                 plat: [], // 可用平台
-                rec: [] //推荐
+                rec: [], //推荐
+                launch: 0
             },
             mounted() {
                 this.initData();
@@ -205,33 +207,37 @@
             methods: {
                 initData() {
                     var self = this;
-                    // 广告
-                    $.post('Video/getHomeAdData', null, function(res) {
-                        if (res.status == 1) {
-                            self.adv = res.results.data;
-                        }
-                    });
-                    // 平台推荐
-                    $.post('Video/getPlatformVideTypeList', null, function(res) {
-                        if (res.status == 1) {
-                            self.rec = res.results.data;
-                        }
-                    });
                     // 首页数据
                     $.post('Video/getPlatformVideoData', null, function(res) {
                         if (res.status == 1) {
                             self.plat = res.results.data;
                             self.banner = res.results.banner;
                         }
+
+                        var slide = new auiSlide({
+                            container: document.getElementById("aui-slide"),
+                            "height": 160,
+                            "speed": 300,
+                            "pageShow": true,
+                            "pageStyle": 'dot',
+                            "loop": true,
+                            'dotPosition': 'center'
+                        });
+                        self.launch++;
                     });
-                    var slide = new auiSlide({
-                        container: document.getElementById("aui-slide"),
-                        "height": 160,
-                        "speed": 300,
-                        "pageShow": true,
-                        "pageStyle": 'dot',
-                        "loop": true,
-                        'dotPosition': 'center'
+                    // 广告
+                    $.post('Video/getHomeAdData', null, function(res) {
+                        if (res.status == 1) {
+                            self.adv = res.results.data;
+                        }
+                        self.launch++;
+                    });
+                    // 平台推荐
+                    $.post('Video/getPlatformVideTypeList', null, function(res) {
+                        if (res.status == 1) {
+                            self.rec = res.results.data;
+                        }
+                        self.launch++;
                     });
                 },
                 goPlat(plat, url) {
@@ -241,8 +247,13 @@
                 goAdv(url) {
                     $.openWebview('平台推广', url);
                 },
-                goRec(title,url) {
-                  $.openWebview(title,url);
+                goRec(title, url) {
+                    $.openWebview(title, url);
+                }
+            },
+            watch: {
+                launch(v) {
+                    if (v >= 3) return $.showSplash(false);
                 }
             }
         })

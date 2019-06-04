@@ -5,7 +5,13 @@ window.$ = {
         else console.log(msg)
     },
     post: function(ctl, data, callback, load) {
-        if (!ctl) return;
+        var connectionType = api.connectionType;
+        if (connectionType == 'none') {
+            $.showSplash(false);
+            return $.toast('无网络连接，请先打开手机网络！然后重新启动聚合视频');
+        }
+        if (connectionType == '2g' || connectionType == '3g') $.toast('请注意，您当前使用的网络过慢！可能影响使用体验');
+        if (!ctl) return $.log('缺少参数');
         var url = API + '/' + ctl
         $.log('请求：' + url);
         $.log('数据：' + JSON.stringify(data));
@@ -27,7 +33,7 @@ window.$ = {
             method: 'post',
             data: data
         }, (res, err) => {
-            if(load) this.load(false);
+            if (load) this.load(false);
             $.log('结果：' + JSON.stringify(res));
             if (err) return $.toast(err);
             if (callback && typeof callback == 'function') return callback(res);
@@ -83,6 +89,7 @@ window.$ = {
             }
         });
     },
+    // 打开新的webview
     openWebview: function(navTitle, url) {
         api.openWin({
             name: 'webview',
@@ -102,6 +109,7 @@ window.$ = {
             }
         });
     },
+    // 获取系统信息
     getOS: function() {　　
         var n = navigator.userAgent;　　
         if (n.indexOf('Android') > -1 || n.indexOf('Linux') > -1) {　　　　
@@ -114,8 +122,22 @@ window.$ = {
             return 'unknown';
         }
     },
+    // 验证手机号
     valPhone: function(phone) {
         var filter = /^1[34578]\d{9}$/;
         return filter.test(phone);
+    },
+    // 启动图开关
+    showSplash: function(flag) {
+        if (flag) {
+            api.showLaunchView();
+        } else {
+            api.removeLaunchView({
+                animation: {
+                    type: 'suck',
+                    duration: 500
+                }
+            });
+        }
     }
 }
