@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>美女直播</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
+    <style>
+        header.aui-bar {
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .aui-bar-nav {
+            color: #fff!important;
+        }
+
+        .aui-bar-nav .aui-iconfont {
+            font-weight: bold!important;
+            color: #fff!important;
+        }
+        .aui-content{
+          padding:0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav aui-bar-light" id="aui-header">
+        <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </a>
+        <div class="aui-title">美女直播</div>
+    </header>
+    <section class="aui-content">
+    </section>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        Vue.use(VueLazyload)
+        var vue = new Vue({
+            el: '#vue',
+            data: {},
+            mounted() {
+                this.initData();
+            },
+            methods: {
+                initData() {},
+            }
+        })
+
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: 'linear-gradient(to right, #ff6144, #ff0072)'
+        });
+    };
+
+    function closeWin() {
+        api.closeWin();
+    }
+</script>
+
+</html>

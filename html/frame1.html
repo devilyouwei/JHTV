@@ -322,13 +322,32 @@
 <script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
     apiready = function() {
-      api.setFrameAttr({
-          bounces: true,
-      });
+        api.setFrameAttr({
+            bounces: true,
+        });
 
     }
-    function tvList(){
-      $.openWebview('TV直播','http://m.zhiboo.net/')
+
+    // 电视直播
+    function tvList() {
+        api.openWin({
+            name: 'tvList',
+            url: './tv_list.html'
+        })
+    }
+    // 游戏直播
+    function gameList() {
+        api.openWin({
+            name: 'gameList',
+            url: './game_list.html'
+        })
+    }
+    // 美女直播
+    function girlList() {
+        api.openWin({
+            name: 'girlList',
+            url: './girl_list.html'
+        })
     }
 </script>
 
