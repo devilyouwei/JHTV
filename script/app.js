@@ -36,9 +36,9 @@ window.$ = {
             method: 'post',
             data: data
         }, (res, err) => {
-            if (load) this.load(false);
+            this.load(false);
             $.log('结果：' + JSON.stringify(res));
-            if (err) return $.toast(err);
+            if (err) return $.toast('服务器出错了啦~ X﹏X'), $.log(err);
             // 失去登陆状态强制退出
             if (res.status == -1) {
                 api.sendEvent({
@@ -133,7 +133,7 @@ window.$ = {
         if (!navTitle || !url) return;
         var webview = '/html/webview.html';
         var webName = 'webview';
-        if (x5) webview = '/html/webview_x5.html',webName='webviewX5';
+        if (x5) webview = '/html/webview_x5.html', webName = 'webviewX5';
         api.openWin({
             name: webName,
             url: api.wgtRootDir + webview,
@@ -152,16 +152,35 @@ window.$ = {
             }
         });
     },
+    // 打开播放器
+    openPlayer: function(videoUrl) {
+        if (videoUrl) {
+            var browser = api.require('webBrowser');
+            browser.openView({
+                url: videoUrl,
+                rect: {
+                    x: 0,
+                    y: $api.dom('header').offsetHeight,
+                    w: api.winWidth,
+                    h: 320
+                }
+            });
+        }
+    },
+    closePlayer: function() {
+        var browser = api.require('webBrowser');
+        browser.closeView();
+    },
     // 获取系统信息
     getOS: function() {　　
-        var n = navigator.userAgent;　　
-        if (n.indexOf('Android') > -1 || n.indexOf('Linux') > -1) {　　　　
+        var n = navigator.userAgent;
+        if (n.indexOf('Android') > -1 || n.indexOf('Linux') > -1) {
             return 'android';
-        } else if (n.indexOf('iPhone') > -1) {　　　　
+        } else if (n.indexOf('iPhone') > -1) {
             return 'ios';
-        } else if (n.indexOf('Windows Phone') > -1) {　　　　
+        } else if (n.indexOf('Windows Phone') > -1) {
             return 'windows';
-        } else if (n.indexOf('Google Phone') > -1) {　　　　
+        } else if (n.indexOf('Google Phone') > -1) {
             return 'unknown';
         }
     },
@@ -199,5 +218,6 @@ window.$ = {
         return api.removePrefs({
             key: key
         });
-    }
+    },
+    API: API
 }

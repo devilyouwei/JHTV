@@ -26,30 +26,43 @@
             font-weight: bold!important;
             color: #fff!important;
         }
-        .aui-content{
-          padding:0.5rem;
+
+        .aui-content {
+            padding: 0.5rem;
+        }
+
+        .img-box {
+            text-align: center;
+        }
+
+        .img-box img {
+            height : 2.5rem;
+            margin: 0 auto;
         }
     </style>
 </head>
 
 <body>
-    <header class="aui-bar aui-bar-nav aui-bar-light" id="aui-header">
-        <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
-            <span class="aui-iconfont aui-icon-left"></span>
-        </a>
-        <div class="aui-title">TV直播</div>
-    </header>
-    <section class="aui-content">
-      <section class="aui-grid">
-            <div class="aui-row">
-                <div class="aui-col-xs-6">
-                    <div class="aui-badge">88</div>
-                    <i class="aui-iconfont aui-icon-home"></i>
-                    <div class="aui-grid-label">首页</div>
+    <div id="vue" v-cloak>
+        <header class="aui-bar aui-bar-nav aui-bar-light" id="aui-header">
+            <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </a>
+            <div class="aui-title">TV直播</div>
+        </header>
+        <section class="aui-content" v-if="list.length">
+            <section class="aui-grid">
+                <div class="aui-row">
+                    <div class="aui-col-xs-4" v-for="(item,index) in list" :key="index" @click="play(item.live_name,item.live_sign)">
+                        <div class="img-box">
+                            <img :src="item.live_log" :key="item.live_log">
+                        </div>
+                        <div class="aui-grid-label">{{item.live_name}}</div>
+                    </div>
                 </div>
-            </div>
+            </section>
         </section>
-    </section>
+    </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/app.js"></script>
@@ -60,13 +73,25 @@
         Vue.use(VueLazyload)
         var vue = new Vue({
             el: '#vue',
-            data: {},
+            data: {
+                list: []
+            },
             mounted() {
                 this.initData();
             },
             methods: {
-                async initData() {
+                initData() {
+                    $.post('Video/getTv', {}, res => {
+                        if (res.status == 1) {
+                            this.list = res.results.data;
+                        }
+                    });
                 },
+                play(title,sign){
+                  var user = $.getUserInfo();
+                  var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
+                  $.openWebview(title,playUrl,true);
+                }
             }
         })
 

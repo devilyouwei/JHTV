@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>播放器</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+</head>
+
+<body>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var url = api.pageParam.url;
+        if (url) {
+            var videoPlayer = api.require('videoPlayer');
+            videoPlayer.open({
+                rect:{
+                    x: 0, //（可选项）数字类型；模块左上角的 x 坐标（相对于所属的 Window 或 Frame）；默认：0
+                    y: 0, //（可选项）数字类型；模块左上角的 y 坐标（相对于所属的 Window 或 Frame）；默认：0
+                    w: 320, //（可选项）数字类型；模块的宽度；默认：所属的 Window 或 Frame 的宽度
+                    h: 300 //（可选项）数字类型；模块的高度；默认：w的3/4
+                },
+                path: url,
+                scalingMode: 'scaleToFill'
+            }, function(ret, err) {
+                if (ret.status) {} else {}
+            });
+        }
+    };
+</script>
+
+</html>
