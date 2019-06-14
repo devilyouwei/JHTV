@@ -201,15 +201,17 @@
                     if (!this.phone) return $.toast('号码还没输入呢！ Σ( ° △ °|||)︴');
                     if (!$.valPhone(this.phone)) return $.toast('号码格式不正确哦~ (。﹏。*)');
                     if (!this.code) return $.toast('验证码怎么没有了？ Σ(⊙▽⊙"a ');
-                    $.post('Login/exeBindingPhone',{
-                      phone:this.phone,
-                      verify:this.code
-                    },function(res){
-                      $.toast(res.msg);
-                      if(res.status==1){
-
-                      }
-                    },'正在登陆哦~');
+                    $.post('Login/exeBindingPhone', {
+                        phone: this.phone,
+                        verify: this.code
+                    }, function(res) {
+                        $.toast(res.msg);
+                        if (res.status == 1) {
+                            $.set('userinfo', JSON.stringify(res.results));
+                            api.sendEvent({name: 'initUser'});
+                            closeWin();
+                        }
+                    }, '正在登陆哦~');
                 },
                 sendCode() {
                     if (this.time != '获取验证码') return;
@@ -222,10 +224,9 @@
                             this.time = TIME;
                             this.interval = setInterval(() => {
                                 if (this.time <= 0) {
-                                    clearInterval(interval);
+                                    clearInterval(this.interval);
                                     this.time = '获取验证码';
                                 } else {
-                                    $.log(this.time);
                                     this.time--;
                                 }
                             }, 1000);

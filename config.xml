@@ -14,7 +14,7 @@
     <preference name="fullScreen" value="false"/>
     <preference name="autoUpdate" value="true"/>
     <preference name="smartUpdate" value="false"/>
-    <preference name="debug" value="true"/>
+    <preference name="debug" value="false"/>
     <preference name="statusBarAppearance" value="true"/>
     <permission name="readPhoneState"/>
     <permission name="camera"/>

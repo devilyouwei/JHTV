@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>webview</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <style>
+        body {
+            background: #fff;
+        }
+
+        header.aui-bar {
+            color: #000!important;
+        }
+
+        .aui-bar .aui-iconfont {
+            color: #000!important;
+            font-weight: bold;
+        }
+
+        .aui-bar .aui-title {
+            color: #000!important;
+        }
+
+        .flex-con {
+            overflow: auto;
+            background-color: #fff;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <header class="aui-bar aui-bar-nav aui-bar-light">
+            <div class="aui-pull-left aui-btn" style="display:none;" id="back">
+                <span class="aui-iconfont aui-icon-left" tapmode onClick="historyBack()"></span>
+            </div>
+            <div class="aui-title"></div>
+            <div class="aui-pull-right aui-btn" id="close">
+                <span class="aui-iconfont aui-icon-close" tapmode onClick="closeWin()"></span>
+            </div>
+        </header>
+        <div id="main" class="flex-con"></div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        $api.fixStatusBar($api.dom('header'));
+        initWebviewFrame();
+        $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle + '&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
+        if ($.getOS() == 'ios') $api.dom('#back').style.display = 'block'; // ios显示返回按钮
+
+        // 返回键frame返回上一页
+        api.addEventListener({
+            name: 'keyback'
+        }, historyBack)
+
+        $.toast('X5引擎加速中...ε = = (づ′▽`)づ');
+    }
+
+    // frame返回上一页
+    function historyBack() {
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.historyBack({
+            frameName: 'webviewFrame'
+        }, function(ret, err) {
+            if (!ret.status) closeWin();
+        });
+    }
+
+    // 刷新frame
+    function refresh() {
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.loadScript({
+            script: 'location.reload();'
+        });
+    }
+
+    //初始化frame
+    function initWebviewFrame() {
+        // x5引擎
+        var browser = api.require('webBrowser');
+        browser.openView({
+            url: api.pageParam.url,
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            progress: {
+                color: '#ff5e3e'
+            }
+        }, function(res, err) {});
+    }
+
+    // 关闭win
+    function closeWin() {
+        api.closeWin();
+    }
+
+    // 运行特殊的js
+    function execJs(js) {
+        var browser = api.require('webBrowser');
+        browser.loadScript({
+            script: js
+        });
+    }
+</script>
+
+</html>

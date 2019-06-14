@@ -117,7 +117,7 @@
         </section>
 
         <section class="aui-content aui-margin-b-15">
-            <div class="aui-title"><i class="iconfont icon-zuirehotchunse" style="color:#ff7600;font-size: 0.8rem"></i>全网VIP视频，尽收眼底</div>
+            <div class="aui-title"><i class="iconfont icon-huo" style="color:#ff7600;font-size: 0.8rem"></i>全网VIP视频，尽收眼底</div>
             <div class="aui-grid aui-padded-l-10 aui-padded-r-10">
                 <!--最火视频网-->
                 <div class="aui-col-xs-3" v-for="(item,index) in plat" :key="index" tapmode @click="goPlat(item.platform_name,item.platform_url)">
@@ -241,14 +241,14 @@
                     });
                 },
                 goPlat(plat, url) {
-                    //if (!$.getUserInfo()) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
+                    if (!$.getUserInfo()) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
                     $.openWebview(plat, url);
                 },
                 goAdv(url) {
-                    $.openWebview('平台推广', url);
+                    $.openWebview('平台推广', url, true); // 使用x5引擎
                 },
                 goRec(title, url) {
-                    $.openWebview(title, url);
+                    $.openWebview(title, url, true); // 使用x5引擎
                 }
             },
             watch: {

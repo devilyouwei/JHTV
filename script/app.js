@@ -14,19 +14,22 @@ window.$ = {
         if (!ctl) return $.log('缺少参数');
         var url = API + '/' + ctl
         $.log('请求：' + url);
-        $.log('数据：' + JSON.stringify(data));
         if (data) {
+            var user = this.getUserInfo();
             // 无文件上传
             if (!data.files) {
+                if (user) data.token = user.token, data.user_id = user.user_id;
                 data = {
                     values: data,
                     files: null
                 };
             } else {
+                if (user) data.values.token = user.token, data.values.user_id = user.user_id;
                 //带文件上传
                 data = data;
             }
         }
+        $.log('数据：' + JSON.stringify(data));
         if (load) this.load(true, load);
         api.ajax({
             url: url,
@@ -36,8 +39,42 @@ window.$ = {
             if (load) this.load(false);
             $.log('结果：' + JSON.stringify(res));
             if (err) return $.toast(err);
+            // 失去登陆状态强制退出
+            if (res.status == -1) {
+                api.sendEvent({
+                    name: 'logout'
+                });
+                return this.logout();
+            }
             if (callback && typeof callback == 'function') return callback(res);
         })
+    },
+    stamp2date: function(ns) {
+        return new Date(parseInt(ns) * 1000)
+    },
+    date2stamp: function(date) {
+        return Date.parse(date) / 1000
+    },
+    // 传入date对象Date类型，格式String类型
+    formatDate: function(date, fmt) {
+        let o = {
+            'M+': date.getMonth() + 1, // 月份
+            'd+': date.getDate(), // 日
+            'h+': date.getHours(), // 小时
+            'm+': date.getMinutes(), // 分
+            's+': date.getSeconds(), // 秒
+            'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+            'S': date.getMilliseconds() // 毫秒
+        }
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+        for (let k in o)
+            if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+        return fmt
+    },
+    // 强制退出
+    logout: function() {
+        this.remove('userinfo');
+        this.toLogin();
     },
     toast: function(msg) {
         api.toast({
@@ -63,18 +100,20 @@ window.$ = {
             msg: msg,
         }, function(ret, err) {});
     },
+    confirm: function(title, msg, callback) {
+        api.confirm({
+            title: title,
+            msg: msg,
+            buttons: ['确定', '取消']
+        }, function(ret, err) {
+            if (callback && typeof callback == 'function') return callback(ret.buttonIndex);
+        });
+    },
     getUserInfo: function() {
-        return JSON.parse(localStorage.getItem('userinfo'));
+        return JSON.parse(this.get('userinfo'));
     },
     clearUserInfo: function() {
-        return localStorage.removeItem('userinfo');
-    },
-    set: function(key, value) {
-        if (typeof value == 'object') localStorage.setItem(key, JSON.stringify(value));
-        else return console.error('not an object!');
-    },
-    get: function(key) {
-        return JSON.parse(localStorage.getItem(key));
+        return this.remove('userinfo');
     },
     toLogin: function() {
         api.openWin({
@@ -90,10 +129,14 @@ window.$ = {
         });
     },
     // 打开新的webview
-    openWebview: function(navTitle, url) {
+    openWebview: function(navTitle, url, x5) {
+        if (!navTitle || !url) return;
+        var webview = '/html/webview.html';
+        var webName = 'webview';
+        if (x5) webview = '/html/webview_x5.html',webName='webviewX5';
         api.openWin({
-            name: 'webview',
-            url: api.wgtRootDir + '/html/webview.html',
+            name: webName,
+            url: api.wgtRootDir + webview,
             slideBackEnabled: false,
             vScrollBarEnabled: false,
             hScrollBarEnabled: false,
@@ -139,5 +182,22 @@ window.$ = {
                 }
             });
         }
+    },
+    set: function(key, value) {
+        return api.setPrefs({
+            key: key,
+            value: value
+        });
+    },
+    get: function(key) {
+        return api.getPrefs({
+            sync: true,
+            key: key
+        }) || null;
+    },
+    remove: function(key) {
+        return api.removePrefs({
+            key: key
+        });
     }
 }

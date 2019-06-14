@@ -54,29 +54,14 @@
 <script type="text/javascript">
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
-        initWebviewFrame();
         $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle + '&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
         if ($.getOS() == 'ios') $api.dom('#back').style.display = 'block'; // ios显示返回按钮
-
-        // 监听frame变化
-        api.setFrameClient({
-            frameName: 'webviewFrame'
-        }, function(res, err) {
-            $.log(res)
-        });
-
-        // 返回键frame返回上一页
-        api.addEventListener({
-            name: 'keyback'
-        }, historyBack)
-
+        initWebviewFrame();
     }
 
     // frame返回上一页
     function historyBack() {
-        // x5引擎
-        var browser = api.require('webBrowser');
-        browser.historyBack({
+        api.historyBack({
             frameName: 'webviewFrame'
         }, function(ret, err) {
             if (!ret.status) closeWin();
@@ -85,17 +70,17 @@
     // 刷新frame
     function refresh() {
         // x5引擎
-        var browser = api.require('webBrowser');
-        browser.loadScript({
+        api.execScript({
+            frameName: 'webviewFrame',
             script: 'location.reload();'
         });
     }
 
     //初始化frame
     function initWebviewFrame() {
-        // x5引擎
-        var browser = api.require('webBrowser');
-        browser.openView({
+        // 打开webview frame
+        api.openFrame({
+            name: 'webviewFrame',
             url: api.pageParam.url,
             rect: {
                 x: 0,
@@ -104,16 +89,118 @@
                 h: $api.dom('#main').offsetHeight
             },
             progress: {
+                type: 'page',
                 color: '#ff5e3e'
-            },
-        },function(res,err){
-          $.log(res)
+            }
         });
+        // 监听frame变化
+        api.setFrameClient({
+            frameName: 'webviewFrame'
+        }, function(res, err) {
+            if (res.progress) $.set('web_progress', res.progress);
+            if (res.url) $.set('web_url', res.url);
+            if ($.get('web_progress') == 100) setTimeout(execJs, 1000);
+        });
+        // 监听内部网页事件
+        api.addEventListener({
+            name: 'hackVideo'
+        }, function(res, err) {
+            $.log(res.value);
+            if (res && res.value) hackVideo(res.value.href, res.value.title);
+        });
+        // 返回键frame返回上一页
+        api.addEventListener({
+            name: 'keyback'
+        }, historyBack)
     }
 
     // 关闭win
     function closeWin() {
         api.closeWin();
+    }
+
+    // 运行特殊的js
+    function execJs() {
+        var jsfun = '';
+        var url = $.get('web_url');
+        if (url.indexOf("iqiyi.com") != -1) {
+            jsfun =
+                "var iframe=document.getElementById('_if');if(iframe){api.toast({msg: '爱奇艺官方错误!稍等自动刷新'});history.go(0)};var i=document.getElementsByClassName('m-video-player-wrap')[0];if(typeof(i) != 'undefined'){i.style.height='220px';i.style.color='#fff';i.style.lineHeight='15';i.style.position='static';i.style.paddingTop='0%';i.style.background='#000000';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';i.onclick=function(){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("v.qq.com") != -1) {
+            jsfun =
+                "var i=document.getElementsByClassName('site_player')[0];if(typeof(i) != 'undefined'){i.style.height='210px';i.style.background='#000000';i.style.textAlign='center';i.style.color='#fff';i.style.lineHeight='14';i.innerHTML='<div>视频连接成功,点击播放!</div>';i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("m.le.com") != -1) {
+            jsfun =
+                "var i=document.getElementsByClassName('playB')[0];if(typeof(i) != 'undefined'){i.style.background='#000000';i.innerHTML='<div>视频连接成功,点击播放!</div>';i.style.width='100%';i.style.textAlign='center';i.style.lineHeight='14';i.style.color='#fff';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("youku.com") != -1) {
+            jsfun =
+                "var i=document.getElementById('playerBox');if(typeof(i) != 'undefined'){i.style.background='#000000';i.style.color='#fff';i.style.textAlign='center';i.style.lineHeight='15';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg:'视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("mgtv.com") != -1) {
+            jsfun =
+                "var i=document.getElementsByClassName('video-area')[0];if(typeof(i) != 'undefined'){i.style.background='#000000';i.style.color='#fff';i.style.textAlign='center';i.style.lineHeight='16';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("sohu.com") != -1) {
+            jsfun =
+                "var i=document.getElementsByClassName('x-player')[0];var x=document.getElementById('top-poster');if(typeof(i) != 'undefined'){i.style.background='#000000';i.style.color='#fff';i.style.textAlign='center';i.style.lineHeight='13';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})})}else if(typeof(x) != 'undefined'){x.style.background='#000000';x.style.color='#fff';x.style.height='210px';x.style.textAlign='center';x.style.lineHeight='13';x.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!'});x.onclick=function(){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("fun.tv") != -1) {
+            jsfun =
+                "var myVideo=document.getElementById('m-h5v-video-1');if(typeof(myVideo) != 'undefined'){myVideo.pause()};var i=document.getElementById('m-h5v-player-1');if(typeof(i) != 'undefined'){i.style.background='#000000';i.style.color='#fff';i.style.lineHeight='12';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("baofeng.com") != -1) {
+            jsfun =
+                "var myVideo=document.getElementsByTagName('video')[0];myVideo.pause();var i=document.getElementById('videoplayer');if(typeof(i) != 'undefined'){i.style.background='#000000';i.style.textAlign='center';i.style.color='#fff';i.style.lineHeight='17';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("bilibili.com") != -1) {
+            jsfun =
+                "var i=document.getElementById('bofqi');i.style.background='#000000';i.style.lineHeight='10';if(typeof(i) != 'undefined'){i.style.color='#fff';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("miguvideo.com") != -1) {
+            jsfun =
+                "var i=document.getElementsByClassName('fixedHeader')[0];if(typeof(i) != 'undefined'){i.style.height='220px';i.style.color='#fff';i.style.fontSize='14px';i.style.lineHeight='15';i.style.background='#000000';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("1905.com") != -1) {
+            jsfun =
+                "var i=document.getElementById('player');if(typeof(i) != 'undefined'){i.style.color='#fff';i.style.fontSize='14px';i.style.lineHeight='16';i.style.background='#000000';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("17173.com") != -1) {
+            jsfun =
+                "var i=document.getElementById('videoplay');if(typeof(i) != 'undefined'){i.style.color='#fff';i.style.fontSize='14px';i.style.lineHeight='16';i.style.background='#000000';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        } else if (url.indexOf("pptv.com") != -1) {
+            jsfun =
+                "var i=document.getElementById('playerbox');if(typeof(i) != 'undefined'){i.style.color='#fff';i.style.lineHeight='12';i.style.background='#000000';i.style.textAlign='center';i.innerHTML='<div>视频连接成功,点击播放!</div>';api.toast({msg: '视频连接成功,点击播放!', duration: 5000});i.onclick=function(e){api.sendEvent({name:'hackVideo',extra:{href:window.location.href,title:document.title}})}}";
+        }
+
+        api.execScript({
+            frameName: 'webviewFrame',
+            script: jsfun
+        });
+    }
+
+    function hackVideo(url, title) {
+        if (url && title) {
+            $.load(true, '超级会员登陆中');
+            $.post('My/getVideoLineData', {
+                video_url: url,
+                video_title: title
+            }, function(res) {
+                $.load(false);
+                if (res.status == 1) {
+                    var buttons = [];
+                    var urls = [];
+                    for (var i = 0; i < res.results.data.length; i++) {
+                        buttons[i] = '线路' + (i + 1);
+                        urls[i] = res.results.data[i];
+                    }
+                    api.actionSheet({
+                        title: '超级会员-线路选择',
+                        cancelTitle: '不想看了 ',
+                        buttons: buttons,
+                        style: {
+                            fontPressColor: '#ff5e3e',
+                            fontNormalColor: '#ff1679'
+                        }
+                    }, function(res, err) {
+                        $.openWebview(title, urls[res.buttonIndex - 1], true);
+                    });
+                } else {
+                    $.toast(res.msg);
+                }
+            });
+        }
     }
 </script>
 

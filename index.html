@@ -167,6 +167,11 @@
         // 点击我的
         if (tag && tag.id == 'icon5') {
             if (!$.getUserInfo()) return $.toLogin();
+            else {
+                api.sendEvent({
+                    name: 'refreshUserInfo'
+                });
+            }
         }
         if (tag == $api.dom('#footer li.active')) return;
         var eFootLis = $api.domAll('#footer li'),

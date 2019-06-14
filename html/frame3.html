@@ -7,6 +7,9 @@
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>我的</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <style type="text/css">
         .text-white {
             color: #ffffff !important;
@@ -17,94 +20,190 @@
         }
 
         #user-info {
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             background: #ff7474;
+            color: #fff;
         }
 
+        #user-info .username {
+            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1.8rem;
+        }
+
+        #user-info .userphone {
+            font-size: 0.8rem;
+            line-height: 1.8rem;
+        }
+
+        #user-info .aui-iconfont {
+            font-size: 0.8rem;
+        }
+
+        .vip {
+            color: rgb(255, 215, 0);
+            font-size: 0.75rem;
+            line-height: 0.75rem;
+            text-align: right;
+        }
+
+        .vip .icon-vip {
+            font-size: 0.8rem;
+            line-height: 0.8rem;
+        }
     </style>
 </head>
 
 <body>
-    <!-- 顶部 -->
-    <section class="aui-content" id="user-info">
-        <div class="aui-list-item-media" style="width:3rem;">
-            <img :src="user" :key="user" class="aui-img-round">
-        </div>
-        <div class="aui-list-item-inner">
-            <div class="aui-list-item-text text-white aui-font-size-18">{{user}}</div>
-            <div class="aui-list-item-text text-white">
-                <div><i class="aui-iconfont aui-icon-mobile aui-font-size-14"></i>{{user}}</div>
+    <div id="vue" v-if="user">
+        <!-- 顶部 -->
+        <section class="aui-content" id="user-info" @click="login">
+            <div class="table">
+                <div class="cell" style="width:4.5rem;">
+                    <img :src="user.user_avatarurl" :key="user.user_avatarurl" class="aui-img-round" style="width:3.5rem;">
+                </div>
+                <div class="cell">
+                    <div class="username">{{user.user_name}}</div>
+                    <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
+                </div>
+                <div class="cell vip">
+                    <div class="vip-endtime"><i class="iconfont icon-vip">&nbsp;</i>{{user.user_vip_end}}</div>
+                </div>
             </div>
-        </div>
-    </section>
-    <section class="aui-content aui-grid aui-margin-b-15">
-        <div class="aui-row">
-            <div class="aui-col-xs-4 aui-border-r">
-                <big class="aui-text-warning">0.00<small> 元</small></big>
-                <div class="aui-gird-lable aui-font-size-12">余额</div>
+        </section>
+        <section class="aui-content aui-grid aui-margin-b-15">
+            <div class="aui-row">
+                <div class="aui-col-xs-4 aui-border-r">
+                    <big class="aui-text-warning">0.00<small> 元</small></big>
+                    <div class="aui-gird-lable aui-font-size-12">余额</div>
+                </div>
+                <div class="aui-col-xs-4 aui-border-r">
+                    <big class="aui-text-danger">0.00<small> 个</small></big>
+                    <div class="aui-gird-lable aui-font-size-12">优惠</div>
+                </div>
+                <div class="aui-col-xs-4">
+                    <big class="aui-text-success">0.00<small> 分</small></big>
+                    <div class="aui-gird-lable aui-font-size-12">积分</div>
+                </div>
             </div>
-            <div class="aui-col-xs-4 aui-border-r">
-                <big class="aui-text-danger">0.00<small> 个</small></big>
-                <div class="aui-gird-lable aui-font-size-12">优惠</div>
-            </div>
-            <div class="aui-col-xs-4">
-                <big class="aui-text-success">0.00<small> 分</small></big>
-                <div class="aui-gird-lable aui-font-size-12">积分</div>
-            </div>
-        </div>
-    </section>
-    <section class="aui-content">
-        <ul class="aui-list aui-list-in aui-margin-b-15">
-            <li class="aui-list-item">
-                <div class="aui-list-item-label-icon">
-                    <i class="aui-iconfont aui-icon-location aui-text-info"></i>
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">收货地址</div>
-                </div>
-            </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-label-icon">
-                    <i class="aui-iconfont aui-icon-like aui-text-danger"></i>
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">我的收藏</div>
-                </div>
-            </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-label-icon">
-                    <i class="aui-iconfont aui-icon-image aui-text-info"></i>
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">美食相册</div>
-                </div>
-            </li>
-        </ul>
-        <ul class="aui-list aui-list-in">
-            <li class="aui-list-item">
-                <div class="aui-list-item-label-icon">
-                    <i class="aui-iconfont aui-icon-cart aui-text-info"></i>
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">积分商城</div>
-                    <div class="aui-list-item-right">0元好物在这里</div>
-                </div>
-            </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-label-icon">
-                    <i class="aui-iconfont aui-icon-cert aui-text-warning"></i>
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">会员卡</div>
-                    <div class="aui-list-item-right">未开通</div>
-                </div>
-            </li>
-        </ul>
-    </section>
+        </section>
+        <section class="aui-content">
+            <ul class="aui-list aui-list-in aui-margin-b-15">
+                <li class="aui-list-item">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-location aui-text-info"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">收货地址</div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-like aui-text-danger"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">我的收藏</div>
+                    </div>
+                </li>
+                <li class="aui-list-item" @click="logout">
+                    <div class="aui-list-item-label-icon">
+                        <i class="iconfont icon-dingbudaohang-zhangh aui-text-info"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">登出</div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="aui-list aui-list-in">
+                <li class="aui-list-item">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-cart aui-text-info"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">积分商城</div>
+                        <div class="aui-list-item-right">0元好物在这里</div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-cert aui-text-warning"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">会员卡</div>
+                        <div class="aui-list-item-right">未开通</div>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                user: {
+                    user_name: '未登录',
+                    user_phone: '10086',
+                    user_avatarurl: '../image/avatar.jpg',
+                    user_vip_end: '未知'
+                }
+            },
+            mounted() {
+                this.initUser();
+                api.addEventListener({
+                    name: 'refreshUserInfo'
+                }, this.refreshUserInfo);
+                api.addEventListener({
+                    name: 'logout'
+                }, this.initUser);
+            },
+            methods: {
+                initUser() {
+                    this.user = {
+                        user_name: '未登录',
+                        user_phone: '10086',
+                        user_avatarurl: '../image/avatar.jpg',
+                        user_vip_end: '未知'
+                    }
+                    var user = $.getUserInfo();
+                    if (user) {
+                        if (user.user_vip_end != 0) user.user_vip_end = '永久会员';
+                        else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy-MM-dd') + '到期';
+                        this.user = user;
+                    }
+                },
+                refreshUserInfo() {
+                    $.post('My/getUserInfo', {}, res => {
+                        if (res.status == 1) {
+                            $.set('userinfo', JSON.stringify(res.results)); // 更新本地用户数据
+                            var user = $.getUserInfo();
+                            if (user.user_vip_end != 0) user.user_vip_end = '永久会员';
+                            else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy-MM-dd') + '到期';
+                            $.log(user)
+                            this.user = user;
+                        } else {
+                            $.toast(res.msg);
+                        }
+                    });
+                },
+                logout() {
+                    $.confirm('退出', '确定要退出登录吗？', index => {
+                        if (index == 1) {
+                            $.logout();
+                            this.initUser();
+                        }
+                    });
+                },
+                login() {
+                    if ($.getUserInfo()) return;
+                    else $.toLogin();
+                }
+            }
+        })
     }
 </script>
 
