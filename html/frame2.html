@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
     <link rel="stylesheet" type="text/css" href="../css/aui-slide.css" />
     <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
         .icon {
             width: 2rem;
@@ -38,7 +39,7 @@
 </head>
 
 <body>
-    <div class="frame">
+    <div id="vue" v-cloak>
         <section class="aui-content">
             <div id="aui-slide">
                 <div class="aui-slide-wrap">
@@ -85,7 +86,7 @@
 <script type="text/javascript">
     apiready = function() {
         var vue = new Vue({
-            el: '.frame',
+            el: '#vue',
             data: {
                 show: true
             },

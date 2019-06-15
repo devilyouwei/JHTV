@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>推荐视频</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
+    <style type="text/css">
+        html,
+        body,
+        .aui-content {
+            background: #fff!important;
+        }
+
+        .aui-col-xs-6 {
+            padding: 0.25rem!important;
+        }
+
+        .goods-item {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.1) inset;
+            text-align: center;
+        }
+
+        .goods-item img {
+            display: block;
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+        }
+
+        .goods-title {
+            padding-top: 0.1rem;
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            line-height: 1.3rem;
+            color: #333 !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .goods-click {
+            padding-bottom: 0.1rem;
+        }
+
+        .aui-title {
+            padding-left: 0.75rem;
+            padding-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .aui-title .iconfont {
+            color: #ff7600;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            padding: 0.5rem;
+            text-align: center;
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue" v-cloak>
+        <section class="aui-content">
+            <div class="aui-title"><i class="iconfont icon-tubiao303"></i>为您推荐最新大片</div>
+            <div class="aui-card-list-content-padded">
+                <div class="aui-row aui-row-padded">
+                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goRec(item.video_title,item.video_url)">
+                        <div class="goods-item">
+                            <img v-lazy="'http:'+item.video_bg_url" :key="item.video_bg_url">
+                            <p class="goods-title">{{item.video_title}}</p>
+                            <p class="goods-click">{{item.video_subtitle}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="loading" v-show="loading">正在加载啦~~~</div>
+        </section>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+
+        Vue.use(VueLazyload)
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                list: [],
+                page: 0,
+                count: 8,
+                loading: false,
+            },
+            mounted() {
+                this.initData();
+            },
+            methods: {
+                initData() {
+                    this.getData(0, 8, '加载推荐中...');
+                    // 下拉刷新
+                    api.setRefreshHeaderInfo({
+                        loadingImg: 'widget://image/refresh.png',
+                        bgColor: '#fff',
+                        textColor: '#000',
+                        textDown: '下拉刷新...',
+                        textUp: '松开人家刷新...'
+                    }, () => {
+                        this.getData(0, 8);
+                    });
+                    // 上拉加载更多
+                    api.addEventListener({
+                        name: 'scrolltobottom'
+                    }, () => {
+                        this.getData(this.page, 8);
+                    });
+
+                },
+                getData(page, count, load) {
+                    if (this.loading) return;
+                    this.loading = true;
+                    $.post('Video/getPlatformVideTypeList', {
+                        page: page + 1,
+                        count: count
+                    }, res => {
+                        this.loading = false;
+                        if (res.status == 1) {
+                            if (page == 0) { // 刷新
+                                this.list = [];
+                                this.list = res.results.data;
+                            } else { // 新增
+                                this.list = this.list.concat(res.results.data);
+                            }
+                            this.page = res.info.page;
+                        }
+                    }, load);
+                },
+                goRec(title, url) {
+                    $.openWebview(title, url);
+                }
+            }
+        })
+
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: 'linear-gradient(to right, #ff6144, #ff0072)'
+        });
+    };
+
+    function closeWin() {
+        api.closeWin();
+    }
+</script>
+
+</html>

@@ -208,7 +208,9 @@
                         $.toast(res.msg);
                         if (res.status == 1) {
                             $.set('userinfo', JSON.stringify(res.results));
-                            api.sendEvent({name: 'initUser'});
+                            api.sendEvent({
+                                name: 'initUser'
+                            });
                             closeWin();
                         }
                     }, '正在登陆哦~');
@@ -230,7 +232,7 @@
                                     this.time--;
                                 }
                             }, 1000);
-                        }
+                        } else $.toast(res.msg);
                     }, '短信正在路上跑~');
                 }
             }
@@ -241,7 +243,7 @@
         setTimeout(function() {
             api.setStatusBarStyle({
                 style: 'dark',
-                color: '#fff'
+                color: 'rgba(0,0,0,0)'
             });
         }, 300)
         api.closeWin();

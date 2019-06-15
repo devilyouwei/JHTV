@@ -15,19 +15,20 @@
         }
 
         header.aui-bar {
-            color: #000!important;
+            background: linear-gradient(to right, #ff5e3e 0, #ff1679 100%)!important;
+            color: #fff!important;
         }
 
         .aui-bar .aui-iconfont {
-            color: #000!important;
+            color: #fff!important;
             font-weight: bold;
         }
 
         .aui-bar .aui-title {
-            color: #000!important;
+            color: #fff!important;
         }
 
-        .flex-con {
+        #main {
             overflow: auto;
             background-color: #fff;
             height: 100%;
@@ -46,7 +47,7 @@
                 <span class="aui-iconfont aui-icon-close" tapmode onClick="closeWin()"></span>
             </div>
         </header>
-        <div id="main" class="flex-con"></div>
+        <div id="main"></div>
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -57,11 +58,17 @@
         $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle + '&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
         if ($.getOS() == 'ios') $api.dom('#back').style.display = 'block'; // ios显示返回按钮
         initWebviewFrame();
+        api.setStatusBarStyle({
+            style: 'light'
+        });
+        api.parseTapmode();
     }
 
     // frame返回上一页
     function historyBack() {
         $.remove('web_title');
+        $.load(false);
+        $.abortPost('hackVideo');
         api.historyBack({
             frameName: 'webviewFrame'
         }, function(ret, err) {
@@ -70,6 +77,7 @@
     }
     // 刷新frame
     function refresh() {
+        $.abortPost('hackVideo');
         $.remove('web_title');
         // x5引擎
         api.execScript({
@@ -95,15 +103,14 @@
                 color: '#ff5e3e'
             }
         });
+        var progress = 0;
         // 监听frame变化
         api.setFrameClient({
             frameName: 'webviewFrame'
         }, function(res, err) {
             $.closePlayer();
-            $.log(res);
-            if (res.progress) $.set('web_progress', res.progress);
-            if (res.url) $.set('web_url', res.url);
-            if ($.get('web_progress') == 100) execJs();
+            if (res.progress) progress = res.progress;
+            if (progress == 100) execJs();
         });
         // 监听内部网页事件
         api.addEventListener({
@@ -119,28 +126,38 @@
 
     // 关闭win
     function closeWin() {
-        $.remove('web_url')
-        $.remove('web_title')
+        $.abortPost('hackVideo'); // 关闭请求
+        $.closePlayer(); //关闭播放器
+        setTimeout(function() {
+            api.closeFrame({
+                name: 'webviewFrame'
+            }); // 关闭webviewframe
+            api.setStatusBarStyle({
+                style: 'dark'
+            });
+        }, 200);
+        $.remove('web_title');
         api.closeWin();
     }
 
     // 运行特殊的js
     function execJs() {
-        var url = $.get('web_url');
         var js =
             `
-        var video = document.getElementsByTagName('video');
-        var tx = document.getElementsByClassName('site_player');
-        if((video && video[0]) || (tx && tx[0])){
-          api.sendEvent({
-              name: 'hackVideo',
-              extra: {
-                  href: location.href,
-                  title: document.title
+              var video = document.getElementsByTagName('video');
+              var tx = document.getElementsByClassName('site_player');
+              var pptv = document.getElementById('playerbox');
+              var el = (video && video[0]) || (tx && tx[0]) || pptv;
+              if(el && api){
+                api.sendEvent({
+                  name: 'hackVideo',
+                  extra: {
+                    href: location.href,
+                    title: document.title
+                  }
+                });
               }
-          });
-        }
-        `
+            `
         api.execScript({
             frameName: 'webviewFrame',
             script: js
@@ -153,7 +170,7 @@
         $.set('web_title', title);
         $.log('破解视频：' + title);
         if (url && title) {
-            $.load(true, '超级会员登陆中');
+            $.abortPost('hackVideo');
             $.post('My/getVideoInfo', { //获取sign
                 video_url: url,
                 video_title: title
@@ -164,10 +181,11 @@
                     $.openPlayer(playUrl);
                 } else {
                     $.toast(res.msg)
-                    $.log(url)
-                    $.openWebview(title, url, true);
+                    setTimeout(function() {
+                        $.openWebview(title, url, true);
+                    }, 1000)
                 }
-            });
+            }, '超级会员登陆中，请稍等哦~ <(￣ˇ￣)/', 'hackVideo');
         }
     }
 </script>

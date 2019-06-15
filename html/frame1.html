@@ -280,7 +280,7 @@
                 <h3>各类游戏在线直播</h3>
                 <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
             </div>
-            <div class="aui-flex-support">看直播</div>
+            <div class="aui-flex-support-no">看直播</div>
         </a>
 
         <a onClick="girlList()" class="aui-flex b-line">
@@ -290,27 +290,27 @@
                 <h3>海量美女在线直播</h3>
                 <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
             </div>
-            <div class="aui-flex-support-no">暂时下线</div>
+            <div class="aui-flex-support-no">看直播</div>
         </a>
 
-        <a onClick="vList()" class="aui-flex b-line">
+        <a onClick="movieList()" class="aui-flex b-line">
             <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">最新热门电影</em></p>
                 <h3>当下最火热大片推荐</h3>
                 <p><em class="aui-group-one">不定时更新</em><em class="aui-group-two">经典热门大片</em></p>
             </div>
-            <div class="aui-flex-support">看大片</div>
+            <div class="aui-flex-support-no">看大片</div>
         </a>
 
-        <a onClick="girlxiezhenList()" class="aui-flex b-line">
+        <a onClick="fuckList()" class="aui-flex b-line">
             <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">美女写真视频</em></p>
                 <h3>海量美女写真视频</h3>
                 <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
             </div>
-            <div class="aui-flex-support">观看</div>
+            <div class="aui-flex-support-no">观看</div>
         </a>
     </section>
 </body>
@@ -332,11 +332,20 @@
     function tvList() {
         api.openWin({
             name: 'tvList',
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false,
+            slidBackEnabled: false,
+            animation: {
+                type: 'movein',
+                subType: 'from_right',
+                duration: 200
+            },
             url: './tv_list.html'
         })
     }
     // 游戏直播
     function gameList() {
+        return $.toast('即将上线，敬请期待');
         api.openWin({
             name: 'gameList',
             url: './game_list.html'
@@ -344,10 +353,19 @@
     }
     // 美女直播
     function girlList() {
+        return $.toast('即将上线，敬请期待');
         api.openWin({
             name: 'girlList',
             url: './girl_list.html'
         })
+    }
+
+    function movieList() {
+        return $.toast('即将上线，敬请期待');
+    }
+
+    function fuckList() {
+        return $.toast('即将上线，敬请期待');
     }
 </script>
 

@@ -19,6 +19,7 @@
     <preference name="backgroundMode" value=""/>
     <permission name="readPhoneState"/>
     <permission name="camera"/>
+    <permission name="fileSystem"/>
     <permission name="record"/>
     <permission name="location"/>
     <permission name="internet"/>

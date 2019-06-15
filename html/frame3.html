@@ -42,13 +42,16 @@
 
         .vip {
             color: rgb(255, 215, 0);
-            font-size: 0.75rem;
-            line-height: 0.75rem;
+            font-size: 0.55rem;
+            line-height: 0.8rem;
+            vertical-align: bottom;
             text-align: right;
         }
 
-        .vip .icon-vip {
-            font-size: 0.8rem;
+        .icon-vip {
+            color: rgb(255, 215, 0);
+            font-weight: normal;
+            font-size: 1rem;
             line-height: 0.8rem;
         }
     </style>
@@ -60,14 +63,15 @@
         <section class="aui-content" id="user-info" @click="login">
             <div class="table">
                 <div class="cell" style="width:4.5rem;">
-                    <img :src="user.user_avatarurl" :key="user.user_avatarurl" class="aui-img-round" style="width:3.5rem;">
+                    <img :src="user.user_avatarurl" :key="user.user_avatarurl" class="aui-img-round" style="width:3.5rem;height:3.5rem;background-color:#e5e5e5;">
                 </div>
                 <div class="cell">
-                    <div class="username">{{user.user_name}}</div>
+                    <div class="username">{{user.user_name}}&nbsp;<i class="iconfont icon-vip">&nbsp;</i></div>
                     <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
                 </div>
                 <div class="cell vip">
-                    <div class="vip-endtime"><i class="iconfont icon-vip">&nbsp;</i>{{user.user_vip_end}}</div>
+                  <div>到期时间</div>
+                  <div>{{user.user_vip_end}}</div>
                 </div>
             </div>
         </section>
@@ -126,11 +130,11 @@
                 </li>
                 <li class="aui-list-item">
                     <div class="aui-list-item-label-icon">
-                        <i class="aui-iconfont aui-icon-cert aui-text-warning"></i>
+                        <i class="iconfont icon-gengxin aui-text-warning"></i>
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
-                        <div class="aui-list-item-title">会员卡</div>
-                        <div class="aui-list-item-right">未开通</div>
+                        <div class="aui-list-item-title">版本更新</div>
+                        <div class="aui-list-item-right">当前：{{version}}</div>
                     </div>
                 </li>
             </ul>
@@ -145,6 +149,7 @@
         var vue = new Vue({
             el: '#vue',
             data: {
+                version: $.version(),
                 user: {
                     user_name: '未登录',
                     user_phone: '10086',
@@ -171,8 +176,8 @@
                     }
                     var user = $.getUserInfo();
                     if (user) {
-                        if (user.user_vip_end != 0) user.user_vip_end = '永久会员';
-                        else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy-MM-dd') + '到期';
+                        if (user.user_vip_end == 0) user.user_vip_end = '永久会员';
+                        else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy/MM/dd');
                         this.user = user;
                     }
                 },
@@ -181,8 +186,8 @@
                         if (res.status == 1) {
                             $.set('userinfo', JSON.stringify(res.results)); // 更新本地用户数据
                             var user = $.getUserInfo();
-                            if (user.user_vip_end != 0) user.user_vip_end = '永久会员';
-                            else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy-MM-dd') + '到期';
+                            if (user.user_vip_end == 0) user.user_vip_end = '永久会员';
+                            else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy/MM/dd');
                             $.log(user)
                             this.user = user;
                         } else {
@@ -199,8 +204,22 @@
                     });
                 },
                 login() {
-                    if ($.getUserInfo()) return;
-                    else $.toLogin();
+                    if ($.getUserInfo()) {
+                        api.openWin({
+                            name: 'editUser',
+                            url: './editUser.html',
+                            animation: {
+                                type: 'movein',
+                                subType: 'from_right',
+                                duration: 200
+                            },
+                            scrollEnabled: false,
+                            vScrollBarEnabled: false,
+                            hScrollBarEnabled: false,
+                            slidBackEnabled: false
+                        });
+
+                    } else $.toLogin();
                 }
             }
         })

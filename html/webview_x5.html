@@ -15,16 +15,17 @@
         }
 
         header.aui-bar {
-            color: #000!important;
+            color: #fff!important;
+            background: rgb(39, 42, 45);
         }
 
         .aui-bar .aui-iconfont {
-            color: #000!important;
+            color: #fff!important;
             font-weight: bold;
         }
 
         .aui-bar .aui-title {
-            color: #000!important;
+            color: #fff!important;
         }
 
         .flex-con {
@@ -38,12 +39,12 @@
 <body>
     <div id="wrap">
         <header class="aui-bar aui-bar-nav aui-bar-light">
-            <div class="aui-pull-left aui-btn" style="display:none;" id="back">
-                <span class="aui-iconfont aui-icon-left" tapmode onClick="historyBack()"></span>
+            <div class="aui-pull-left aui-btn" style="display:none;" id="back" tapmode onClick="historyBack()">
+                <span class="aui-iconfont aui-icon-left"></span>
             </div>
             <div class="aui-title"></div>
-            <div class="aui-pull-right aui-btn" id="close">
-                <span class="aui-iconfont aui-icon-close" tapmode onClick="closeWin()"></span>
+            <div class="aui-pull-right aui-btn" id="close" tapmode onClick="closeWin()">
+                <span class="aui-iconfont aui-icon-close"></span>
             </div>
         </header>
         <div id="main" class="flex-con"></div>
@@ -63,7 +64,13 @@
             name: 'keyback'
         }, historyBack)
 
+        api.setStatusBarStyle({
+            style: 'light',
+            color: 'rgba(0,0,0,0)'
+        });
+
         $.toast('X5引擎加速中...ε = = (づ′▽`)づ');
+        api.parseTapmode();
     }
 
     // frame返回上一页
@@ -106,6 +113,11 @@
 
     // 关闭win
     function closeWin() {
+        setTimeout(function() {
+            api.setStatusBarStyle({
+                style: 'dark'
+            });
+        }, 200);
         api.closeWin();
     }
 

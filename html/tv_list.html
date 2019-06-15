@@ -13,9 +13,17 @@
     <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <style>
         header.aui-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
             text-align: center;
             font-size: 1rem;
+        }
+
+        .icon-tv {
+            font-size: 1rem!important;
         }
 
         .aui-bar-nav {
@@ -29,6 +37,7 @@
 
         .aui-content {
             padding: 0.5rem;
+            padding-top: 4rem;
         }
 
         .img-box {
@@ -36,7 +45,7 @@
         }
 
         .img-box img {
-            height : 2.5rem;
+            height: 2.5rem;
             margin: 0 auto;
         }
     </style>
@@ -48,14 +57,14 @@
             <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
                 <span class="aui-iconfont aui-icon-left"></span>
             </a>
-            <div class="aui-title">TV直播</div>
+            <div class="aui-title"><i class="iconfont icon-tv">&nbsp;</i>TV直播</div>
         </header>
-        <section class="aui-content" v-if="list.length">
+        <section class="aui-content">
             <section class="aui-grid">
                 <div class="aui-row">
-                    <div class="aui-col-xs-4" v-for="(item,index) in list" :key="index" @click="play(item.live_name,item.live_sign)">
+                    <div class="aui-col-xs-4" v-for="(item,index) in list" :key="index" @click="play(item.live_name,item.sign)">
                         <div class="img-box">
-                            <img :src="item.live_log" :key="item.live_log">
+                            <img v-lazy="item.live_log" :key="item.live_log">
                         </div>
                         <div class="aui-grid-label">{{item.live_name}}</div>
                     </div>
@@ -70,6 +79,8 @@
 <script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
         Vue.use(VueLazyload)
         var vue = new Vue({
             el: '#vue',
@@ -77,31 +88,32 @@
                 list: []
             },
             mounted() {
-                this.initData();
+                setTimeout(() => {
+                    this.initData();
+                }, 200)
             },
             methods: {
                 initData() {
                     $.post('Video/getTv', {}, res => {
                         if (res.status == 1) {
                             this.list = res.results.data;
+                        } else {
+                            $.toast(res.msg);
                         }
-                    });
+                    }, '电视频道加载中...');
                 },
-                play(title,sign){
-                  var user = $.getUserInfo();
-                  var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
-                  $.openWebview(title,playUrl,true);
+                play(title, sign) {
+                    var user = $.getUserInfo();
+                    if (!user) {
+                        return $.toLogin();
+                    }
+                    var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
+                    $.openWebview(title, playUrl, true);
                 }
             }
         })
 
         api.parseTapmode();
-        var header = $api.byId('aui-header');
-        $api.fixStatusBar(header);
-        api.setStatusBarStyle({
-            style: 'dark',
-            color: 'linear-gradient(to right, #ff6144, #ff0072)'
-        });
     };
 
     function closeWin() {

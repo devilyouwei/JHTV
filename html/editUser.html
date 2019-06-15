@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>编辑个人信息</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <style>
+        body {
+            background: #fff!important;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        header.aui-bar {
+            color: #fff!important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        header .aui-icon-left {
+            font-size: 1rem;
+            color: #fff!important;
+        }
+
+        a:hover {
+            color: #fff!important;
+        }
+
+        a:active {
+            color: #fff!important;
+        }
+
+        #main {
+            padding-top: 4rem;
+            text-align: center;
+        }
+
+        .img-box {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .img-box .avatar {
+            width: 5rem;
+            height: 5rem;
+            margin: 0 auto;
+            border: solid 2px #ccc;
+            border-radius: 100%;
+        }
+
+        .input-box {
+            padding: 0 2rem;
+        }
+
+        .input-box .input {
+            text-align: center;
+            font-size: 0.8rem;
+            height: auto;
+        }
+
+        .btn {
+            font-size: 0.8rem;
+            color: #fff;
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            border-radius: 5px;
+            padding: 0.3rem 3rem;
+            height: auto;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: #fff;
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.9);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue" v-cloak>
+        <header class="aui-bar aui-bar-nav aui-bar-light" id="aui-header">
+            <a class="aui-btn aui-pull-left" tapmode @click="closeWin()">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </a>
+            <div class="aui-title">编辑资料</div>
+            <a class="aui-btn aui-pull-right" tapmode @click="save">保存</a>
+        </header>
+        <div id="main">
+            <div class="img-box">
+                <img class="avatar" v-lazy="user.user_avatarurl" :key="user.user_avatarurl" @click="selectImg" tapmode>
+            </div>
+            <div class="input-box">
+                <input v-model="user.user_name" class="input" type="text" placeholder="输入用户名">
+                <button class="btn" tapmode @click="save">保存</button>
+            </div>
+        </div>
+        <div class="footer table" id="footer" v-if="opt">
+            <div class="cell" @click='confirm' tapmode>确认</div>
+            <div class="cell" @click="reset" tapmode>重置</div>
+            <div class="cell" @click="cancel" tapmode>取消</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light'
+        });
+        var FNImageClip = api.require('FNImageClip');
+        Vue.use(VueLazyload)
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                user: $.getUserInfo(),
+                opt: false
+            },
+            mounted() {
+                api.addEventListener({
+                    name: 'keyback'
+                }, this.closeWin);
+            },
+            methods: {
+                selectImg() {
+                    api.actionSheet({
+                        title: '选择图片来源',
+                        cancelTitle: '取消',
+                        buttons: ['相册', '照相']
+                    }, (res, err) => {
+                        if (res.buttonIndex == 1) {
+                            this.getPic('library');
+                        } else {
+                            this.getPic('camera');
+                        }
+                    });
+                },
+                getPic(source) {
+                    api.getPicture({
+                        sourceType: source,
+                        mediaValue: 'pic',
+                        destinationType: 'url',
+                        quality: 50,
+                        saveToPhotoAlbum: false
+                    }, (res, err) => {
+                        if (res) this.clipPic(res.data);
+                    });
+                },
+                clipPic(pic) {
+                    FNImageClip.open({
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: api.winWidth,
+                            h: api.winHeight - 64
+                        },
+                        highDefinition: false,
+                        mode: 'image',
+                        srcPath: pic,
+                        style: {
+                            mask: 'rgba(0,0,0,0.6)',
+                            clip: {
+                                w: 300,
+                                h: 300,
+                                x: (api.winWidth - 300) / 2,
+                                y: (api.winHeight - 300) / 2,
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                appearance: 'rectangle'
+                            }
+                        }
+                    }, (res, err) => {
+                        api.addEventListener({
+                            name: 'keyback'
+                        }, this.cancel);
+                        this.opt = true;
+                    });
+                },
+                confirm() {
+                    FNImageClip.save({}, (res, err) => {
+                        if (res && res.destPath) {
+                            this.uploadImg(res.destPath);
+                        } else {
+                            $.toast('截图失败');
+                            this.cancel();
+                        }
+                    });
+                },
+                uploadImg(data) {
+                    $.post('Upload/uploadTvCos', {
+                        files: {
+                            file: data
+                        },
+                        values: {}
+                    }, res => {
+                        if (res.status == 1) {
+                            this.user.user_avatarurl = res.results.img;
+                            this.cancel();
+                        } else $.toast(res.msg);
+                    }, '大头上传中~');
+                },
+                reset() {
+                    FNImageClip.reset();
+                },
+                cancel() {
+                    FNImageClip.close();
+                    this.opt = false;
+                    api.addEventListener({
+                        name: 'keyback'
+                    }, this.closeWin);
+                },
+                save() {
+                    if (this.user.user_name && this.user.user_avatarurl) {
+                        $.post('My/editUserInfo', this.user, res => {
+                            api.sendEvent({
+                                name: 'refreshUserInfo'
+                            });
+                            if (res.status == 1) {
+                                setTimeout(() => {
+                                    this.closeWin();
+                                }, 1000)
+                            }
+                            $.toast(res.msg);
+                        });
+                    } else {
+                        $.toast('信息不完整哦 Σ( ° △ °|||)︴~')
+                    }
+                },
+                closeWin() {
+                    setTimeout(function() {
+                        api.setStatusBarStyle({
+                            style: 'dark'
+                        });
+                    }, 200);
+                    api.closeWin();
+                }
+            }
+        })
+        api.parseTapmode();
+    };
+</script>
+
+</html>

@@ -4,8 +4,9 @@ window.$ = {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
         else console.log(msg)
     },
-    post: function(ctl, data, callback, load) {
+    post: function(ctl, data, callback, load, tag) {
         var connectionType = api.connectionType;
+        tag = tag || null;
         if (connectionType == 'none') {
             $.showSplash(false);
             return $.toast('无网络连接，请先打开手机网络！然后重新启动聚合视频');
@@ -21,11 +22,11 @@ window.$ = {
                 if (user) data.token = user.token, data.user_id = user.user_id;
                 data = {
                     values: data,
-                    files: null
+                    files: {}
                 };
-            } else {
+            } else { // 带文件上传
+                if (!data.values) data.values = {};
                 if (user) data.values.token = user.token, data.values.user_id = user.user_id;
-                //带文件上传
                 data = data;
             }
         }
@@ -33,12 +34,21 @@ window.$ = {
         if (load) this.load(true, load);
         api.ajax({
             url: url,
+            tag: tag,
             method: 'post',
             data: data
         }, (res, err) => {
             this.load(false);
+            api.refreshHeaderLoadDone();
             $.log('结果：' + JSON.stringify(res));
-            if (err) return $.toast('服务器出错了啦~ X﹏X'), $.log(err);
+            if (err) {
+                $.log(err);
+                $.toast('服务器出错了啦~ X﹏X');
+                res = {
+                    status: 0,
+                    msg: '服务器出错了啦~ X﹏X'
+                };
+            }
             // 失去登陆状态强制退出
             if (res.status == -1) {
                 api.sendEvent({
@@ -48,6 +58,11 @@ window.$ = {
             }
             if (callback && typeof callback == 'function') return callback(res);
         })
+    },
+    abortPost: function(tag) {
+        api.cancelAjax({
+            tag: tag
+        });
     },
     stamp2date: function(ns) {
         return new Date(parseInt(ns) * 1000)
@@ -162,7 +177,7 @@ window.$ = {
                     x: 0,
                     y: $api.dom('header').offsetHeight,
                     w: api.winWidth,
-                    h: 320
+                    h: 280
                 }
             });
         }
@@ -219,5 +234,8 @@ window.$ = {
             key: key
         });
     },
-    API: API
+    API: API,
+    version: function() {
+        return api.appVersion
+    }
 }
