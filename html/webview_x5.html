@@ -64,11 +64,6 @@
             name: 'keyback'
         }, historyBack)
 
-        api.setStatusBarStyle({
-            style: 'light',
-            color: 'rgba(0,0,0,0)'
-        });
-
         $.toast('X5引擎加速中...ε = = (づ′▽`)づ');
         api.parseTapmode();
     }
@@ -113,11 +108,6 @@
 
     // 关闭win
     function closeWin() {
-        setTimeout(function() {
-            api.setStatusBarStyle({
-                style: 'dark'
-            });
-        }, 200);
         api.closeWin();
     }
 

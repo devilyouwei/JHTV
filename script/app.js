@@ -234,8 +234,74 @@ window.$ = {
             key: key
         });
     },
-    API: API,
     version: function() {
         return api.appVersion
-    }
+    },
+    // 获取设备信息
+    device: function() {
+        var device = {
+            appId: api.appId,
+            appName: api.appName,
+            appVersion: api.appVersion,
+            systemType: api.systemType,
+            systemVersion: api.systemVersion,
+            version: api.version,
+            deviceId: api.deviceId,
+            deviceToken: api.deviceToken,
+            deviceModel: api.deviceModel,
+            deviceName: api.deviceName,
+            uiMode: api.uiMode,
+            operator: api.operator,
+            connectionType: api.connectionType,
+            fullScreen: api.fullScreen,
+            screenWidth: api.screenWidth,
+            screenHeight: api.screenHeight,
+            safeArea: api.safeArea,
+            channel: api.channel
+        };
+        return device;
+    },
+    // 电池信息
+    battery: function(callback) {
+        api.addEventListener({
+            name: 'batterystatus'
+        }, function(res, err) {
+            if (res && callback && typeof callback == 'function') return callback(res);
+        });
+    },
+    // 网络状态改变
+    online: function(callback) {
+        api.addEventListener({
+            name: 'online'
+        }, function(res, err) {
+            if (res && callback && typeof callback == 'function') return callback(res);
+        });
+    },
+    // 摇一摇
+    shake: function(callback) {
+        api.addEventListener({
+            name: 'shake'
+        }, callback);
+    },
+    unshake: function() {
+        api.removeEventListener({
+            name: 'shake'
+        });
+    },
+    update: function() {
+        var type = 1; // android
+        if (this.getOS() == 'ios') type = 2; //ios
+        var version = api.appVersion;
+        var channel = api.channel;
+        this.post('Server/getVersion', {
+            type: type,
+            version_number: version,
+            version_channel: channel
+        }, function(res) {
+            if (res.status == 1) {
+
+            }
+        })
+    },
+    API: API
 }

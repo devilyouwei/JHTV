@@ -124,9 +124,6 @@
 <script type="text/javascript">
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
-        api.setStatusBarStyle({
-            style: 'light'
-        });
         var FNImageClip = api.require('FNImageClip');
         Vue.use(VueLazyload)
         var vue = new Vue({
@@ -246,11 +243,6 @@
                     }
                 },
                 closeWin() {
-                    setTimeout(function() {
-                        api.setStatusBarStyle({
-                            style: 'dark'
-                        });
-                    }, 200);
                     api.closeWin();
                 }
             }

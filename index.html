@@ -10,13 +10,14 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <style>
         header {
-            background: #fff;
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            color:#fff;
         }
 
         header ul li {
             text-align: center;
             display: none;
-            color: #323237;
+            color: #fff;
             position: relative;
             font-size: 0.5rem;
             padding: 0.35rem 0;
@@ -114,19 +115,23 @@
 <script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light',
+            color: 'rgba(0,0,0,0)'
+        });
+
         var vue = new Vue({
             el: '#wrap',
             data: {
                 show: true
             },
-            mounted() {}
+            mounted() {
+                getDevice();
+                funIniGroup();
+                $.update(); // 检查版本更新
+            }
         });
-        $api.fixStatusBar($api.dom('header'));
-        api.setStatusBarStyle({
-            style: 'dark',
-            color: 'rgba(0,0,0,0)'
-        });
-        funIniGroup();
     }
 
     function funIniGroup() {
@@ -149,16 +154,14 @@
             scrollEnabled: false,
             rect: {
                 x: 0,
-                y: $api.dom('header').offsetHeight,
+                y: $api.dom('header').offsetHeight-1,
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },
             preload: 4,
             index: 0,
             frames: frames
-        }, function(ret, err) {
-
-        });
+        }, function(ret, err) {});
     }
 
     // 随意切换按钮
@@ -191,5 +194,10 @@
             scroll: true,
             index: index
         });
+    }
+
+    function getDevice() {
+        var device = $.device();
+        $.log(device);
     }
 </script>

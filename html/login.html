@@ -178,11 +178,6 @@
     var TIME = 60;
     apiready = function() {
         $api.fixStatusBar($api.dom('header'));
-        api.setStatusBarStyle({
-            style: 'light',
-            color: 'rgba(0,0,0,0)'
-        });
-        api.parseTapmode();
         api.addEventListener({
             name: 'keyback'
         }, closeWin)
@@ -237,15 +232,10 @@
                 }
             }
         })
+        api.parseTapmode();
     };
 
     function closeWin() {
-        setTimeout(function() {
-            api.setStatusBarStyle({
-                style: 'dark',
-                color: 'rgba(0,0,0,0)'
-            });
-        }, 300)
         api.closeWin();
     }
 </script>

@@ -58,9 +58,6 @@
         $api.dom('header .aui-title').innerHTML = api.pageParam.navTitle + '&nbsp;&nbsp;<span class="aui-iconfont aui-icon-refresh" tapmode onClick="refresh()"></span>';
         if ($.getOS() == 'ios') $api.dom('#back').style.display = 'block'; // ios显示返回按钮
         initWebviewFrame();
-        api.setStatusBarStyle({
-            style: 'light'
-        });
         api.parseTapmode();
     }
 
@@ -132,9 +129,6 @@
             api.closeFrame({
                 name: 'webviewFrame'
             }); // 关闭webviewframe
-            api.setStatusBarStyle({
-                style: 'dark'
-            });
         }, 200);
         $.remove('web_title');
         api.closeWin();

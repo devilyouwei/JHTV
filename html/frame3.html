@@ -20,20 +20,22 @@
         }
 
         #user-info {
-            padding: 1.5rem 1rem;
-            background: #ff7474;
+            padding: 1rem;
+            padding-top:0.8rem;
+            padding-bottom:1.5rem;
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
             color: #fff;
         }
 
         #user-info .username {
             font-weight: bold;
             font-size: 1rem;
-            line-height: 1.8rem;
+            line-height: 1.5rem;
         }
 
         #user-info .userphone {
             font-size: 0.8rem;
-            line-height: 1.8rem;
+            line-height: 1.5rem;
         }
 
         #user-info .aui-iconfont {
@@ -42,7 +44,7 @@
 
         .vip {
             color: rgb(255, 215, 0);
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             line-height: 0.8rem;
             vertical-align: bottom;
             text-align: right;
@@ -60,7 +62,7 @@
 <body>
     <div id="vue" v-if="user">
         <!-- 顶部 -->
-        <section class="aui-content" id="user-info" @click="login">
+        <section class="aui-content" id="user-info" tapmode @click="login">
             <div class="table">
                 <div class="cell" style="width:4.5rem;">
                     <img :src="user.user_avatarurl" :key="user.user_avatarurl" class="aui-img-round" style="width:3.5rem;height:3.5rem;background-color:#e5e5e5;">
@@ -109,7 +111,7 @@
                         <div class="aui-list-item-title">我的收藏</div>
                     </div>
                 </li>
-                <li class="aui-list-item" @click="logout">
+                <li class="aui-list-item" tapmode @click="logout">
                     <div class="aui-list-item-label-icon">
                         <i class="iconfont icon-dingbudaohang-zhangh aui-text-info"></i>
                     </div>
@@ -128,7 +130,7 @@
                         <div class="aui-list-item-right">0元好物在这里</div>
                     </div>
                 </li>
-                <li class="aui-list-item">
+                <li class="aui-list-item" tapmode @click="checkUpdate">
                     <div class="aui-list-item-label-icon">
                         <i class="iconfont icon-gengxin aui-text-warning"></i>
                     </div>
@@ -188,7 +190,6 @@
                             var user = $.getUserInfo();
                             if (user.user_vip_end == 0) user.user_vip_end = '永久会员';
                             else user.user_vip_end = $.formatDate($.stamp2date(user.user_vip_end), 'yyyy/MM/dd');
-                            $.log(user)
                             this.user = user;
                         } else {
                             $.toast(res.msg);
@@ -202,6 +203,9 @@
                             this.initUser();
                         }
                     });
+                },
+                checkUpdate(){
+                  $.update();
                 },
                 login() {
                     if ($.getUserInfo()) {
@@ -218,11 +222,11 @@
                             hScrollBarEnabled: false,
                             slidBackEnabled: false
                         });
-
                     } else $.toLogin();
                 }
             }
         })
+        api.parseTapmode();
     }
 </script>
 
