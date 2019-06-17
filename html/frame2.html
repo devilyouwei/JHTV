@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>娱乐城</title>
+    <title>娱乐</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
     <link rel="stylesheet" type="text/css" href="../css/aui-slide.css" />
@@ -32,8 +32,9 @@
             text-align: left;
             padding: 10px;
         }
-        body{
-          background: #fff;
+
+        body {
+            background: #fff;
         }
     </style>
 </head>
@@ -43,14 +44,8 @@
         <section class="aui-content">
             <div id="aui-slide">
                 <div class="aui-slide-wrap">
-                    <div class="aui-slide-node">
-                        <img src="../image/demo/b1.jpg" />
-                    </div>
-                    <div class="aui-slide-node">
-                        <img src="../image/demo/b2.jpg" />
-                    </div>
-                    <div class="aui-slide-node">
-                        <img src="../image/demo/b3.jpg" />
+                    <div class="aui-slide-node" v-for="(item,index) in banner" :key="index">
+                        <img v-lazy="item.banner_img" :key="item.banner_img" @click="goUrl(item.banner_title,item.banner_url)" tapmode/>
                     </div>
                 </div>
                 <div class="aui-slide-page-wrap">
@@ -61,20 +56,9 @@
         <section class="aui-grid aui-margin-b-15">
             <div class="aui-title"><i class="iconfont icon-youxi" style="color:#ff7600;font-size: 0.9rem"></i>视频看累了？逛逛娱乐城</div>
             <div class="aui-row">
-                <div class="aui-col-xs-4" tapmode>
-                    <div class="aui-badge">88</div>
-                    <img class="icon" src="../image/lip.png" alt="">
-                    <div class="aui-grid-label">天天赢口红</div>
-                </div>
-                <div class="aui-col-xs-4">
-                    <div class="aui-badge">88</div>
-                    <img class="icon" src="../image/lip.png" alt="">
-                    <div class="aui-grid-label">我要赢口红</div>
-                </div>
-                <div class="aui-col-xs-4">
-                    <div class="aui-badge">88</div>
-                    <img class="icon" src="../image/lip.png" alt="">
-                    <div class="aui-grid-label">牛牛</div>
+                <div class="aui-col-xs-4" tapmode v-for="(item,index) in list" :key="index" @click="goUrl(item.welfare_name,item.welfare_url)">
+                    <img class="icon" v-lazy="item.welfare_logo" alt="">
+                    <div class="aui-grid-label">{{item.welfare_name}}</div>
                 </div>
             </div>
         </section>
@@ -83,14 +67,34 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/aui-slide.js"></script>
 <script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        Vue.use(VueLazyload);
         var vue = new Vue({
             el: '#vue',
             data: {
-                show: true
+                banner: [],
+                list: []
             },
-            mounted() {}
+            mounted() {
+                this.initData();
+            },
+            methods: {
+                initData() {
+                    $.post('Welfare/getWelfareData', {}, res => {
+                        if (res.status == 1) {
+                          this.banner = res.results.banner;
+                          this.list = res.results.data;
+                        } else $.toast(res.msg);
+                    })
+                },
+                // 第三方网址
+                goUrl(title,url){
+                  $.openWebview(title,url,true);
+                }
+            }
         })
         var slide = new auiSlide({
             container: document.getElementById("aui-slide"),
@@ -101,18 +105,7 @@
             "loop": true,
             'dotPosition': 'center'
         });
-        /*
-        api.setRefreshHeaderInfo({
-            visible: true,
-            loadingImg: '',
-            bgColor: '#fff',
-            textColor: '#000',
-            textDown: '下拉刷新...',
-            textUp: '松开刷新...',
-            showTime: true
-        }, function(ret, err) {
-        });
-        */
+        api.parseTapmode();
     }
 </script>
 

@@ -263,7 +263,7 @@
     </section>
 
     <section class="aui-flexView">
-        <a onClick="tvList()" class="aui-flex b-line">
+        <a onClick="tvList()" class="aui-flex b-line" tapmode>
             <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">全国电视直播</em></p>
@@ -273,7 +273,7 @@
             <div class="aui-flex-support">看直播</div>
         </a>
 
-        <a onClick="gameList()" class="aui-flex b-line">
+        <a onClick="gameList()" class="aui-flex b-line" tapmode>
             <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">游戏在线直播</em></p>
@@ -283,7 +283,7 @@
             <div class="aui-flex-support-no">看直播</div>
         </a>
 
-        <a onClick="girlList()" class="aui-flex b-line">
+        <a onClick="girlList()" class="aui-flex b-line" tapmode>
             <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">美女在线直播</em></p>
@@ -293,17 +293,17 @@
             <div class="aui-flex-support-no">看直播</div>
         </a>
 
-        <a onClick="movieList()" class="aui-flex b-line">
+        <a onClick="movieList()" class="aui-flex b-line" tapmode>
             <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
             <div class="aui-flex-box">
-                <p><em class="aui-group-three">最新热门电影</em></p>
+                <p><em class="aui-group-three">热门电影</em></p>
                 <h3>当下最火热大片推荐</h3>
-                <p><em class="aui-group-one">不定时更新</em><em class="aui-group-two">经典热门大片</em></p>
+                <p><em class="aui-group-one">智能更新</em><em class="aui-group-two">各平台热门电影</em></p>
             </div>
-            <div class="aui-flex-support-no">看大片</div>
+            <div class="aui-flex-support">看大片</div>
         </a>
 
-        <a onClick="fuckList()" class="aui-flex b-line">
+        <a onClick="fuckList()" class="aui-flex b-line" tapmode>
             <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
             <div class="aui-flex-box">
                 <p><em class="aui-group-three">美女写真视频</em></p>
@@ -326,6 +326,7 @@
             bounces: true,
         });
 
+        api.parseTapmode();
     }
 
     // 电视直播
@@ -361,7 +362,20 @@
     }
 
     function movieList() {
-        return $.toast('即将上线，敬请期待');
+        if (!$.getUserInfo()) return $.toast('请先登录后看大片！');
+        api.openWin({
+            name: 'recmovie',
+            url: './recmovie.html',
+            animation: {
+                type: 'movein',
+                subType: 'from_right',
+                duration: 200
+            },
+            scrollEnabled: false,
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false,
+            slidBackEnabled: false
+        });
     }
 
     function fuckList() {

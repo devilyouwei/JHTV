@@ -198,7 +198,8 @@
                     if (!this.code) return $.toast('验证码怎么没有了？ Σ(⊙▽⊙"a ');
                     $.post('Login/exeBindingPhone', {
                         phone: this.phone,
-                        verify: this.code
+                        verify: this.code,
+                        info: JSON.stringify($.device())
                     }, function(res) {
                         $.toast(res.msg);
                         if (res.status == 1) {

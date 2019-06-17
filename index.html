@@ -127,7 +127,6 @@
                 show: true
             },
             mounted() {
-                getDevice();
                 funIniGroup();
                 $.update(); // 检查版本更新
             }
@@ -196,8 +195,4 @@
         });
     }
 
-    function getDevice() {
-        var device = $.device();
-        $.log(device);
-    }
 </script>

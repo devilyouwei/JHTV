@@ -288,20 +288,52 @@ window.$ = {
             name: 'shake'
         });
     },
-    update: function() {
-        var type = 1; // android
-        if (this.getOS() == 'ios') type = 2; //ios
-        var version = api.appVersion;
-        var channel = api.channel;
-        this.post('Server/getVersion', {
-            type: type,
-            version_number: version,
-            version_channel: channel
-        }, function(res) {
-            if (res.status == 1) {
-
+    update: function(flag) {
+        var mam = api.require('mam');
+        mam.checkUpdate((ret, err) => {
+            if (ret) {
+                var result = ret.result;
+                if (result.update == true && result.closed == false) {
+                    var str = '新版本型号:' + result.version + ';更新提示语:' + result.updateTip + ';下载地址:' + result.source + ';发布时间:' + result.time;
+                    api.confirm({
+                        title: '新版本',
+                        msg: str,
+                        buttons: ['确定', '取消']
+                    }, (ret, err) => {
+                        if (ret.buttonIndex == 1) {
+                            if (api.systemType == "android") {
+                                api.download({
+                                    url: result.source,
+                                    report: true
+                                }, (ret, err) => {
+                                    if (ret && 0 == ret.state) { /* 下载进度 */
+                                        api.toast({
+                                            msg: "正在下载应用" + ret.percent + "%",
+                                            duration: 2000
+                                        });
+                                    }
+                                    if (ret && 1 == ret.state) { /* 下载完成 */
+                                        var savePath = ret.savePath;
+                                        api.installApp({
+                                            appUri: savePath
+                                        });
+                                    }
+                                });
+                            }
+                            if (api.systemType == "ios") {
+                                api.installApp({
+                                    appUri: result.source
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    if (flag) this.toast('已经是最新版本咯~ (☆▽☆)');
+                }
+            } else {
+                this.toast(err.msg);
             }
-        })
+        });
     },
     API: API
 }

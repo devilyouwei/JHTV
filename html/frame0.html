@@ -53,8 +53,8 @@
 
         .goods-title {
             padding-top: 0.1rem;
-            padding-left:0.2rem;
-            padding-right:0.2rem;
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
             font-size: 0.8rem;
             font-weight: bold;
             line-height: 1.3rem;
@@ -112,7 +112,7 @@
             <div id="aui-slide">
                 <div class="aui-slide-wrap">
                     <div v-for="(item,index) in banner" class="aui-slide-node">
-                        <img v-lazy="item.banner_img" :key="item.banner_img" />
+                        <img v-lazy="item.banner_img" :key="item.banner_img" @click="goUrl(item.banner_title,item.banner_url)" tapmode/>
                     </div>
                 </div>
                 <div class="aui-slide-page-wrap">
@@ -161,32 +161,22 @@
             </div>
         </section>
 
-        <div class="aui-content" style="background:#fff;">
-            <div class="aui-card-list">
-                <div class="aui-card-list-header" style="padding-bottom:0rem;">
-                    <div></div>
-                    <div class="title">
-                        /&nbsp;&nbsp;聚合推荐&nbsp;&nbsp;/
-                        <p>Recommend</p>
-                    </div>
-                    <div></div>
+        <section class="aui-content aui-margin-b-15" style="background:#fff;">
+            <div class="aui-card-list-header">
+                <div></div>
+                <div class="title">
+                    /&nbsp;&nbsp;聚合推荐&nbsp;&nbsp;/
+                    <p>Recommend</p>
                 </div>
-                <div class="aui-card-list-content-padded">
-                    <div class="aui-row aui-row-padded">
-                        <div class="aui-col-xs-6" v-for="(item,index) in rec" tapmode @click="goRec(item.video_title,item.video_url)">
-                            <div class="goods-item">
-                                <img v-lazy="'http:'+item.video_bg_url" :key="item.video_bg_url">
-                                <p class="goods-title">{{item.video_title}}</p>
-                                <p class="goods-click">{{item.video_subtitle}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="more">
-                    <div class="aui-btn aui-btn-block aui-btn-outlined aui-btn-sm" tapmode @click="moreRec">更多热门视频</div>
+                <div></div>
+            </div>
+            <div class="aui-grid aui-padded-l-10 aui-padded-r-10">
+                <div class="aui-col-xs-3" v-for="(item,index) in rec" :key="index" tapmode @click="goUrl(item.welfare_name,item.welfare_url)">
+                    <img :src="item.welfare_logo" :key="item.welfare_logo" class="icon">
+                    <div class="aui-grid-label">{{item.welfare_name}}</div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -217,31 +207,30 @@
                         if (res.status == 1) {
                             self.plat = res.results.data;
                             self.banner = res.results.banner;
-                        }
-
-                        var slide = new auiSlide({
-                            container: document.getElementById("aui-slide"),
-                            "height": 160,
-                            "speed": 300,
-                            "pageShow": true,
-                            "pageStyle": 'dot',
-                            "loop": true,
-                            'dotPosition': 'center'
-                        });
+                            var slide = new auiSlide({
+                                container: document.getElementById("aui-slide"),
+                                "height": 160,
+                                "speed": 300,
+                                "pageShow": true,
+                                "pageStyle": 'dot',
+                                "loop": true,
+                                'dotPosition': 'center'
+                            });
+                        } else $.toast(res.msg);
                         self.launch++;
                     });
                     // 广告
                     $.post('Video/getHomeAdData', {}, function(res) {
                         if (res.status == 1) {
                             self.adv = res.results.data;
-                        }
+                        } else $.toast(res.msg);
                         self.launch++;
                     });
-                    // 平台推荐
-                    $.post('Video/getPlatformVideTypeList', {page:1,count:4}, function(res) {
+                    // 推荐服务
+                    $.post('Video/getRecommendPlatform', {}, function(res) {
                         if (res.status == 1) {
                             self.rec = res.results.data;
-                        }
+                        } else $.toast(res.msg);
                         self.launch++;
                     });
                 },
@@ -252,24 +241,17 @@
                 goAdv(url) {
                     $.openWebview('平台推广', url, true); // 使用x5引擎
                 },
-                goRec(title, url) {
-                    $.openWebview(title, url); // 使用x5引擎
-                },
-                moreRec() {
-                    api.openWin({
-                        name: 'recmovie',
-                        url: './recmovie.html',
-                        scrollEnabled: false,
-                        vScrollBarEnabled: false,
-                        hScrollBarEnabled: false,
-                        slidBackEnabled: false
-                    });
-
+                goUrl(title, url) {
+                    $.openWebview(title, url, true);
                 }
             },
             watch: {
                 launch(v) {
-                    if (v >= 3) return $.showSplash(false);
+                    if (v >= 3) {
+                        setTimeout(function() {
+                            $.showSplash(false);
+                        }, 500);
+                    }
                 }
             }
         })
