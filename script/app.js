@@ -294,7 +294,7 @@ window.$ = {
             if (ret) {
                 var result = ret.result;
                 if (result.update == true && result.closed == false) {
-                    var str = '新版本型号:' + result.version + ';更新提示语:' + result.updateTip + ';下载地址:' + result.source + ';发布时间:' + result.time;
+                    var str = '新版本型号:&nbsp;' + result.version + '<br>' + result.updateTip + '<br>发布时间:' + result.time;
                     api.confirm({
                         title: '新版本',
                         msg: str,
