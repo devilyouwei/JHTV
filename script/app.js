@@ -335,5 +335,22 @@ window.$ = {
             }
         });
     },
+    // 更新配置
+    setConfig: function(callback) {
+        this.post('Confing/getConfing', {}, function(res) {
+            if (res.status == 1) {
+                $.set('config', JSON.stringify(res.results));
+                if (callback && typeof callback == 'function') {
+                    return callback(res.results);
+                }
+            } else $.toast('获取配置失败~(°o°；)');
+        })
+    },
+    // 获取配置
+    getConfig: function() {
+        var config = $.get('config');
+        if (config) return JSON.parse(config);
+        else return config;
+    },
     API: API
 }

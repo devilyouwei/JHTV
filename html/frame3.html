@@ -11,6 +11,9 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <style type="text/css">
+    big{
+      font-size:1rem;
+    }
         .text-white {
             color: #ffffff !important;
         }
@@ -21,8 +24,8 @@
 
         #user-info {
             padding: 1rem;
-            padding-top:0.8rem;
-            padding-bottom:1.5rem;
+            padding-top: 0.8rem;
+            padding-bottom: 1.5rem;
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
             color: #fff;
         }
@@ -56,6 +59,62 @@
             font-size: 1rem;
             line-height: 0.8rem;
         }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99;
+        }
+
+        .modal .img-box {
+            text-align: center;
+            padding: 2.5rem;
+            padding-bottom: 1.8rem;
+            position: relative;
+        }
+
+        img[lazy=loading] {
+            background: rgba(0, 0, 0, 0);
+        }
+
+        img[lazy=error] {
+            background: rgba(0, 0, 0, 0);
+        }
+
+        .modal .img-box img {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .modal .btn-box {
+            text-align: center;
+        }
+
+        .modal .btn-box .btn {
+            border: none;
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            color: #fff;
+            font-size: 1rem;
+            height: 2.5rem;
+            padding: 0 3rem;
+        }
+
+        .modal .btn-box .btn .iconfont {
+            font-size: 1rem;
+        }
+
+        .modal .img-box .icon-cha {
+            z-index: 111;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color:#fff;
+        }
     </style>
 </head>
 
@@ -72,20 +131,20 @@
                     <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
                 </div>
                 <div class="cell vip">
-                  <div>到期时间</div>
-                  <div>{{user.user_vip_end}}</div>
+                    <div>到期时间</div>
+                    <div>{{user.user_vip_end}}</div>
                 </div>
             </div>
         </section>
         <section class="aui-content aui-grid aui-margin-b-15">
             <div class="aui-row">
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-warning">0.00<small> 元</small></big>
-                    <div class="aui-gird-lable aui-font-size-12">余额</div>
+                    <big class="aui-text-warning">0.00<small> 个</small></big>
+                    <div class="aui-gird-lable aui-font-size-12">收藏</div>
                 </div>
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-danger">0.00<small> 个</small></big>
-                    <div class="aui-gird-lable aui-font-size-12">优惠</div>
+                    <big class="aui-text-danger">0.00<small> 元</small></big>
+                    <div class="aui-gird-lable aui-font-size-12">余额</div>
                 </div>
                 <div class="aui-col-xs-4">
                     <big class="aui-text-success">0.00<small> 分</small></big>
@@ -101,14 +160,15 @@
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">收货地址</div>
+                        <div class="aui-list-item-right">即将上线</div>
                     </div>
                 </li>
-                <li class="aui-list-item">
+                <li class="aui-list-item" tapmode @click="share">
                     <div class="aui-list-item-label-icon">
-                        <i class="aui-iconfont aui-icon-like aui-text-danger"></i>
+                        <i class="iconfont icon-fenxiang aui-text-danger"></i>
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
-                        <div class="aui-list-item-title">我的收藏</div>
+                        <div class="aui-list-item-title">分享海报</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="logout">
@@ -127,7 +187,7 @@
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">积分商城</div>
-                        <div class="aui-list-item-right">0元好物在这里</div>
+                        <div class="aui-list-item-right">即将上线</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="checkUpdate">
@@ -141,17 +201,29 @@
                 </li>
             </ul>
         </section>
+        <div class="modal" v-show="poster">
+            <div class="img-box">
+                <i class="iconfont icon-cha" @click="poster=false;" tapmode>&nbsp;</i>
+                <img v-lazy="poster" :key="poster">
+            </div>
+            <div class="btn-box">
+                <button class="btn" tapmode @click="downloadPoster"><i class="iconfont icon-xiazai1">&nbsp;</i>保存海报</button>
+            </div>
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        Vue.use(VueLazyload);
         var vue = new Vue({
             el: '#vue',
             data: {
                 version: $.version(),
+                poster: '',
                 user: {
                     user_name: '未登录',
                     user_phone: '10086',
@@ -204,8 +276,8 @@
                         }
                     });
                 },
-                checkUpdate(){
-                  $.update(true);
+                checkUpdate() {
+                    $.update(true);
                 },
                 login() {
                     if ($.getUserInfo()) {
@@ -223,6 +295,36 @@
                             slidBackEnabled: false
                         });
                     } else $.toLogin();
+                },
+                share() {
+                    var config = $.getConfig();
+                    if (config) {
+                        this.poster = config.qrcode;
+                    } else {
+                        $.setConfig((config) => {
+                            this.poster = config.qrcode
+                        })
+                    }
+                },
+                downloadPoster() {
+                    $.load(true, '保存中...');
+                    api.download({
+                        url: this.poster,
+                        savePath: 'fs://res/poster.jpg'
+                    }, (ret, err) => {
+                        $.load(false);
+                        if (ret && ret.state == 1) {
+                            api.saveMediaToAlbum({
+                                path: ret.savePath
+                            }, (ret, err) => {
+                                if (ret && ret.status) $.toast('保存成功，赶紧去相册找找分享给好友吧~');
+                                else $.toast('保存失败');
+                            });
+                        } else {
+                            $.toast('保存失败，请检查存储权限')
+                        }
+                    });
+
                 }
             }
         })

@@ -205,8 +205,9 @@
                         if (res.status == 1) {
                             $.set('userinfo', JSON.stringify(res.results));
                             api.sendEvent({
-                                name: 'initUser'
+                                name: 'refreshUserInfo'
                             });
+                            $.setConfig();
                             closeWin();
                         }
                     }, '正在登陆哦~');

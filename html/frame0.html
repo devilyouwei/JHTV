@@ -137,25 +137,25 @@
                 <div class="aui-col-xs-4 aui-padded-15 aui-border-r" style="height: 10rem;" tapmode @click="goAdv(adv[0].ad_url)">
                     <h3 class="aui-text-danger">{{adv[0].ad_title}}</h3>
                     <p>{{adv[0].ad_subtitle}}</p>
-                    <img v-lazy="adv[0].ad_img" :key="adv[0].ad_img" style="width: 4.5rem;">
+                    <img v-lazy="adv[0].ad_img" :key="adv[0].ad_img" style="width: 100%;margin-top:1rem;">
                 </div>
                 <div class="aui-col-xs-8 aui-padded-b-0 aui-padded-l-0">
                     <div class="aui-col-xs-12 aui-border-b" style="overflow: hidden; height: 4rem" tapmode @click="goAdv(adv[1].ad_url)">
-                        <div class="aui-col-xs-9">
+                        <div class="aui-col-xs-7">
                             <h3 class="aui-text-info">{{adv[1].ad_title}}</h3>
                             <p>{{adv[1].ad_subtitle}}</p>
                         </div>
-                        <div class="aui-col-xs-3"><img v-lazy="adv[1].ad_img" :key="adv[1].ad_img"></div>
+                        <div class="aui-col-xs-5"><img v-lazy="adv[1].ad_img" :key="adv[1].ad_img" style="width:100%;"></div>
                     </div>
                     <div class="aui-col-xs-6 aui-border-r" style="height: 5.875rem;" tapmode @click="goAdv(adv[2].ad_url)">
                         <h5 class="aui-text-warning">{{adv[2].ad_title}}</h5>
                         <p>{{adv[2].ad_subtitle}}</p>
-                        <img v-lazy="adv[2].ad_img" :key="adv[2].ad_img">
+                        <img v-lazy="adv[2].ad_img" :key="adv[2].ad_img" style="width:80%;margin-top:0.5rem;">
                     </div>
                     <div class="aui-col-xs-6" tapmode @click="goAdv(adv[3].ad_url)">
                         <h5 class="aui-text-success">{{adv[3].ad_title}}</h5>
                         <p>{{adv[3].ad_subtitle}}</p>
-                        <img v-lazy="adv[3].ad_img" :key="adv[3].ad_img">
+                        <img v-lazy="adv[3].ad_img" :key="adv[3].ad_img" style="width:80%;margin-top:0.5rem;">
                     </div>
                 </div>
             </div>

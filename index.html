@@ -11,7 +11,7 @@
     <style>
         header {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
-            color:#fff;
+            color: #fff;
         }
 
         header ul li {
@@ -129,6 +129,7 @@
             mounted() {
                 funIniGroup();
                 $.update(); // 检查版本更新
+                $.setConfig(); //获取配置
             }
         });
     }
@@ -153,7 +154,7 @@
             scrollEnabled: false,
             rect: {
                 x: 0,
-                y: $api.dom('header').offsetHeight-1,
+                y: $api.dom('header').offsetHeight - 1,
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },
@@ -194,5 +195,4 @@
             index: index
         });
     }
-
 </script>

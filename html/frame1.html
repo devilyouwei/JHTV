@@ -257,9 +257,7 @@
 
 <body>
     <section class="aui-content">
-        <a href="javascript:;">
-            <img src="http://video.caoyujie.com/zb.gif" class="poster">
-        </a>
+        <img src="" class="poster" id="poster">
     </section>
 
     <section class="aui-flexView">
@@ -325,7 +323,10 @@
         api.setFrameAttr({
             bounces: true,
         });
-
+        var config = $.getConfig();
+        if (config && config.zhibo_banner) {
+          document.getElementById('poster').src = config.zhibo_banner;
+        }
         api.parseTapmode();
     }
 
