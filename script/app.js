@@ -307,7 +307,7 @@ window.$ = {
                                     report: true
                                 }, (ret, err) => {
                                     if (ret && 0 == ret.state) { /* 下载进度 */
-                                      this.load(true,'正在下载应用' + ret.percent + '%');
+                                      this.load(true,'下载' + ret.percent + '%');
                                       if(ret.percent==100) this.load(false);
                                     }
                                     if (ret && 1 == ret.state) { /* 下载完成 */
