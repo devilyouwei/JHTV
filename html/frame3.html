@@ -139,15 +139,15 @@
         <section class="aui-content aui-grid aui-margin-b-15">
             <div class="aui-row">
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-warning">0</big>
+                    <big class="aui-text-warning">{{user.user_collect}}</big>
                     <div class="aui-gird-lable aui-font-size-12">收藏</div>
                 </div>
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-danger">0.00</big>
+                    <big class="aui-text-danger">{{user.user_pay}}</big>
                     <div class="aui-gird-lable aui-font-size-12">余额</div>
                 </div>
                 <div class="aui-col-xs-4">
-                    <big class="aui-text-success">0</big>
+                    <big class="aui-text-success">{{user.user_integral}}</big>
                     <div class="aui-gird-lable aui-font-size-12">积分</div>
                 </div>
             </div>
@@ -235,7 +235,10 @@
                     user_name: '未登录',
                     user_phone: '10086',
                     user_avatarurl: '../image/avatar.jpg',
-                    user_vip_end: '未知'
+                    user_vip_end: '未知',
+                    user_collect:0,
+                    user_pay:0,
+                    user_integral:0
                 }
             },
             mounted() {

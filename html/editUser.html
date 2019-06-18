@@ -146,7 +146,7 @@
                     }, (res, err) => {
                         if (res.buttonIndex == 1) {
                             this.getPic('library');
-                        } else {
+                        } else if(res.buttonIndex == 2){
                             this.getPic('camera');
                         }
                     });
