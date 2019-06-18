@@ -1,4 +1,4 @@
-var API = 'http://h5.shuiguoji.caoyujie.com/index';
+var API = 'http://jhtv.devil.ren/index';
 window.$ = {
     log: function(msg) {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))

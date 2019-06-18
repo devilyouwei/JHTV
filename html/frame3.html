@@ -11,9 +11,10 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <style type="text/css">
-    big{
-      font-size:1rem;
-    }
+        big {
+            font-size: 1rem;
+        }
+
         .text-white {
             color: #ffffff !important;
         }
@@ -96,11 +97,10 @@
 
         .modal .btn-box .btn {
             border: none;
-            background: linear-gradient(to right, #ff6144, #ff0072)!important;
             color: #fff;
-            font-size: 1rem;
-            height: 2.5rem;
-            padding: 0 3rem;
+            font-size: 0.8rem;
+            height: 2rem;
+            padding: 0 1rem;
         }
 
         .modal .btn-box .btn .iconfont {
@@ -113,7 +113,7 @@
             top: 1rem;
             right: 1rem;
             font-size: 2rem;
-            color:#fff;
+            color: #fff;
         }
     </style>
 </head>
@@ -139,15 +139,15 @@
         <section class="aui-content aui-grid aui-margin-b-15">
             <div class="aui-row">
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-warning">0.00<small> 个</small></big>
+                    <big class="aui-text-warning">0</big>
                     <div class="aui-gird-lable aui-font-size-12">收藏</div>
                 </div>
                 <div class="aui-col-xs-4 aui-border-r">
-                    <big class="aui-text-danger">0.00<small> 元</small></big>
+                    <big class="aui-text-danger">0.00</big>
                     <div class="aui-gird-lable aui-font-size-12">余额</div>
                 </div>
                 <div class="aui-col-xs-4">
-                    <big class="aui-text-success">0.00<small> 分</small></big>
+                    <big class="aui-text-success">0</big>
                     <div class="aui-gird-lable aui-font-size-12">积分</div>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                         <i class="iconfont icon-fenxiang aui-text-danger"></i>
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
-                        <div class="aui-list-item-title">分享海报</div>
+                        <div class="aui-list-item-title">分享APP</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="logout">
@@ -207,7 +207,14 @@
                 <img v-lazy="poster" :key="poster">
             </div>
             <div class="btn-box">
-                <button class="btn" tapmode @click="downloadPoster"><i class="iconfont icon-xiazai1">&nbsp;</i>保存海报</button>
+                <div class="table">
+                    <div class="cell">
+                        <button class="btn" tapmode @click="downloadPoster" style="background:#ff6144"><i class="iconfont icon-xiazai1">&nbsp;</i>保存</button>
+                    </div>
+                    <div class="cell">
+                        <button class="btn" tapmode @click="sharePoster" style="background:#ff0072"><i class="iconfont icon-fenxiang">&nbsp;</i>分享</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -310,6 +317,7 @@
                     $.load(true, '保存中...');
                     api.download({
                         url: this.poster,
+                        cache: true,
                         savePath: 'fs://res/poster.jpg'
                     }, (ret, err) => {
                         $.load(false);
@@ -324,7 +332,26 @@
                             $.toast('保存失败，请检查存储权限')
                         }
                     });
-
+                },
+                sharePoster() {
+                    $.load(true, '分享中...');
+                    api.download({
+                        url: this.poster,
+                        cache:true,
+                        savePath: 'fs://res/poster.jpg'
+                    }, (ret, err) => {
+                        $.load(false);
+                        if (ret && ret.state == 1) {
+                            var share= api.require('shareAction');
+                            share.share({
+                                text: '聚合视频分享',
+                                type: 'image',
+                                path: ret.savePath
+                            });
+                        } else {
+                            $.toast('保存失败，请检查存储权限')
+                        }
+                    });
                 }
             }
         })
