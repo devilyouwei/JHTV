@@ -15,6 +15,7 @@
     <preference name="autoUpdate" value="true"/>
     <preference name="smartUpdate" value="false"/>
     <preference name="debug" value="false"/>
+    <preference name="appCertificateVerify" value="false"/>
     <preference name="statusBarAppearance" value="true"/>
     <preference name="backgroundMode" value=""/>
     <permission name="readPhoneState"/>
