@@ -84,7 +84,7 @@
         }
 
         .aui-slide-wrap {
-            border-radius: 0.5rem;
+            border-radius: 8px;
             box-shadow: 0.1rem 0.1rem 0.4rem rgba(99, 99, 99, 0.3);
         }
 
@@ -117,7 +117,7 @@
             <div id="slide1" class="aui-slide">
                 <div class="aui-slide-wrap">
                     <div v-for="(item,index) in banner" class="aui-slide-node" :key="index">
-                        <img :src="item.banner_img" :key="item.banner_img" @click="goUrl(item.banner_title,item.banner_url)" tapmode/>
+                        <img :src="item.banner_img" :key="item.banner_img" @click="goUrl(item.banner_title,item.banner_url,item.banner_play_sign)" tapmode/>
                     </div>
                 </div>
                 <div class="aui-slide-page-wrap">
@@ -141,7 +141,7 @@
             <div id="slide2" class="aui-slide">
                 <div class="aui-slide-wrap">
                     <div v-for="(item,index) in adv" class="aui-slide-node" :key="index">
-                        <img :src="item.ad_img" :key="item.ad_img" @click="goPlat(item.ad_title,item.ad_url)" tapmode/>
+                        <img :src="item.ad_img" :key="item.ad_img" @click="goPlat(item.ad_title,item.ad_url,item.ad_play_sign)" tapmode/>
                     </div>
                 </div>
                 <div class="aui-slide-page-wrap">
@@ -202,6 +202,7 @@
                                     container: document.getElementById("slide1"),
                                     "height": 160,
                                     "speed": 300,
+                                    "autoPlay": 3500,
                                     "pageShow": true,
                                     "pageStyle": 'dot',
                                     "loop": true,
@@ -218,8 +219,9 @@
                             setTimeout(function() {
                                 new auiSlide({
                                     container: document.getElementById("slide2"),
-                                    "height": 160,
+                                    "height": 180,
                                     "speed": 300,
+                                    "autoPlay": 3500,
                                     "pageShow": true,
                                     "pageStyle": 'dot',
                                     "loop": true,
@@ -237,12 +239,21 @@
                         self.launch++;
                     });
                 },
-                goPlat(plat, url) {
-                    if (!$.getUserInfo()) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
-                    $.openWebview(plat, url);
+                goPlat(plat, url, sign) {
+                    if (sign) { // 有sign直接播放视频，不跳转平台
+                        var user = $.getUserInfo();
+                        if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
+                        var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
+                        $.openWebview(plat, playUrl, true);
+                    } else $.openWebview(plat, url);
                 },
-                goUrl(title, url) {
-                    $.openWebview(title, url, true);
+                goUrl(title, url, sign) {
+                    if (sign) { // 有sign直接播放视频，不跳转平台
+                        var user = $.getUserInfo();
+                        if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
+                        var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
+                        $.openWebview(title, playUrl, true);
+                    } else $.openWebview(title, url, true);
                 }
             },
             watch: {

@@ -186,6 +186,50 @@ window.$ = {
         var browser = api.require('webBrowser');
         browser.closeView();
     },
+    // 本地播放器
+    play: function(url,title) {
+        var videoPlayer = api.require('videoPlayer');
+        videoPlayer.play({
+            texts: {
+                head: {
+                    title: title || '视频'
+                }
+            },
+            styles: {
+                head: {
+                    bg: 'rgba(0.5,0.5,0.5,0.7)',
+                    height: 30,
+                    titleSize: 15,
+                    titleColor: '#fff',
+                    backSize: 20,
+                    backImg: 'fs://img/back.png',
+                    setSize: 20,
+                    setImg: 'fs://img/set.png'
+                },
+                foot: {
+                    bg: 'rgba(0.5,0.5,0.5,0.7)',
+                    height: 30,
+                    playSize: 20,
+                    playImg: 'fs://img/back.png',
+                    pauseImg: 'fs://img/back.png',
+                    nextSize: 20,
+                    nextImg: 'fs://img/back.png',
+                    timeSize: 14,
+                    timeColor: '#fff',
+                    sliderImg: 'fs://img/slder.png',
+                    progressColor: '#ff0072',
+                    progressSelected: '#76EE00'
+                }
+            },
+            path: url,
+            autorotation:false,
+            autoPlay: true
+        }, function(ret, err) {
+            if (ret) {
+            } else {
+            }
+        });
+    },
     // 获取系统信息
     getOS: function() {　　
         var n = navigator.userAgent;
@@ -307,8 +351,8 @@ window.$ = {
                                     report: true
                                 }, (ret, err) => {
                                     if (ret && 0 == ret.state) { /* 下载进度 */
-                                      this.load(true,'下载' + ret.percent + '%');
-                                      if(ret.percent==100) this.load(false);
+                                        this.load(true, '下载' + ret.percent + '%');
+                                        if (ret.percent == 100) this.load(false);
                                     }
                                     if (ret && 1 == ret.state) { /* 下载完成 */
                                         var savePath = ret.savePath;

@@ -76,7 +76,7 @@
             <div class="aui-title"><i class="iconfont icon-tubiao303"></i>为您推荐最新大片</div>
             <div class="aui-card-list-content-padded">
                 <div class="aui-row aui-row-padded">
-                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goRec(item.video_title,item.video_url)">
+                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goRec(item.video_title,item.video_url,item.video_play_sign)">
                         <div class="goods-item">
                             <img v-lazy="'http:'+item.video_bg_url" :key="item.video_bg_url">
                             <p class="goods-title">{{item.video_title}}</p>
@@ -148,8 +148,13 @@
                         }
                     }, load);
                 },
-                goRec(title, url) {
-                    $.openWebview(title, url);
+                goRec(title, url, sign) {
+                    if (sign) { // 有sign直接播放视频，不跳转平台
+                        var user = $.getUserInfo();
+                        if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
+                        var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
+                        $.openWebview(title,playUrl,true);
+                    }else $.openWebview(title, url);
                 }
             }
         })

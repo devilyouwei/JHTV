@@ -8,6 +8,7 @@
     <title>底部导航</title>
     <link rel="stylesheet" type="text/css" href="./css/api.css" />
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css" />
     <style>
         header {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
@@ -28,59 +29,26 @@
         }
 
         #footer {
-            border: none;
+          border-top:1px solid #e5e5e5;
+          padding:0.2rem 0;
+          color:#ff6144
         }
 
-        #footer ul li {
+        #footer .table .cell {
             height: auto;
-            padding-top: 0.8rem;
-            padding-bottom: 0.2rem;
-            background: url() no-repeat center 2px;
             font-size: 0.35rem;
-            background-size: auto 0.8rem;
             text-align: center;
+            font-weight: 600;
+        }
+        #footer .table .cell .iconfont{
+            font-size: 0.55rem;
+            line-height: 0.65rem;
         }
 
-        #footer ul li.active {
-            color: #f52737;
+        #footer .table .cell.active {
+            color: #ff0072;
         }
 
-        #footer ul li#icon1 {
-            background-image: url(./image/shouye.png);
-        }
-
-        #footer ul li#icon2 {
-            background-image: url(./image/zhibo.png);
-        }
-
-        #footer ul li#icon4 {
-            background-image: url(./image/faxian.png);
-        }
-
-        #footer ul li#icon5 {
-            background-image: url(./image/wode.png);
-        }
-
-        #footer ul li#icon1.active {
-            background-image: url(./image/shouye2.png);
-        }
-
-        #footer ul li#icon2.active {
-            background-image: url(./image/zhibo2.png);
-        }
-
-        #footer ul li#icon4.active {
-            background-image: url(./image/faxian2.png);
-        }
-
-        #footer ul li#icon5.active {
-            background-image: url(./image/wode2.png);
-        }
-
-        .flex-con {
-            overflow: auto;
-            background-color: #fff;
-        }
     </style>
 </head>
 
@@ -97,13 +65,25 @@
         <div id="main" class="flex-con">
 
         </div>
-        <div id="footer" class="border-t">
-            <ul class="flex-wrap" style="font-weight:bold">
-                <li id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">视频</li>
-                <li id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">直播</li>
-                <li id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">娱乐</li>
-                <li id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
-            </ul>
+        <div id="footer">
+            <div class="table fixed">
+                <div id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="active cell">
+                  <div><i class="iconfont icon-dianying"></i></div>
+                  <h1>视频</h1>
+                </div>
+                <div id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
+                  <div><i class="iconfont icon-zhibo"></i></div>
+                  <h1>直播</h1>
+                </div>
+                <div id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
+                  <div><i class="iconfont icon-yule"></i></div>
+                  <h1>娱乐</h1>
+                </div>
+                <div id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
+                  <div><i class="iconfont icon-renshu"></i></div>
+                  <h1>我的</h1>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -174,8 +154,8 @@
                 });
             }
         }
-        if (tag == $api.dom('#footer li.active')) return;
-        var eFootLis = $api.domAll('#footer li'),
+        if (tag == $api.dom('#footer .cell.active')) return;
+        var eFootLis = $api.domAll('#footer .cell'),
             eHeaderLis = $api.domAll('header li'),
             index = 0;
         for (var i = 0, len = eFootLis.length; i < len; i++) {

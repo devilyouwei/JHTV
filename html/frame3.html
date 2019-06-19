@@ -340,7 +340,6 @@
                     $.load(true, '分享中...');
                     api.download({
                         url: this.poster,
-                        cache:true,
                         savePath: 'fs://res/poster.jpg'
                     }, (ret, err) => {
                         $.load(false);
