@@ -12,7 +12,7 @@
     <preference name="frameBackgroundColor" value="rgba(255,255,255,1)"/>
     <preference name="autoLaunch" value="false"/>
     <preference name="fullScreen" value="false"/>
-    <preference name="autoUpdate" value="true"/>
+    <preference name="autoUpdate" value="false"/>
     <preference name="smartUpdate" value="false"/>
     <preference name="debug" value="false"/>
     <preference name="appCertificateVerify" value="false"/>
