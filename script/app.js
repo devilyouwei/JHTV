@@ -233,7 +233,7 @@ window.$ = {
     },
     // 验证手机号
     valPhone: function(phone) {
-        var filter = /^1[34578]\d{9}$/;
+        var filter = /^1[234567890]\d{9}$/;
         return filter.test(phone);
     },
     // 启动图开关
