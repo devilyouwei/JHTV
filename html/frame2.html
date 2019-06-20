@@ -26,7 +26,8 @@
             border-radius: 8px;
             box-shadow: 0.1rem 0.1rem 0.4rem rgba(99, 99, 99, 0.3);
         }
-        .aui-slide-wrap img{
+
+        .aui-slide-wrap img {
             border-radius: 8px;
         }
 
@@ -93,7 +94,8 @@
                 list2: []
             },
             mounted() {
-                this.initData();
+                if (api.connectionType == 'none') $.online(this.initData);
+                else this.initData();
             },
             methods: {
                 initData() {

@@ -5,12 +5,10 @@ window.$ = {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
         else console.log(msg)
     },
-    post: function(ctl, data, callback, load, tag) {
+    post: function(ctl, data, callback, load) {
         var connectionType = api.connectionType;
-        tag = tag || null;
         if (connectionType == 'none') {
-            $.showSplash(false);
-            return $.toast('无网络连接，请先打开手机网络！然后重新启动聚合视频');
+            return $.toast('未连接到网络，请先打开联网权限');
         }
         if (connectionType == '2g' || connectionType == '3g') $.toast('请注意，您当前使用的网络过慢！可能影响使用体验');
         if (!ctl) return $.log('缺少参数');
@@ -33,12 +31,13 @@ window.$ = {
         }
         $.log('数据：' + JSON.stringify(data));
         if (load) this.load(true, load);
-        api.ajax({
+        var opt = {
             url: url,
-            tag: tag,
             method: 'post',
-            data: data
-        }, (res, err) => {
+            data: data,
+            tag: ctl
+        };
+        api.ajax(opt, (res, err) => {
             this.load(false);
             api.refreshHeaderLoadDone();
             $.log('结果：' + JSON.stringify(res));
@@ -95,7 +94,7 @@ window.$ = {
     toast: function(msg) {
         api.toast({
             msg: msg,
-            duration: 2000,
+            duration: 2500,
             location: 'bottom'
         });
     },
@@ -110,11 +109,13 @@ window.$ = {
             api.hideProgress();
         }
     },
-    alert: function(msg) {
+    alert: function(msg, callback) {
         api.alert({
             title: '提示',
             msg: msg,
-        }, function(ret, err) {});
+        }, function(ret, err) {
+            if (callback && typeof callback == 'function') return callback();
+        });
     },
     confirm: function(title, msg, callback) {
         api.confirm({
@@ -211,9 +212,9 @@ window.$ = {
             var browser = api.require('webBrowser');
             browser.closeView();
         } else {
-          api.closeFrame({
-              name: 'webview_player'
-          });
+            api.closeFrame({
+                name: 'webview_player'
+            });
 
         }
     },

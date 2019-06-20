@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>错误</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css" />
+    <style>
+        header {
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header>
+            <ul>
+                <li class="border-b active">聚合视频</li>
+                <li class="border-b">直播</li>
+                <li class="border-b">娱乐</li>
+                <li class="border-b">我的</li>
+            </ul>
+        </header>
+        <div id="main" class="flex-con">
+
+        </div>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript" src="script/flexible.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light',
+            color: 'rgba(0,0,0,0)'
+        });
+
+        var vue = new Vue({
+            el: '#wrap',
+            data: {
+                show: true
+            },
+            mounted() {
+                funIniGroup();
+                $.setConfig(); //获取配置
+            }
+        });
+    }
+
+    function funIniGroup() {
+        var eHeaderLis = $api.domAll('header li'),
+            frames = [];
+        for (var i = 0, len = eHeaderLis.length; i < len; i++) {
+            frames.push({
+                name: 'frame' + i,
+                url: './html/frame' + i + '.html',
+                bgColor: 'rgba(0,0,0,0)',
+                useWKWebView: $.getOS() == 'ios' ? true : false,
+                overScrollMode: $.getOS() == 'android' ? 'scrolls' : 'never',
+                bounces: $.getOS() == 'ios' ? true : false,
+                scrollToTop: true,
+                scrollEnabled: true,
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false
+            });
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            background: '#fff',
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight - 1,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            preload: 4,
+            index: 0,
+            frames: frames
+        }, function(ret, err) {});
+    }
+
+    // 随意切换按钮
+    function randomSwitchBtn(tag) {
+        // 点击我的
+        if (tag && tag.id == 'icon5') {
+            if (!$.getUserInfo()) return $.toLogin();
+            else {
+                api.sendEvent({
+                    name: 'refreshUserInfo'
+                });
+            }
+        }
+        if (tag == $api.dom('#footer .cell.active')) return;
+        var eFootLis = $api.domAll('#footer .cell'),
+            eHeaderLis = $api.domAll('header li'),
+            index = 0;
+        for (var i = 0, len = eFootLis.length; i < len; i++) {
+            if (tag == eFootLis[i]) {
+                index = i;
+            } else {
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls(eFootLis[index], 'active');
+        $api.addCls(eHeaderLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            scroll: true,
+            index: index
+        });
+    }
+</script>

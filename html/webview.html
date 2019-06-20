@@ -66,7 +66,7 @@
         $.remove('web_title');
         $.load(false);
         $.closePlayer();
-        $.abortPost('hackVideo');
+        $.abortPost('My/getVideoInfo');
         api.historyBack({
             frameName: 'webviewFrame'
         }, function(ret, err) {
@@ -78,7 +78,7 @@
         $.remove('web_title');
         $.load(false);
         $.closePlayer();
-        $.abortPost('hackVideo');
+        $.abortPost('My/getVideoInfo');
         // x5引擎
         api.execScript({
             frameName: 'webviewFrame',
@@ -133,7 +133,7 @@
     // 关闭win
     function closeWin() {
         $.load(false);
-        $.abortPost('hackVideo'); // 关闭请求
+        $.abortPost('My/getVideoInfo'); // 关闭请求
         $.closePlayer(); //关闭播放器
         $.remove('web_title');
         setTimeout(function() {
@@ -172,7 +172,7 @@
         if (title == $.get('web_title')) return;
         $.set('web_title', title);
         if (url && title) {
-            $.abortPost('hackVideo');
+            $.abortPost('My/getVideoInfo');
             $.post('My/getVideoInfo', { //获取sign
                 video_url: url,
                 video_title: title
@@ -187,7 +187,7 @@
                         $.openWebview(title, url, true);
                     }, 1000)
                 }
-            }, '超级会员登陆...', 'hackVideo');
+            }, '超级会员登陆...');
         }
     }
 </script>
