@@ -81,11 +81,15 @@
 
         .aui-slide {
             padding: 0 10px;
+            border-radius: 8px;
         }
 
         .aui-slide-wrap {
             border-radius: 8px;
             box-shadow: 0.1rem 0.1rem 0.4rem rgba(99, 99, 99, 0.3);
+        }
+        .aui-slide-wrap img{
+            border-radius: 8px;
         }
 
         .aui-title {
@@ -240,11 +244,11 @@
                     });
                 },
                 goPlat(plat, url, sign) {
+                    var user = $.getUserInfo();
+                    if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~'),$.toLogin();
                     if (sign) { // 有sign直接播放视频，不跳转平台
-                        var user = $.getUserInfo();
-                        if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
                         var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
-                        $.openWebview(plat, playUrl, true);
+                        $.openWebview(plat, playUrl,true);
                     } else $.openWebview(plat, url);
                 },
                 goUrl(title, url, sign) {

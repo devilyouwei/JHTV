@@ -7,6 +7,8 @@
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>登录</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
         .login-third {
             width: 13rem;
@@ -124,8 +126,8 @@
 <body>
     <div id="vue" v-cloak>
         <header class="aui-bar aui-bar-nav aui-bar-light">
-            <div class="aui-pull-left">
-                <span tapmode="hover" onclick="closeWin();" class="aui-iconfont aui-icon-left"></span>
+            <div class="aui-pull-left" tapmode onclick="closeWin();">
+                <span class="aui-iconfont aui-icon-left"></span>
             </div>
             <div class="aui-title">会员登录</div>
         </header>

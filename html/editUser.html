@@ -193,7 +193,9 @@
                     });
                 },
                 confirm() {
-                    FNImageClip.save({}, (res, err) => {
+                    FNImageClip.save({
+                      destPath:'fs://res/avatar.png'
+                    }, (res, err) => {
                         if (res && res.destPath) {
                             this.uploadImg(res.destPath);
                         } else {

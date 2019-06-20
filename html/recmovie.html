@@ -43,6 +43,7 @@
     </header>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
     apiready = function() {
         api.parseTapmode();
@@ -53,6 +54,7 @@
         api.openFrame({
             name: 'recmovie_frm',
             url: 'recmovie_frm.html',
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             bounces: true,
             rect: {
                 x: 0,

@@ -337,11 +337,12 @@
             name: 'tvList',
             vScrollBarEnabled: false,
             hScrollBarEnabled: false,
-            slidBackEnabled: false,
+            slidBackEnabled: true,
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             animation: {
                 type: 'movein',
                 subType: 'from_right',
-                duration: 200
+                duration: 300
             },
             url: './tv_list.html'
         })
@@ -350,6 +351,7 @@
     function gameList() {
         return $.toast('即将上线，敬请期待');
         api.openWin({
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             name: 'gameList',
             url: './game_list.html'
         })
@@ -358,6 +360,7 @@
     function girlList() {
         return $.toast('即将上线，敬请期待');
         api.openWin({
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             name: 'girlList',
             url: './girl_list.html'
         })
@@ -366,17 +369,17 @@
     function movieList() {
         if (!$.getUserInfo()) return $.toast('请先登录后看大片！');
         api.openWin({
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             name: 'recmovie',
             url: './recmovie.html',
             animation: {
                 type: 'movein',
                 subType: 'from_right',
-                duration: 200
+                duration: 300
             },
-            scrollEnabled: false,
             vScrollBarEnabled: false,
             hScrollBarEnabled: false,
-            slidBackEnabled: false
+            slidBackEnabled: true
         });
     }
 

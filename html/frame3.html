@@ -72,6 +72,7 @@
         }
 
         .modal .img-box {
+            height: 90%;
             text-align: center;
             padding: 2.5rem;
             padding-bottom: 1.8rem;
@@ -87,7 +88,8 @@
         }
 
         .modal .img-box img {
-            width: 100%;
+            height: 100%;
+            width: auto;
             margin: 0 auto;
         }
 
@@ -169,6 +171,7 @@
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">分享APP</div>
+                        <div class="aui-list-item-right">抢永久会员</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="logout">
@@ -225,6 +228,9 @@
 <script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        api.setFrameAttr({
+            bounces: false,
+        });
         Vue.use(VueLazyload);
         var vue = new Vue({
             el: '#vue',
@@ -236,9 +242,9 @@
                     user_phone: '10086',
                     user_avatarurl: '../image/avatar.jpg',
                     user_vip_end: '未知',
-                    user_collect:0,
-                    user_pay:0,
-                    user_integral:0
+                    user_collect: 0,
+                    user_pay: 0,
+                    user_integral: 0
                 }
             },
             mounted() {
@@ -294,15 +300,16 @@
                         api.openWin({
                             name: 'editUser',
                             url: './editUser.html',
+                            useWKWebView: $.getOS() == 'ios' ? true : false,
                             animation: {
-                                type: 'movein',
+                              type: $.getOS()=='ios'?'ripple':'movein',
                                 subType: 'from_right',
                                 duration: 200
                             },
                             scrollEnabled: false,
                             vScrollBarEnabled: false,
                             hScrollBarEnabled: false,
-                            slidBackEnabled: false
+                            slidBackEnabled: true
                         });
                     } else $.toLogin();
                 },
@@ -344,7 +351,7 @@
                     }, (ret, err) => {
                         $.load(false);
                         if (ret && ret.state == 1) {
-                            var share= api.require('shareAction');
+                            var share = api.require('shareAction');
                             share.share({
                                 text: '聚合视频分享',
                                 type: 'image',

@@ -93,6 +93,9 @@
         api.openFrame({
             name: 'webviewFrame',
             url: api.pageParam.url,
+            scrollEnabled:true,
+            useWKWebView: $.getOS() == 'ios' ? true : false,
+            overScrollMode: $.getOS() == 'android' ? 'scrolls' : 'never',
             rect: {
                 x: 0,
                 y: $api.dom('header').offsetHeight,

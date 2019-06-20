@@ -29,9 +29,9 @@
         }
 
         #footer {
-          border-top:1px solid #e5e5e5;
-          padding:0.2rem 0;
-          color:#ff6144
+            border-top: 1px solid #e5e5e5;
+            padding: 0.2rem 0;
+            color: #ff6144
         }
 
         #footer .table .cell {
@@ -40,7 +40,8 @@
             text-align: center;
             font-weight: 600;
         }
-        #footer .table .cell .iconfont{
+
+        #footer .table .cell .iconfont {
             font-size: 0.55rem;
             line-height: 0.65rem;
         }
@@ -48,7 +49,6 @@
         #footer .table .cell.active {
             color: #ff0072;
         }
-
     </style>
 </head>
 
@@ -68,20 +68,20 @@
         <div id="footer">
             <div class="table fixed">
                 <div id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="active cell">
-                  <div><i class="iconfont icon-dianying"></i></div>
-                  <h1>视频</h1>
+                    <div><i class="iconfont icon-dianying"></i></div>
+                    <h1>视频</h1>
                 </div>
                 <div id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
-                  <div><i class="iconfont icon-zhibo"></i></div>
-                  <h1>直播</h1>
+                    <div><i class="iconfont icon-zhibo"></i></div>
+                    <h1>直播</h1>
                 </div>
                 <div id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
-                  <div><i class="iconfont icon-yule"></i></div>
-                  <h1>娱乐</h1>
+                    <div><i class="iconfont icon-yule"></i></div>
+                    <h1>娱乐</h1>
                 </div>
                 <div id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
-                  <div><i class="iconfont icon-renshu"></i></div>
-                  <h1>我的</h1>
+                    <div><i class="iconfont icon-renshu"></i></div>
+                    <h1>我的</h1>
                 </div>
             </div>
         </div>
@@ -120,8 +120,10 @@
             frames.push({
                 name: 'frame' + i,
                 url: './html/frame' + i + '.html',
-                bgColor: 'rgba(255,255,255,0)',
-                bounces: false,
+                bgColor: 'rgba(0,0,0,0)',
+                useWKWebView: $.getOS() == 'ios' ? true : false,
+                overScrollMode: $.getOS() == 'android' ? 'scrolls' : 'never',
+                bounces: $.getOS() == 'ios' ? true : false,
                 scrollToTop: true,
                 scrollEnabled: true,
                 vScrollBarEnabled: false,
@@ -131,6 +133,7 @@
         api.openFrameGroup({
             name: 'group',
             scrollEnabled: false,
+            background: '#fff',
             rect: {
                 x: 0,
                 y: $api.dom('header').offsetHeight - 1,

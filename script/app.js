@@ -1,4 +1,5 @@
 var API = 'http://jhtv.devil.ren/index';
+
 window.$ = {
     log: function(msg) {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
@@ -131,13 +132,20 @@ window.$ = {
         return this.remove('userinfo');
     },
     toLogin: function() {
+        if ($.getOS() == 'ios') $.toast('带你去登录咯﻿ε≡٩(๑>₃<)۶ ')
         api.openWin({
             name: 'login',
             url: api.wgtRootDir + '/html/login.html',
             slideBackEnabled: true,
             slideBackType: 'edge',
+            useWKWebView: $.getOS() == 'ios' ? true : false,
+            vScrollBarEnabled: false,
+            bgColor: '#ff0072',
+            hScrollBarEnabled: false,
+            delay: $.getOS() == 'ios' ? 500 : 100,
+            singleInstance: true,
             animation: {
-                type: 'movein',
+                type: $.getOS() == 'ios' ? 'ripple' : 'movein',
                 subType: 'from_right',
                 duration: 300
             }
@@ -146,13 +154,14 @@ window.$ = {
     // 打开新的webview
     openWebview: function(navTitle, url, x5) {
         if (!navTitle || !url) return;
+        if ($.getOS() == 'ios') x5 = false; // ios不需要使用x5
         var webview = '/html/webview.html';
         var webName = 'webview';
         if (x5) webview = '/html/webview_x5.html', webName = 'webviewX5';
         api.openWin({
             name: webName,
             url: api.wgtRootDir + webview,
-            slideBackEnabled: false,
+            slideBackEnabled: true,
             vScrollBarEnabled: false,
             hScrollBarEnabled: false,
             bounces: false,
@@ -170,65 +179,43 @@ window.$ = {
     // 打开播放器
     openPlayer: function(videoUrl) {
         if (videoUrl) {
-            var browser = api.require('webBrowser');
-            browser.openView({
-                url: videoUrl,
-                rect: {
-                    x: 0,
-                    y: $api.dom('header').offsetHeight,
-                    w: api.winWidth,
-                    h: 280
-                }
-            });
+            var os = $.getOS();
+            if (os == 'android') {
+                var browser = api.require('webBrowser');
+                browser.openView({
+                    url: videoUrl,
+                    rect: {
+                        x: 0,
+                        y: $api.dom('header').offsetHeight,
+                        w: api.winWidth,
+                        h: 280
+                    }
+                });
+            } else {
+                api.openFrame({
+                    name: 'webview_player',
+                    url: videoUrl,
+                    rect: {
+                        x: 0,
+                        y: $api.dom('header').offsetHeight,
+                        w: api.winWidth,
+                        h: 280
+                    }
+                });
+            }
         }
     },
     closePlayer: function() {
-        var browser = api.require('webBrowser');
-        browser.closeView();
-    },
-    // 本地播放器
-    play: function(url,title) {
-        var videoPlayer = api.require('videoPlayer');
-        videoPlayer.play({
-            texts: {
-                head: {
-                    title: title || '视频'
-                }
-            },
-            styles: {
-                head: {
-                    bg: 'rgba(0.5,0.5,0.5,0.7)',
-                    height: 30,
-                    titleSize: 15,
-                    titleColor: '#fff',
-                    backSize: 20,
-                    backImg: 'fs://img/back.png',
-                    setSize: 20,
-                    setImg: 'fs://img/set.png'
-                },
-                foot: {
-                    bg: 'rgba(0.5,0.5,0.5,0.7)',
-                    height: 30,
-                    playSize: 20,
-                    playImg: 'fs://img/back.png',
-                    pauseImg: 'fs://img/back.png',
-                    nextSize: 20,
-                    nextImg: 'fs://img/back.png',
-                    timeSize: 14,
-                    timeColor: '#fff',
-                    sliderImg: 'fs://img/slder.png',
-                    progressColor: '#ff0072',
-                    progressSelected: '#76EE00'
-                }
-            },
-            path: url,
-            autorotation:false,
-            autoPlay: true
-        }, function(ret, err) {
-            if (ret) {
-            } else {
-            }
-        });
+        var os = $.getOS();
+        if (os == 'android') {
+            var browser = api.require('webBrowser');
+            browser.closeView();
+        } else {
+          api.closeFrame({
+              name: 'webview_player'
+          });
+
+        }
     },
     // 获取系统信息
     getOS: function() {　　
