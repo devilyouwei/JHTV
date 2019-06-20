@@ -351,8 +351,8 @@ window.$ = {
                                 });
                             }
                             if (api.systemType == "ios") {
-                                api.installApp({
-                                    appUri: result.source
+                                api.openApp({
+                                  iosUrl: result.source
                                 });
                             }
                         }
