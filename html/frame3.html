@@ -184,13 +184,13 @@
                 </li>
             </ul>
             <ul class="aui-list aui-list-in">
-                <li class="aui-list-item">
+                <li class="aui-list-item" tapmode @click="feedback">
                     <div class="aui-list-item-label-icon">
-                        <i class="aui-iconfont aui-icon-cart aui-text-info"></i>
+                        <i class="iconfont icon-liuyan aui-text-info"></i>
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
-                        <div class="aui-list-item-title">积分商城</div>
-                        <div class="aui-list-item-right">即将上线</div>
+                        <div class="aui-list-item-title">留言反馈</div>
+                        <div class="aui-list-item-right">视频无法观看</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="checkUpdate">
@@ -300,12 +300,12 @@
                         api.openWin({
                             name: 'editUser',
                             url: './editUser.html',
-                            useWKWebView: $.getOS() == 'ios' ? true : false,
                             animation: {
-                              type: $.getOS()=='ios'?'ripple':'movein',
+                                type: $.getOS() == 'ios' ? 'ripple' : 'movein',
                                 subType: 'from_right',
                                 duration: 200
                             },
+                            useWKWebView: $.getOS() == 'ios' ? true : false,
                             scrollEnabled: false,
                             vScrollBarEnabled: false,
                             hScrollBarEnabled: false,
@@ -360,6 +360,16 @@
                         } else {
                             $.toast('保存失败，请检查存储权限')
                         }
+                    });
+                },
+                feedback() {
+                    api.openWin({
+                        name: 'feedback',
+                        url: './feedback.html',
+                        useWKWebView: $.getOS() == 'ios' ? true : false,
+                        scrollEnabled: false,
+                        vScrollBarEnabled: false,
+                        hScrollBarEnabled: false
                     });
                 }
             }

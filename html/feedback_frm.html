@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style type="text/css">
+        .aui-list .aui-list-item-media {
+            width: 3rem;
+        }
+
+        .notes-add {
+            position: fixed;
+            left: 0.5rem;
+            bottom: 0.5rem;
+            width: 3rem;
+            z-index: 99;
+        }
+
+        textarea {
+            height: 8rem;
+            background-color: #ffffff;
+            padding: 0.5rem;
+        }
+
+        .photos img {
+            display: block;
+            width: 100%;
+        }
+
+        .add-photos>div {
+            width: 100%;
+            height: 5.15rem;
+            line-height: 5.15rem;
+        }
+
+        .add-photos>div .aui-iconfont {
+            font-size: 2rem;
+            color: #ccc;
+        }
+
+        .image-item {
+            position: relative;
+            height: 5.3rem;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+
+        .image-item img {
+            display: block;
+            margin: 0 auto;
+            width: auto;
+            height: 100%;
+        }
+
+        .image-item .delete-btn {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 28px;
+            height: 28px;
+            background-color: rgba(0, 0, 0, 0.7);
+            margin-left: -14px;
+            margin-top: -14px;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 50%;
+        }
+
+        .btn-box {
+            padding-top: 1rem;
+            text-align: center;
+        }
+
+        .btn-box .btn {
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            height: 2.5rem;
+            padding: 0 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue" v-cloak>
+        <p class="aui-text-center aui-margin-t-15">内容</p>
+        <section class="aui-content-padded">
+            <textarea placeholder="在这里输入内容..." v-model="content"></textarea>
+        </section>
+        <p class="aui-text-center aui-margin-t-15">有图有真相~</p>
+        <section class="aui-content-padded">
+            <div class="aui-row aui-row-padded">
+                <div class="aui-col-xs-4 add-photos" @click='uploadImg' tapmode>
+                    <div class="aui-border aui-text-center">
+                        <img :src="img" :key="img" v-if="img">
+                        <i class="aui-iconfont aui-icon-plus" v-if="!img"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="btn-box">
+            <button class="btn" tapmode @click="feedback" style="background:#ff6144"><i class="iconfont icon-xiazai1">&nbsp;</i>反馈</button>
+        </div>
+        <!--
+    <section class="aui-content-padded aui-clearfix">
+        <div class="aui-info">
+            <div class="aui-info-item aui-padded-r-10" style="width: 13rem">
+                <div>
+                    <i class="aui-iconfont aui-icon-location"></i>
+                    <span id="location" class="aui-ellipsis">北京市海淀区</span>
+                </div>
+            </div>
+            <div class="aui-info-item" style="width: 80px;" tapmode>
+                <i class="aui-iconfont aui-icon-refresh aui-text-info aui-margin-r-5"></i>
+                <span class="aui-text-info">重新定位</span>
+            </div>
+        </div>
+    </section>
+  -->
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        Vue.use(VueLazyload)
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                img: '',
+                content: ''
+            },
+            mounted() {},
+            methods: {
+                uploadImg() {
+                    api.getPicture({
+                        sourceType: 'album',
+                        mediaValue: 'pic',
+                        destinationType: 'url',
+                        quality: 50,
+                        saveToPhotoAlbum: false
+                    }, (res, err) => {
+                        if (res && res.data) {
+                            $.post('Upload/uploadTvCos', {
+                                files: {
+                                    file: res.data
+                                },
+                                values: {}
+                            }, res => {
+                                if (res.status == 1) {
+                                    this.img = res.results.img;
+                                } else $.toast(res.msg);
+                            }, '反馈图上传中~');
+                        }
+                    });
+                },
+                feedback() {
+                    if (!this.content) return $.toast('请输入反馈意见！');
+                    $.post('Feedback/getFeedback', {
+                        text: this.content,
+                        img: this.img
+                    }, res => {
+                        if (res.status == 1) {
+                            $.toast('反馈成功！我们的客服小姐姐会在24小时内看到~');
+                            setTimeout(function() {
+                                api.closeWin({
+                                    name: 'feedback'
+                                });
+                            }, 800)
+                        } else $.toast(res.msg);
+                    })
+                }
+            }
+        })
+        api.parseTapmode();
+    }
+</script>
+
+</html>
