@@ -95,10 +95,9 @@
 <script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
     apiready = function() {
-        $.update();
         setTimeout(function() {
             $.showSplash(false);
-            if (api.connectionType == 'none') alert('暂无网络，请检查手机网络及其权限是否打开！')
+            if (api.connectionType == 'none') alert('暂无网络，请检查手机网络及其权限是否打开！');
         }, 10000)
         $api.fixStatusBar($api.dom('header'));
         api.setStatusBarStyle({
@@ -116,6 +115,7 @@
                 $.setConfig(); //获取配置
             }
         });
+        $.update();
     }
 
     function funIniGroup() {

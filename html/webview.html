@@ -93,7 +93,7 @@
         api.openFrame({
             name: 'webviewFrame',
             url: api.pageParam.url,
-            scrollEnabled:true,
+            scrollEnabled: true,
             useWKWebView: $.getOS() == 'ios' ? true : false,
             overScrollMode: $.getOS() == 'android' ? 'scrolls' : 'never',
             rect: {
@@ -174,8 +174,8 @@
         if (url && title) {
             $.abortPost('My/getVideoInfo');
             $.post('My/getVideoInfo', { //获取sign
-                video_url: url,
-                video_title: title
+                video_url: encodeURIComponent(url), // 加encode防止传输和数据库出错
+                video_title: encodeURIComponent(title)
             }, function(res) {
                 if (res.status == 1) { // 获取视频源
                     var user = $.getUserInfo();

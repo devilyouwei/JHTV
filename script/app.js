@@ -165,6 +165,7 @@ window.$ = {
             slideBackEnabled: true,
             vScrollBarEnabled: false,
             hScrollBarEnabled: false,
+            useWKWebView: $.getOS() == 'ios' ? true : false,
             bounces: false,
             animation: {
                 type: 'movein',
@@ -180,8 +181,9 @@ window.$ = {
     // 打开播放器
     openPlayer: function(videoUrl) {
         if (videoUrl) {
+            var height = 300;
             var os = $.getOS();
-            if (os == 'android') {
+            if (os == 'android') { // Android使用x5引擎
                 var browser = api.require('webBrowser');
                 browser.openView({
                     url: videoUrl,
@@ -189,18 +191,20 @@ window.$ = {
                         x: 0,
                         y: $api.dom('header').offsetHeight,
                         w: api.winWidth,
-                        h: 280
+                        h: height
                     }
                 });
             } else {
-                api.openFrame({
+                api.openFrame({ // ios使用原生
                     name: 'webview_player',
+                    useWKWebView: true,
+                    bgColor: 'rgba(0,0,0,0)',
                     url: videoUrl,
                     rect: {
                         x: 0,
                         y: $api.dom('header').offsetHeight,
                         w: api.winWidth,
-                        h: 280
+                        h: height
                     }
                 });
             }
@@ -352,7 +356,7 @@ window.$ = {
                             }
                             if (api.systemType == "ios") {
                                 api.openApp({
-                                  iosUrl: result.source
+                                    iosUrl: result.source
                                 });
                             }
                         }
