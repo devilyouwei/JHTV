@@ -14,7 +14,7 @@
         html,
         body,
         .aui-content {
-            background: #fff!important;
+            background: #fff;
         }
 
         .aui-col-xs-6 {
@@ -48,6 +48,11 @@
 
         .goods-click {
             padding-bottom: 0.1rem;
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .aui-title {
@@ -64,7 +69,7 @@
         .loading {
             padding: 0.5rem;
             text-align: center;
-            color: #ccc;
+            color: #fff;
             font-size: 0.8rem;
         }
     </style>
@@ -72,15 +77,16 @@
 
 <body>
     <div id="vue" v-cloak>
+
         <section class="aui-content">
             <div class="aui-title"><i class="iconfont icon-tubiao303"></i>为您推荐最新大片</div>
             <div class="aui-card-list-content-padded">
                 <div class="aui-row aui-row-padded">
-                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goRec(item.video_title,item.video_url,item.video_play_sign)">
+                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goVideo(item.video_title,item.video_url)">
                         <div class="goods-item">
-                            <img v-lazy="'http:'+item.video_bg_url" :key="item.video_bg_url">
-                            <p class="goods-title">{{item.video_title}}</p>
-                            <p class="goods-click">{{item.video_subtitle}}</p>
+                            <img v-lazy="item.video_bg_url" :key="item.video_bg_url">
+                            <p class="goods-title" v-html="item.video_title">{{item.video_title}}</p>
+                            <p class="goods-click" v-html="item.video_subtitle">{{item.video_subtitle}}</p>
                         </div>
                     </div>
                 </div>
@@ -95,7 +101,6 @@
 <script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
-
         Vue.use(VueLazyload)
         var vue = new Vue({
             el: '#vue',
@@ -103,21 +108,28 @@
                 list: [],
                 page: 0,
                 count: 8,
-                loading: false,
+                search: api.pageParam.search ? api.pageParam.search : '',
+                loading: false
             },
             mounted() {
                 this.initData();
+                api.addEventListener({
+                    name: 'search'
+                }, (res, err) => {
+                    if (res && res.value && res.value.search) {
+                        this.search = res.value.search;
+                    }
+                });
             },
             methods: {
                 initData() {
                     this.getData(0, 8, '加载推荐中...');
                     // 下拉刷新
                     api.setRefreshHeaderInfo({
-                        loadingImg: 'widget://image/refresh.png',
                         bgColor: '#fff',
                         textColor: '#000',
                         textDown: '下拉刷新...',
-                        textUp: '松开人家刷新...'
+                        textUp: '松开人家了啦...'
                     }, () => {
                         this.getData(0, 8);
                     });
@@ -134,10 +146,15 @@
                     this.loading = true;
                     $.post('Video/getPlatformVideTypeList', {
                         page: page + 1,
-                        count: count
+                        count: count,
+                        search: this.search
                     }, res => {
                         this.loading = false;
                         if (res.status == 1) {
+                            for (var i = 0; i < res.results.data.length; i++) {
+                                //if (res.results.data[i].video_bg_url.indexOf('http') == -1) res.results.data[i].video_bg_url = 'http:' + res.results.data[i].video_bg_url;
+                                //if (!res.results.data[i].video_subtitle || res.results.data[i].video_subtitle.indexOf('<')!=-1) res.results.data[i].video_subtitle = '暂无介绍';
+                            }
                             if (page == 0) { // 刷新
                                 this.list = [];
                                 this.list = res.results.data;
@@ -148,13 +165,30 @@
                         }
                     }, load);
                 },
-                goRec(title, url, sign) {
-                    if (sign) { // 有sign直接播放视频，不跳转平台
-                        var user = $.getUserInfo();
-                        if (!user) return $.toast('哎呀，(ｷ｀ﾟДﾟ´)!!  你还没登陆~');
-                        var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
-                        $.openWebview(title,playUrl,true);
-                    }else $.openWebview(title, url);
+                goVideo(title, url) {
+                    if (title && url) {
+                        var urls = JSON.parse(url)
+                        api.openWin({
+                            name: 'jhtv',
+                            url: './jhtv.html',
+                            slideBackEnabled: true,
+                            slideBackType: 'edge',
+                            useWKWebView: $.getOS() == 'ios' ? true : false,
+                            vScrollBarEnabled: false,
+                            bgColor: '#fff',
+                            hScrollBarEnabled: false,
+                            pageParam: {
+                                title: title,
+                                urls: urls
+                            }
+                        });
+
+                    }
+                }
+            },
+            watch: {
+                search(v) {
+                    this.getData(0, 8, '搜索中...');
                 }
             }
         })

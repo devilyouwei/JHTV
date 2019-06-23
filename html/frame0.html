@@ -113,11 +113,32 @@
         .more {
             padding: 0.1rem 0.8rem;
         }
+
+        .aui-searchbar {
+            background: linear-gradient(to right, #ff6144, #ff0072)!important;
+        }
+
+        .aui-searchbar input {
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 
 <body>
-    <div id="vue" v-cloak>
+    <div id="vue">
+
+        <section class="search-box">
+            <div class="aui-searchbar" id="search">
+                <div class="aui-searchbar-input aui-border-radius">
+                    <i class="aui-iconfont aui-icon-search"></i>
+                    <input type="search" placeholder="视频看不了？在这里全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch">
+                    <div class="aui-searchbar-clear-btn">
+                        <i class="aui-iconfont aui-icon-close"></i>
+                    </div>
+                </div>
+                <div class="aui-searchbar-btn" tapmode>取消</div>
+            </div>
+        </section>
         <section class="aui-content" style="background:#fff;padding-top:0.6rem;">
             <div id="slide1" class="aui-slide">
                 <div class="aui-slide-wrap">
@@ -181,6 +202,10 @@
 <script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
     apiready = function() {
+        api.setFrameAttr({
+            bounces: false
+        });
+
         Vue.use(VueLazyload)
         var vue = new Vue({
             el: '#vue',
@@ -189,11 +214,12 @@
                 adv: [], //广告
                 plat: [], // 可用平台
                 rec: [], //推荐
+                search: '',
                 launch: 0
             },
             mounted() {
-              if(api.connectionType=='none') $.online(this.initData);
-              else this.initData();
+                if (api.connectionType == 'none') $.online(this.initData);
+                else this.initData();
             },
             methods: {
                 initData() {
@@ -260,6 +286,26 @@
                         var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${sign}`;
                         $.openWebview(title, playUrl, true);
                     } else $.openWebview(title, url, true);
+                },
+                submitSearch() {
+                    if (this.search) {
+                        api.openWin({
+                            useWKWebView: $.getOS() == 'ios' ? true : false,
+                            name: 'recmovie',
+                            url: './recmovie.html',
+                            animation: {
+                                type: 'movein',
+                                subType: 'from_right',
+                                duration: 300
+                            },
+                            pageParam:{
+                              search:this.search
+                            },
+                            vScrollBarEnabled: false,
+                            hScrollBarEnabled: false,
+                            slidBackEnabled: true
+                        });
+                    }
                 }
             },
             watch: {

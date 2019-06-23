@@ -146,7 +146,7 @@
                     }, (res, err) => {
                         if (res.buttonIndex == 1) {
                             this.getPic('library');
-                        } else if(res.buttonIndex == 2){
+                        } else if (res.buttonIndex == 2) {
                             this.getPic('camera');
                         }
                     });
@@ -194,7 +194,7 @@
                 },
                 confirm() {
                     FNImageClip.save({
-                      destPath:'fs://res/avatar.png'
+                        destPath: 'fs://res/avatar.png'
                     }, (res, err) => {
                         if (res && res.destPath) {
                             this.uploadImg(res.destPath);
@@ -239,7 +239,7 @@
                                 }, 1000)
                             }
                             $.toast(res.msg);
-                        },'信息保存中...');
+                        }, '信息保存中...');
                     } else {
                         $.toast('信息不完整哦 Σ( ° △ °|||)︴~')
                     }

@@ -42,6 +42,7 @@
             <div class="aui-pull-left aui-btn" style="display:none;" id="back" tapmode onClick="historyBack()">
                 <span class="aui-iconfont aui-icon-left"></span>
             </div>
+            <div class="aui-pull-left aui-btn" tapmode onClick="report()" id="error-btn" style="display:none;">报错</div>
             <div class="aui-title"></div>
             <div class="aui-pull-right aui-btn" id="close" tapmode onClick="closeWin()">
                 <span class="aui-iconfont aui-icon-close"></span>
@@ -61,31 +62,6 @@
         api.parseTapmode();
     }
 
-    var ctl = 'My/getNewVideoInfo';
-    // frame返回上一页
-    function historyBack() {
-        $.remove('web_title');
-        $.load(false);
-        $.closePlayer();
-        $.abortPost(ctl);
-        api.historyBack({
-            frameName: 'webviewFrame'
-        }, function(ret, err) {
-            if (!ret.status) closeWin();
-        });
-    }
-    // 刷新frame
-    function refresh() {
-        $.remove('web_title');
-        $.load(false);
-        $.closePlayer();
-        $.abortPost(ctl);
-        // x5引擎
-        api.execScript({
-            frameName: 'webviewFrame',
-            script: 'location.reload();'
-        });
-    }
 
     //初始化frame
     function initWebviewFrame() {
@@ -131,12 +107,29 @@
         }, historyBack)
     }
 
+    var ctl = 'My/getNewVideoInfo';
+    // frame返回上一页
+    function historyBack() {
+        reset();
+        api.historyBack({
+            frameName: 'webviewFrame'
+        }, function(ret, err) {
+            if (!ret.status) closeWin();
+        });
+    }
+    // 刷新frame
+    function refresh() {
+        reset();
+        // x5引擎
+        api.execScript({
+            frameName: 'webviewFrame',
+            script: 'location.reload();'
+        });
+    }
+
     // 关闭win
     function closeWin() {
-        $.load(false);
-        $.abortPost(ctl); // 关闭请求
-        $.closePlayer(); //关闭播放器
-        $.remove('web_title');
+        reset();
         setTimeout(function() {
             api.closeFrame({
                 name: 'webviewFrame'
@@ -172,6 +165,7 @@
     function hackVideo(url, title) {
         if (title == $.get('web_title')) return;
         $.set('web_title', title);
+        if (url.indexOf('jhtv') != -1) return;
         if (url && title) {
             $.abortPost(ctl);
             $.post(ctl, { //获取sign
@@ -182,14 +176,54 @@
                     var user = $.getUserInfo();
                     var playUrl = `${API}/My/video?user_id=${user.user_id}&token=${user.token}&sign=${res.results.sign}`;
                     $.openPlayer(playUrl);
+                    report_url = url;
+                    report_title = title;
+                    document.getElementById('error-btn').style.display='block';
                 } else {
-                    $.toast(res.msg)
+                    $.toast(res.msg);
                     setTimeout(function() {
                         $.openWebview(title, url, true);
                     }, 1000)
                 }
             }, '超级会员登陆...');
         }
+    }
+
+    // 报错功能
+    var report_url = '';
+    var report_title = '';
+    var report_opt = ''
+
+    function report() {
+        if (report_url && report_title) {
+            var error = ['太卡了', '视频不对', '违法违纪'];
+            api.actionSheet({
+                title: report_title,
+                cancelTitle: '算了',
+                buttons: error
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                if (index == 4) return;
+                report_error = error[index - 1];
+                $.post('My/getvideoError', {
+                    video_url: encodeURIComponent(report_url), // 加encode防止传输和数据库出错
+                    video_title: encodeURIComponent(report_title),
+                    video_error: encodeURIComponent(report_error)
+                }, res => {
+                    $.toast(res.msg);
+                })
+            });
+        }
+    }
+    // 页面变动重置变量
+    function reset() {
+        $.remove('web_title');
+        $.load(false);
+        $.closePlayer();
+        $.abortPost(ctl);
+        document.getElementById('error-btn').style.display='none';
+        report_url = '';
+        report_title = '';
     }
 </script>
 

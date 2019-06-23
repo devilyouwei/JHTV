@@ -144,7 +144,6 @@ window.$ = {
             bgColor: '#ff0072',
             hScrollBarEnabled: false,
             delay: $.getOS() == 'ios' ? 500 : 100,
-            singleInstance: true,
             animation: {
                 type: $.getOS() == 'ios' ? 'ripple' : 'movein',
                 subType: 'from_right',

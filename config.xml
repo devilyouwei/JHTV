@@ -1,9 +1,9 @@
 <widget id="A6004592205468" version="0.0.1">
     <name>聚合视频</name>
     <description>
-        Example For APICloud.
+      聚合视频，全网VIP免费观看
     </description>
-    <author email="developer@apicloud.com" href="http://www.apicloud.com">Developer</author>
+    <author email="developer@apicloud.com" href="http://www.apicloud.com">devilyouwei</author>
     <content src="index.html"/>
     <access origin="*"/>
     <preference name="pageBounce" value="false"/>
@@ -26,5 +26,7 @@
     <permission name="internet"/>
     <permission name="bootCompleted"/>
     <permission name="hardware"/>
-    <preference name="forbiddenSchemes" value="^alipay,^wechat,^weixin" />
+    <preference name="urlScheme" value="jhtvapp" />
+    <preference name="querySchemes" value="weixin,alipay" />
+    <preference name="forbiddenSchemes" value="*" />
 </widget>
