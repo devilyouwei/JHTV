@@ -62,7 +62,7 @@
 
 <body>
     <header class="aui-bar aui-bar-nav">
-        <div class="aui-pull-left aui-btn" onclick="closeWin" tapmode>
+        <div class="aui-pull-left aui-btn" onclick="closeWin()" tapmode>
             <span class="aui-iconfont aui-icon-left"></span>
         </div>
         <div class="aui-title" id="title"></div>
@@ -89,17 +89,19 @@
     apiready = function() {
         document.getElementById('title').innerHTML = api.pageParam.title
         $api.fixStatusBar($api.dom('header'));
+        var title = api.pageParam.title;
+        var urls = api.pageParam.urls;
         var vue = new Vue({
             el: '#vue',
             data: {
-                title: api.pageParam.title,
-                urls: api.pageParam.urls,
-                activeIndex: 0
+                title: title,
+                urls: urls,
+                activeIndex: $.get(title) || 0
             },
-            mounted() {},
             methods: {
                 play(index) {
                     this.activeIndex = index;
+                    $.set(title,index);
                 }
             },
             watch: {

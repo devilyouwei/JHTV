@@ -197,8 +197,12 @@ window.$ = {
                 api.openFrame({ // ios使用原生
                     name: 'webview_player',
                     useWKWebView: true,
-                    bgColor: 'rgba(0,0,0,0)',
+                    bgColor: 'rgba(0,0,0,0.8)',
                     url: videoUrl,
+                    progress: {
+                        type: "page",
+                        color: "#ff0072"
+                    },
                     rect: {
                         x: 0,
                         y: $api.dom('header').offsetHeight,
