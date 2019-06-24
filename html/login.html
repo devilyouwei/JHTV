@@ -150,6 +150,14 @@
                         </div>
                     </div>
                 </li>
+
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-input">
+                            <input type="text" placeholder="输入邀请码（选填可空）" id="invite_code" v-model="invite_code">
+                        </div>
+                    </div>
+                </li>
             </ul>
         </section>
         <section class="aui-content-padded">
@@ -190,6 +198,7 @@
                 time: '获取验证码',
                 phone: '',
                 code: '',
+                invite_code: '',
                 authLogin: false,
                 interval: null
             },
@@ -202,6 +211,7 @@
                     $.post('Login/exeBindingPhone', {
                         phone: this.phone,
                         verify: this.code,
+                        invite_code: this.invite_code,
                         info: JSON.stringify($.device())
                     }, function(res) {
                         $.toast(res.msg);
@@ -234,6 +244,11 @@
                             }, 1000);
                         } else $.toast(res.msg);
                     }, '短信正在路上跑~');
+                }
+            },
+            watch: {
+                invite_code(v) {
+                    this.invite_code = v.toUpperCase();
                 }
             }
         })

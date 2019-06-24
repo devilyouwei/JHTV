@@ -188,6 +188,7 @@
                 opt: false
             },
             mounted() {
+                if (user.user_invite_code) user.user_invite_code = '已绑定：' + user.user_invite_code;
                 api.addEventListener({
                     name: 'keyback'
                 }, this.closeWin);
