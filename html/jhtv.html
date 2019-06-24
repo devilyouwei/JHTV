@@ -10,7 +10,8 @@
     <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        html,body {
+        html,
+        body {
             background: #fff;
         }
 
@@ -61,7 +62,7 @@
 
 <body>
     <header class="aui-bar aui-bar-nav">
-        <div class="aui-pull-left aui-btn">
+        <div class="aui-pull-left aui-btn" onclick="closeWin" tapmode>
             <span class="aui-iconfont aui-icon-left"></span>
         </div>
         <div class="aui-title" id="title"></div>
@@ -110,9 +111,12 @@
                 }
             }
         })
-
         api.parseTapmode();
     };
+
+    function closeWin() {
+        api.closeWin();
+    }
 </script>
 
 </html>

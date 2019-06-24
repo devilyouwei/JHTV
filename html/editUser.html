@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="../css/aui-flex.css" />
     <style>
         body {
@@ -45,9 +46,26 @@
             text-align: center;
         }
 
+        .invite-box {
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 9rem;
+            margin: 0 auto;
+            color: #ff0072;
+            position: relative;
+        }
+
+        .invite-box .iconfont {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 99;
+        }
+
         .img-box {
             text-align: center;
             padding: 3rem 0;
+            padding-bottom: 1rem;
         }
 
         .img-box .avatar {
@@ -62,10 +80,37 @@
             padding: 0 2rem;
         }
 
+        .input-row {
+            padding: 0.8rem 0;
+        }
+
         .input-box .input {
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             height: auto;
+            padding: 0.5rem 0;
+            border-radius: 1rem;
+            transition: box-shadow 0.8s;
+            width: 10rem;
+            margin: 0 auto;
+            border: #ff6144 solid 1px;
+            color: #000;
+        }
+
+        .input:hover,
+        .input:focus {
+            border: 1px solid #ff0072;
+            color: #000;
+        }
+
+        .input::-webkit-input-placeholder {
+            color: #e5e5e5;
+        }
+
+        .input:disabled {
+            border: 1px solid #DDD;
+            background-color: #F5F5F5;
+            color: #ACA899!important;
         }
 
         .btn {
@@ -105,8 +150,16 @@
             <div class="img-box">
                 <img class="avatar" v-lazy="user.user_avatarurl" :key="user.user_avatarurl" @click="selectImg" tapmode>
             </div>
+            <div class="invite-box" @click="shareCode(user.user_my_code)" tapmode>
+                <div>{{user.user_my_code}}<i class="iconfont icon-fenxiang1">&nbsp;</i></div>
+            </div>
             <div class="input-box">
-                <input v-model="user.user_name" class="input" type="text" placeholder="输入用户名">
+                <div class="input-row">
+                    <input v-model="user.user_name" class="input" type="text" placeholder="输入用户名">
+                </div>
+                <div class="input-row">
+                    <input v-model="user.user_invite_code" class="input" type="text" placeholder="输入邀请码" :disabled="disabled">
+                </div>
                 <button class="btn" tapmode @click="save">保存</button>
             </div>
         </div>
@@ -126,10 +179,12 @@
         $api.fixStatusBar($api.dom('header'));
         var FNImageClip = api.require('FNImageClip');
         Vue.use(VueLazyload)
+        var user = $.getUserInfo();
         var vue = new Vue({
             el: '#vue',
             data: {
-                user: $.getUserInfo(),
+                user: user,
+                disabled: user.user_invite_code == "" ? false : true,
                 opt: false
             },
             mounted() {
@@ -246,6 +301,21 @@
                 },
                 closeWin() {
                     api.closeWin();
+                },
+                shareCode(code) {
+                    var share = api.require('shareAction');
+                    share.share({
+                        text: code,
+                        type: 'text'
+                    });
+                }
+            },
+            watch: {
+                user: {
+                    handler(user) {
+                        user.user_invite_code = user.user_invite_code.toUpperCase();
+                    },
+                    deep: true
                 }
             }
         })

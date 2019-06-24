@@ -132,7 +132,7 @@
                     <div class="username">{{user.user_name}}&nbsp;<i class="iconfont icon-vip">&nbsp;</i></div>
                     <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
                 </div>
-                <div class="cell vip">
+                <div class="cell vip" @click.stop="what" tapmode>
                     <div>到期时间</div>
                     <div>{{user.user_vip_end}}</div>
                 </div>
@@ -370,6 +370,65 @@
                         scrollEnabled: false,
                         vScrollBarEnabled: false,
                         hScrollBarEnabled: false
+                    });
+                },
+                what(e) {
+                    var config = $.getConfig();
+                    if (!config || !config.vip_tip) return;
+                    var tip = config.vip_tip;
+                    var dialogBox = api.require('dialogBox');
+                    dialogBox.taskPlan({
+                        rect: {
+                            w: 300
+                        },
+                        tapClose: true,
+                        texts: {
+                            mainTitle: tip.title,
+                            subTitle: tip.subtitle,
+                            content: tip.content,
+                            btnTitle: '开始做任务'
+                        },
+                        styles: {
+                            bg: '#fff',
+                            main: {
+                                marginT: 20,
+                                color: '#000',
+                                size: 18,
+                                bold: true,
+                            },
+                            sub: {
+                                marginT: 8,
+                                color: '#999999',
+                                size: 13,
+                            },
+                            content: [{
+                                bg: '#fff',
+                                marginT: 15,
+                                marginL: 15,
+                                marginR: 15,
+                                h: 30,
+                                align: 'left',
+                                color: '#000',
+                                size: 18
+                            }],
+                            ok: {
+                                marginB: 20,
+                                marginL: 100,
+                                w: 100,
+                                h: 40,
+                                bg: '#ff0072',
+                                color: '#fff',
+                                size: 13
+                            }
+                        }
+                    }, (ret) => {
+                        if (ret.eventType == 'ok') {
+                            var dialogBox = api.require('dialogBox');
+                            dialogBox.close({
+                                dialogName: 'taskPlan'
+                            });
+                            this.login();
+                        }
                     });
                 }
             }
