@@ -397,7 +397,7 @@ window.$ = {
             value: v
         }, function(ret, err) {
             if (ret) {
-                $.toast("复制成功")
+                $.toast("复制成功，赶紧去分享吧~")
             } else {
                 $.toast("复制失败");
             }

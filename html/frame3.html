@@ -42,7 +42,7 @@
             line-height: 1.5rem;
         }
 
-        #user-info .userphone i{
+        #user-info .userphone i {
             font-size: 0.8rem!important;
         }
 
@@ -67,7 +67,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 99;
         }
 
@@ -181,9 +181,9 @@
                     <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
                     <div class="userphone" @click.stop="copy(user.user_my_code)"><i class="iconfont icon-fuzhi">&nbsp;</i>邀请码 {{user.user_my_code}}</div>
                 </div>
-                <div class="cell vip" @click.stop="what" tapmode>
-                    <div>到期时间</div>
-                    <div>{{user.user_vip_end}}</div>
+                <div class="cell vip">
+                    <div @click.stop="what" tapmode>到期时间</div>
+                    <div @click.stop="what" tapmode>{{user.user_vip_end}}</div>
                 </div>
             </div>
         </section>
@@ -250,7 +250,7 @@
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">提现</div>
-                        <div class="aui-list-item-right">满10元联系客服提现</div>
+                        <div class="aui-list-item-right">{{withdrawTip}}</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="checkUpdate">
@@ -314,6 +314,7 @@
                 poster: '',
                 qq: $.getConfig() && $.getConfig().vip_tip.qq,
                 wx: $.getConfig() && $.getConfig().vip_tip.wechat,
+                withdrawTip: $.getConfig() && $.getConfig().withdraw_tip,
                 connectModal: false,
                 user: {
                     user_name: '未登录',
@@ -461,6 +462,18 @@
                     if (!config || !config.vip_tip) return;
                     var tip = config.vip_tip;
                     var dialogBox = api.require('dialogBox');
+                    var contentStyle = {
+                        bg: '#fff',
+                        marginT: 10,
+                        marginL: 20,
+                        marginR: 0,
+                        h: 30,
+                        align: 'left',
+                        color: '#000',
+                        size: 18
+                    }
+                    var contentStyleArr = [];
+                    for (let i = 0; i < config.vip_tip.content.length; i++) contentStyleArr.push(contentStyle);
                     dialogBox.taskPlan({
                         rect: {
                             w: 300
@@ -481,20 +494,11 @@
                                 bold: true,
                             },
                             sub: {
-                                marginT: 8,
+                                marginT: 5,
                                 color: '#999999',
                                 size: 13,
                             },
-                            content: [{
-                                bg: '#fff',
-                                marginT: 15,
-                                marginL: 15,
-                                marginR: 15,
-                                h: 30,
-                                align: 'left',
-                                color: '#000',
-                                size: 18
-                            }],
+                            content: contentStyleArr,
                             ok: {
                                 marginB: 20,
                                 marginL: 100,
@@ -522,7 +526,7 @@
                 // 复制
                 copy(value, plat) {
                     $.copy(value);
-                    setTimeout(function() {
+                    if (plat) setTimeout(function() {
                         if ($.getOS() == 'ios') {
                             if (plat == 1) iosUrl = 'weixin://'
                             else if (plat == 2) iosUrl = 'qq://'
@@ -532,7 +536,6 @@
                         } else if ($.getOS() == 'android') {
                             if (plat == 1) androidPkg = 'com.tencent.mobileqq'
                             else if (plat == 2) androidPkg = 'com.tencent.mm'
-                            console.log(androidPkg)
                             api.openApp({
                                 androidPkg: androidPkg
                             }, function(ret, err) {});
