@@ -169,7 +169,7 @@
 </head>
 
 <body>
-    <div id="vue" v-if="user">
+    <div id="vue" v-cloak v-if="user">
         <!-- 顶部 -->
         <section class="aui-content" id="user-info" tapmode @click="login">
             <div class="table">

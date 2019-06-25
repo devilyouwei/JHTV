@@ -20,8 +20,9 @@
             display: none;
             color: #fff;
             position: relative;
-            font-size: 0.5rem;
-            padding: 0.35rem 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.6rem 0;
         }
 
         header ul li.active {
@@ -30,20 +31,21 @@
 
         #footer {
             border-top: 1px solid #e5e5e5;
-            padding: 0.2rem 0;
-            color: #ff6144
+            padding: 0.5rem 0;
+            color: #ff6144;
+            text-align:center;
         }
 
-        #footer .table .cell {
+        #footer .cell div{
             height: auto;
-            font-size: 0.35rem;
             text-align: center;
             font-weight: 600;
+          font-size:0.9rem;
         }
 
         #footer .table .cell .iconfont {
-            font-size: 0.55rem;
-            line-height: 0.65rem;
+            font-size: 1.1rem;
+            line-height: 1.3rem;
         }
 
         #footer .table .cell.active {
@@ -69,19 +71,19 @@
             <div class="table fixed">
                 <div id="icon1" tapmode="hover" onclick="randomSwitchBtn( this );" class="active cell">
                     <div><i class="iconfont icon-dianying"></i></div>
-                    <h1>视频</h1>
+                    <div>视频</div>
                 </div>
                 <div id="icon2" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
                     <div><i class="iconfont icon-zhibo"></i></div>
-                    <h1>直播</h1>
+                    <div>直播</div>
                 </div>
                 <div id="icon4" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
                     <div><i class="iconfont icon-yule"></i></div>
-                    <h1>娱乐</h1>
+                    <div>娱乐</div>
                 </div>
                 <div id="icon5" tapmode="hover" onclick="randomSwitchBtn( this );" class="cell">
                     <div><i class="iconfont icon-renshu"></i></div>
-                    <h1>我的</h1>
+                    <div>我的</div>
                 </div>
             </div>
         </div>
@@ -92,7 +94,6 @@
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript" src="script/vue.js"></script>
 <script type="text/javascript" src="script/app.js"></script>
-<script type="text/javascript" src="script/flexible.js"></script>
 <script type="text/javascript">
     apiready = function() {
         setTimeout(function() {
@@ -141,7 +142,7 @@
             background: '#fff',
             rect: {
                 x: 0,
-                y: $api.dom('header').offsetHeight - 1,
+                y: $api.dom('header').offsetHeight-2,
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },

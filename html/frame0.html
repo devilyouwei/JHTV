@@ -121,15 +121,40 @@
         .aui-searchbar input {
             font-size: 0.7rem;
         }
+
+        .aui-searchbar {
+            height: auto!important;
+            padding: 0.8rem 0.3rem;
+        }
+
+        .aui-searchbar-input {
+            height: auto!important;
+            font-size: 1rem;
+        }
+
+        .aui-searchbar-input input {
+            height: 1.8rem;
+            font-size: 0.8rem;
+            padding: 0.2rem;
+        }
+
+        .aui-searchbar-input i.aui-iconfont {
+            font-size: 0.8rem;
+            line-height: 1.8rem;
+        }
+
+        .search-box {
+            margin: 0 auto;
+        }
     </style>
 </head>
 
 <body>
     <div id="vue" v-cloak>
 
-        <section class="search-box">
+        <section class="search-box" id="search-box">
             <div class="aui-searchbar" id="search">
-                <div class="aui-searchbar-input aui-border-radius">
+                <div class="aui-searchbar-input aui-border-radius" id="search-bar">
                     <i class="aui-iconfont aui-icon-search"></i>
                     <input type="search" placeholder="视频看不了？在这里全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch">
                     <div class="aui-searchbar-clear-btn">
@@ -298,8 +323,8 @@
                                 subType: 'from_right',
                                 duration: 300
                             },
-                            pageParam:{
-                              search:this.search
+                            pageParam: {
+                                search: this.search
                             },
                             vScrollBarEnabled: false,
                             hScrollBarEnabled: false,
@@ -319,6 +344,20 @@
             }
         })
         api.parseTapmode();
+        scrollFade();
+    }
+
+    function scrollFade() {
+        window.onscroll = function() {
+            var sH = document.documentElement.scrollTop || document.body.scrollTop; //滚动条y轴上的距离
+            var searchbox = document.getElementById('search-box');
+            var bH = searchbox.offsetHeight
+            searchbox.style.opacity = ((bH - sH) / bH);
+            document.getElementById('search').style.borderBottomRightRadius = (sH * 100 / bH) + '%';
+            document.getElementById('search').style.borderBottomLeftRadius = (sH * 100 / bH) + '%';
+            document.getElementById('search-bar').style.borderBottomRightRadius = (sH * 100 / bH) + '%';
+            document.getElementById('search-bar').style.borderBottomLeftRadius = (sH * 100 / bH) + '%';
+        }
     }
 </script>
 

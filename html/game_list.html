@@ -43,25 +43,11 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/app.js"></script>
-<script type="text/javascript" src="../script/vue.js"></script>
-<script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
-        Vue.use(VueLazyload)
-        var vue = new Vue({
-            el: '#vue',
-            data: {},
-            mounted() {
-                this.initData();
-            },
-            methods: {
-                initData() {},
-            }
-        })
-
-        api.parseTapmode();
         var header = $api.byId('aui-header');
         $api.fixStatusBar(header);
+        api.parseTapmode();
     };
 
     function closeWin() {
