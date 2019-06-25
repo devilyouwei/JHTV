@@ -271,11 +271,11 @@
                 <div class="connect-tip">提现需联系客服(点击复制)</div>
                 <div class="connect-type">
                     <div class="connect-type-title"><i class="iconfont icon-QQ" style="color:rgb(29, 178, 237);font-size:0.8rem!important;">&nbsp;</i>QQ</div>
-                    <div class="aui-row" @click="copy(item,1)" tapmode v-for="(item,index) in qq" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi"></i></div>
+                    <div class="aui-row" @click="copy(item,1)" tapmode v-for="(item,index) in qq" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi">&nbsp;</i>点击复制</div>
                 </div>
                 <div class="connect-type">
                     <div class="connect-type-title"><i class="iconfont icon-wchart" style="color:rgb(85, 183, 55);font-size:0.8rem!important;">&nbsp;</i>微信</div>
-                    <div class="aui-row" @click="copy(item,2)" tapmode v-for="(item,index) in wx" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi"></i></div>
+                    <div class="aui-row" @click="copy(item,2)" tapmode v-for="(item,index) in wx" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi">&nbsp;</i>点击复制</div>
                 </div>
             </div>
         </div>
