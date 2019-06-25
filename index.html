@@ -153,6 +153,8 @@
 
     // 随意切换按钮
     function randomSwitchBtn(tag) {
+        if (tag == $api.dom('#footer .cell.active')) return;
+
         // 点击我的
         if (tag && tag.id == 'icon5') {
             if (!$.getUserInfo()) return $.toLogin();
@@ -162,7 +164,6 @@
                 });
             }
         }
-        if (tag == $api.dom('#footer .cell.active')) return;
         var eFootLis = $api.domAll('#footer .cell'),
             eHeaderLis = $api.domAll('header li'),
             index = 0;

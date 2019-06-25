@@ -389,5 +389,19 @@ window.$ = {
         if (config) return JSON.parse(config);
         else return config;
     },
+    // 复制到粘贴板
+    copy: function(v) {
+        if (!v) return;
+        var clipBoard = api.require('clipBoard');
+        clipBoard.set({
+            value: v
+        }, function(ret, err) {
+            if (ret) {
+                $.toast("复制成功")
+            } else {
+                $.toast("复制失败");
+            }
+        });
+    },
     API: API
 }

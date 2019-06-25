@@ -42,8 +42,8 @@
             line-height: 1.5rem;
         }
 
-        #user-info .aui-iconfont {
-            font-size: 0.8rem;
+        #user-info .userphone i{
+            font-size: 0.8rem!important;
         }
 
         .vip {
@@ -67,7 +67,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 99;
         }
 
@@ -117,6 +117,54 @@
             font-size: 2rem;
             color: #fff;
         }
+
+        .connect-box {
+            background: #fff;
+            width: 80%;
+            padding: 1.2rem;
+            margin: 0 auto;
+            margin-top: 25%;
+            position: relative;
+            border-radius: 1rem;
+        }
+
+        .connect-box .connect-close {
+            position: absolute;
+            right: 0.8rem;
+            top: 0rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .connect-box .connect-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        .connect-box .connect-tip {
+            text-align: center;
+            font-size: 0.7rem;
+            line-height: 1.2rem;
+            color: #ccc;
+        }
+
+        .connect-box .connect-type {
+            margin-top: 0.5rem;
+        }
+
+        .connect-box .connect-type-title {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #000;
+        }
+
+        .connect-box .aui-row {
+            color: #808080;
+            font-size: 0.8rem;
+            line-height: 1.5rem;
+        }
     </style>
 </head>
 
@@ -131,6 +179,7 @@
                 <div class="cell">
                     <div class="username">{{user.user_name}}&nbsp;<i class="iconfont icon-vip">&nbsp;</i></div>
                     <div class="userphone"><i class="aui-iconfont aui-icon-mobile">&nbsp;</i>{{user.user_phone}}</div>
+                    <div class="userphone" @click.stop="copy(user.user_my_code)"><i class="iconfont icon-fuzhi">&nbsp;</i>邀请码 {{user.user_my_code}}</div>
                 </div>
                 <div class="cell vip" @click.stop="what" tapmode>
                     <div>到期时间</div>
@@ -156,6 +205,7 @@
         </section>
         <section class="aui-content">
             <ul class="aui-list aui-list-in aui-margin-b-15">
+                <!--
                 <li class="aui-list-item">
                     <div class="aui-list-item-label-icon">
                         <i class="aui-iconfont aui-icon-location aui-text-info"></i>
@@ -165,6 +215,7 @@
                         <div class="aui-list-item-right">即将上线</div>
                     </div>
                 </li>
+              -->
                 <li class="aui-list-item" tapmode @click="share">
                     <div class="aui-list-item-label-icon">
                         <i class="iconfont icon-fenxiang aui-text-danger"></i>
@@ -190,12 +241,21 @@
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">留言反馈</div>
-                        <div class="aui-list-item-right">视频无法观看</div>
+                        <div class="aui-list-item-right">APP有问题？</div>
+                    </div>
+                </li>
+                <li class="aui-list-item" tapmode @click="withdraw">
+                    <div class="aui-list-item-label-icon">
+                        <i class="iconfont icon-jinbi aui-text-info" style="color:rgb(255,215,0)!important"></i>
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-title">提现</div>
+                        <div class="aui-list-item-right">满10元联系客服提现</div>
                     </div>
                 </li>
                 <li class="aui-list-item" tapmode @click="checkUpdate">
                     <div class="aui-list-item-label-icon">
-                        <i class="iconfont icon-gengxin aui-text-warning"></i>
+                        <i class="iconfont icon-gengxin aui-text-success"></i>
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-title">版本更新</div>
@@ -204,10 +264,25 @@
                 </li>
             </ul>
         </section>
+        <div class="modal" v-show="connectModal">
+            <div class="connect-box">
+                <span class="connect-close" @click="connectModal=false">×</span>
+                <div class="connect-title">联系客服</div>
+                <div class="connect-tip">提现需联系客服(点击复制)</div>
+                <div class="connect-type">
+                    <div class="connect-type-title"><i class="iconfont icon-QQ" style="color:rgb(29, 178, 237);font-size:0.8rem!important;">&nbsp;</i>QQ</div>
+                    <div class="aui-row" @click="copy(item,1)" tapmode v-for="(item,index) in qq" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi"></i></div>
+                </div>
+                <div class="connect-type">
+                    <div class="connect-type-title"><i class="iconfont icon-wchart" style="color:rgb(85, 183, 55);font-size:0.8rem!important;">&nbsp;</i>微信</div>
+                    <div class="aui-row" @click="copy(item,2)" tapmode v-for="(item,index) in wx" :key="index">{{item}}&nbsp;<i class="iconfont icon-fuzhi"></i></div>
+                </div>
+            </div>
+        </div>
         <div class="modal" v-show="poster">
             <div class="img-box">
                 <i class="iconfont icon-cha" @click="poster=false;" tapmode>&nbsp;</i>
-                <img v-lazy="poster" :key="poster">
+                <img v-lazy="poster+'?(new Date()).getTime()'" :key="poster">
             </div>
             <div class="btn-box">
                 <div class="table">
@@ -237,11 +312,15 @@
             data: {
                 version: $.version(),
                 poster: '',
+                qq: $.getConfig() && $.getConfig().vip_tip.qq,
+                wx: $.getConfig() && $.getConfig().vip_tip.wechat,
+                connectModal: false,
                 user: {
                     user_name: '未登录',
                     user_phone: '10086',
                     user_avatarurl: '../image/avatar.jpg',
                     user_vip_end: '未知',
+                    user_my_code: '',
                     user_collect: 0,
                     user_pay: 0,
                     user_integral: 0
@@ -262,7 +341,11 @@
                         user_name: '未登录',
                         user_phone: '10086',
                         user_avatarurl: '../image/avatar.jpg',
-                        user_vip_end: '未知'
+                        user_my_code: '',
+                        user_vip_end: '未知',
+                        user_collect: 0,
+                        user_pay: 0,
+                        user_integral: 0
                     }
                     var user = $.getUserInfo();
                     if (user) {
@@ -327,7 +410,7 @@
                     $.load(true, '保存中...');
                     api.download({
                         url: this.poster,
-                        cache: true,
+                        cache: false,
                         savePath: 'fs://res/poster.jpg'
                     }, (ret, err) => {
                         $.load(false);
@@ -339,7 +422,7 @@
                                 else $.toast('保存失败');
                             });
                         } else {
-                            $.toast('保存失败，请检查存储权限')
+                            $.toast('保存失败，请检查存储权限');
                         }
                     });
                 },
@@ -347,6 +430,7 @@
                     $.load(true, '分享中...');
                     api.download({
                         url: this.poster,
+                        cache: false,
                         savePath: 'fs://res/poster.jpg'
                     }, (ret, err) => {
                         $.load(false);
@@ -358,7 +442,7 @@
                                 path: ret.savePath
                             });
                         } else {
-                            $.toast('保存失败，请检查存储权限')
+                            $.toast('保存失败，请检查存储权限');
                         }
                     });
                 },
@@ -430,6 +514,30 @@
                             this.login();
                         }
                     });
+                },
+                // 提现客服
+                withdraw() {
+                    this.connectModal = true;
+                },
+                // 复制
+                copy(value, plat) {
+                    $.copy(value);
+                    setTimeout(function() {
+                        if ($.getOS() == 'ios') {
+                            if (plat == 1) iosUrl = 'weixin://'
+                            else if (plat == 2) iosUrl = 'qq://'
+                            api.openApp({
+                                iosUrl: iosUrl
+                            });
+                        } else if ($.getOS() == 'android') {
+                            if (plat == 1) androidPkg = 'com.tencent.mobileqq'
+                            else if (plat == 2) androidPkg = 'com.tencent.mm'
+                            console.log(androidPkg)
+                            api.openApp({
+                                androidPkg: androidPkg
+                            }, function(ret, err) {});
+                        }
+                    }, 800);
                 }
             }
         })
