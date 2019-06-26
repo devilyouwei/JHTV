@@ -528,8 +528,8 @@
                     $.copy(value);
                     if (plat) setTimeout(function() {
                         if ($.getOS() == 'ios') {
-                            if (plat == 1) iosUrl = 'weixin://'
-                            else if (plat == 2) iosUrl = 'qq://'
+                            if (plat == 1) iosUrl = 'qq://'
+                            else if (plat == 2) iosUrl = 'weixin://'
                             api.openApp({
                                 iosUrl: iosUrl
                             });
