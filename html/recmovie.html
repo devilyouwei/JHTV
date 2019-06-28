@@ -34,11 +34,34 @@
 
         .aui-searchbar {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
-            z-index: 999;
+            height: auto!important;
+            border: none!important;
+            padding: 0.8rem 0.3rem;
         }
 
-        .aui-searchbar input {
-            font-size: 0.7rem;
+        .aui-searchbar-input {
+            height: auto!important;
+            border: none!important;
+            font-size: 1rem;
+        }
+
+        .aui-searchbar-input input {
+          height: auto!important;
+            font-size: 0.85rem;
+            line-height:1.25rem;
+            border: none!important;
+            padding: 0.4rem;
+        }
+
+        .aui-searchbar-input i.aui-iconfont {
+            font-weight: bold;
+            font-size: 0.85rem;
+            top:0.255rem;
+        }
+
+        .search-box {
+            margin: 0 auto;
+            border: none!important;
         }
     </style>
 </head>
@@ -48,13 +71,15 @@
         <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
             <span class="aui-iconfont aui-icon-left"></span>
         </a>
-        <div class="aui-title">聚合推荐</div>
+        <div class="aui-title">聚合库</div>
 
         <div class="search-box">
             <div class="aui-searchbar">
                 <div class="aui-searchbar-input aui-border-radius">
                     <i class="aui-iconfont aui-icon-search"></i>
-                    <input type="search" placeholder="全站搜搜试试~" id="search">
+                    <form action="" id="form">
+                        <input type="search" placeholder="想看什么节目，尽管来搜~" id="search">
+                    </form>
                     <div class="aui-searchbar-clear-btn">
                         <i class="aui-iconfont aui-icon-close"></i>
                     </div>
@@ -71,7 +96,6 @@
         var searchInput = document.getElementById('search');
         searchInput.addEventListener('keyup', function(e) {
             if (e.keyCode == '13') {
-                if (!searchInput.value) return;
                 api.sendEvent({
                     name: 'search',
                     extra: {
@@ -93,12 +117,14 @@
             bgColor: '#fff',
             useWKWebView: $.getOS() == 'ios' ? true : false,
             bounces: true,
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false,
             pageParam: {
                 search: key ? key : ''
             },
             rect: {
                 x: 0,
-                y: headerPos.h,
+                y: headerPos.h - 2,
                 w: 'auto',
                 h: 'auto'
             }

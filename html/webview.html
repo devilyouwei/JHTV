@@ -181,9 +181,7 @@
                     document.getElementById('error-btn').style.display='block';
                 } else {
                     $.toast(res.msg);
-                    setTimeout(function() {
-                        $.openWebview(title, url, true);
-                    }, 1000)
+                    $.dialogSearch(title)
                 }
             }, '超级会员登陆...');
         }
@@ -192,19 +190,19 @@
     // 报错功能
     var report_url = '';
     var report_title = '';
-    var report_opt = ''
 
     function report() {
         if (report_url && report_title) {
             var error = ['太卡了', '视频不对', '违法违纪'];
             api.actionSheet({
                 title: report_title,
-                cancelTitle: '算了，首页搜索试试手气',
+                cancelTitle: '算了',
                 buttons: error
             }, function(ret, err) {
                 var index = ret.buttonIndex;
                 if (index == 4) return;
                 report_error = error[index - 1];
+                $.dialogSearch(report_title);
                 $.post('My/getvideoError', {
                     video_url: encodeURIComponent(report_url), // 加encode防止传输和数据库出错
                     video_title: encodeURIComponent(report_title),

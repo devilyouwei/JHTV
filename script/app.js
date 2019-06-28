@@ -1,57 +1,71 @@
 var API = 'http://jhtv.devil.ren/index';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 组织全部表单的提交事件
+    var form = document.getElementById('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    }
+});
 (function(designWidth, maxWidth) {
-	var doc = document,
-		win = window;
-	var docEl = doc.documentElement;
-	var tid;
-	var rootItem,rootStyle;
+    var doc = document,
+        win = window;
+    var docEl = doc.documentElement;
+    var tid;
+    var rootItem, rootStyle;
 
-	function refreshRem() {
-		var width = docEl.getBoundingClientRect().width;
-		if (!maxWidth) {
-			maxWidth = 540;
-		};
-		if (width > maxWidth) {
-			width = maxWidth;
-		}
-		//与淘宝做法不同，直接采用简单的rem换算方法1rem=100px
-		var rem = width * 30 / designWidth;
-		//兼容UC开始
-		rootStyle="html{font-size:"+rem+'px !important}';
-		rootItem = document.getElementById('rootsize') || document.createElement("style");
-		if(!document.getElementById('rootsize')){
-		document.getElementsByTagName("head")[0].appendChild(rootItem);
-		rootItem.id='rootsize';
-		}
-		if(rootItem.styleSheet){
-		rootItem.styleSheet.disabled||(rootItem.styleSheet.cssText=rootStyle)
-		}else{
-		try{rootItem.innerHTML=rootStyle}catch(f){rootItem.innerText=rootStyle}
-		}
-		//兼容UC结束
-		docEl.style.fontSize = rem + "px";
-	};
-	refreshRem();
+    function refreshRem() {
+        var width = docEl.getBoundingClientRect().width;
+        if (!maxWidth) {
+            maxWidth = 540;
+        };
+        if (width > maxWidth) {
+            width = maxWidth;
+        }
+        //与淘宝做法不同，直接采用简单的rem换算方法1rem=100px
+        var rem = width * 30 / designWidth;
+        //兼容UC开始
+        rootStyle = "html{font-size:" + rem + 'px !important}';
+        rootItem = document.getElementById('rootsize') || document.createElement("style");
+        if (!document.getElementById('rootsize')) {
+            document.getElementsByTagName("head")[0].appendChild(rootItem);
+            rootItem.id = 'rootsize';
+        }
+        if (rootItem.styleSheet) {
+            rootItem.styleSheet.disabled || (rootItem.styleSheet.cssText = rootStyle)
+        } else {
+            try {
+                rootItem.innerHTML = rootStyle
+            } catch (f) {
+                rootItem.innerText = rootStyle
+            }
+        }
+        //兼容UC结束
+        docEl.style.fontSize = rem + "px";
+    };
+    refreshRem();
 
-	win.addEventListener("resize", function() {
-		clearTimeout(tid); //防止执行两次
-		tid = setTimeout(refreshRem, 300);
-	}, false);
+    win.addEventListener("resize", function() {
+        clearTimeout(tid); //防止执行两次
+        tid = setTimeout(refreshRem, 300);
+    }, false);
 
-	win.addEventListener("pageshow", function(e) {
-		if (e.persisted) { // 浏览器后退的时候重新计算
-			clearTimeout(tid);
-			tid = setTimeout(refreshRem, 300);
-		}
-	}, false);
+    win.addEventListener("pageshow", function(e) {
+        if (e.persisted) { // 浏览器后退的时候重新计算
+            clearTimeout(tid);
+            tid = setTimeout(refreshRem, 300);
+        }
+    }, false);
 
-	if (doc.readyState === "complete") {
-		doc.body.style.fontSize = "16px";
-	} else {
-		doc.addEventListener("DOMContentLoaded", function(e) {
-			doc.body.style.fontSize = "16px";
-		}, false);
-	}
+    if (doc.readyState === "complete") {
+        doc.body.style.fontSize = "16px";
+    } else {
+        doc.addEventListener("DOMContentLoaded", function(e) {
+            doc.body.style.fontSize = "16px";
+        }, false);
+    }
 })(640, 640);
 window.$ = {
     log: function(msg) {
@@ -241,7 +255,7 @@ window.$ = {
                     url: videoUrl,
                     rect: {
                         x: 0,
-                        y: $api.dom('header').offsetHeight,
+                        y: $api.dom('header').offsetHeight - 2,
                         w: api.winWidth,
                         h: height
                     }
@@ -258,7 +272,7 @@ window.$ = {
                     },
                     rect: {
                         x: 0,
-                        y: $api.dom('header').offsetHeight,
+                        y: $api.dom('header').offsetHeight - 2,
                         w: api.winWidth,
                         h: height
                     }
@@ -303,8 +317,8 @@ window.$ = {
         } else {
             api.removeLaunchView({
                 animation: {
-                    type: 'suck',
-                    duration: 500
+                    type: 'fade',
+                    duration: 400
                 }
             });
         }
@@ -455,6 +469,118 @@ window.$ = {
                 $.toast("复制失败");
             }
         });
+    },
+    dialogSearch: function(title) {
+        title = title.split(' ')[0]
+        var dialogBox = api.require('dialogBox');
+				title = this.splitText(title)
+        dialogBox.input({
+            keyboardType: 'search',
+            texts: {
+                title: 'VIP片源错误',
+                placeholder: `搜视频库：${title}（视频已上报）`,
+                leftBtnTitle: '算了',
+                rightBtnTitle: '搜索'
+            },
+            styles: {
+                bg: '#fff',
+                corner: 10,
+                w: 300,
+                h: 180,
+                title: {
+                    h: 50,
+                    alignment: 'center',
+                    size: 18,
+                    bold: true,
+                    color: '#ff1679',
+                    marginT: 15,
+                },
+                input: {
+                    h: 40,
+                    y: 30,
+                    marginT: 6,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    alignment: 'left',
+                    textSize: 15,
+                    textColor: '#000'
+                },
+                dividingLine: {
+                    width: 0,
+                    color: '#fff'
+                },
+                left: {
+                    bg: 'rgba(0,0,0,0)',
+                    color: '#ccc',
+                    size: 17
+                },
+                right: {
+                    bg: 'rgba(0,0,0,0)',
+                    color: '#ff1679',
+                    size: 17
+                }
+            }
+        }, function(ret) {
+            if (ret.eventType == 'left') {
+                var dialogBox = api.require('dialogBox');
+            } else {
+                if (ret.text) title = ret.text
+                if (!title) return $.toast('请输入搜索内容~')
+                $.openSearchPage(title)
+            }
+						var dialogBox = api.require('dialogBox');
+            dialogBox.close({
+                dialogName: 'input'
+            });
+        });
+    },
+		splitText(title){
+        if (title.indexOf('第') != -1){
+					if(title.split('第')[0]) title = title.split('第')[0]
+				}
+				for(var i=0;i<9;i++){
+					if (title.indexOf(i+'') != -1){
+						if(title.split(i+'')[0]) title = title.split(i+'')[0]
+					}
+				}
+				if (title.indexOf('-') != -1) title = title.split('-')[0]
+				if (title.indexOf(':') != -1) title = title.split(':')[0]
+				if (title.indexOf('：') != -1) title = title.split('：')[0]
+				if (title.indexOf('&') != -1) title = title.split('&')[0]
+				if (title.indexOf('#') != -1) title = title.split('#')[0]
+				if (title.indexOf('/') != -1) title = title.split('/')[0]
+				if (title.indexOf('_') != -1) title = title.split('_')[0]
+        if (title.indexOf('+') != -1) title = title.split('+')[0]
+        if (title.indexOf('=') != -1) title = title.split('=')[0]
+        if (title.indexOf('!') != -1) title = title.split('!')[0]
+        if (title.indexOf('?') != -1) title = title.split('?')[0]
+        if (title.indexOf('！') != -1) title = title.split('！')[0]
+        if (title.indexOf('？') != -1) title = title.split('？')[0]
+        if (title.indexOf('【') != -1) title = title.split('【')[1]
+        if (title.indexOf('】') != -1) title = title.split('】')[0]
+        if (title.indexOf('[') != -1) title = title.split('[')[1]
+        if (title.indexOf(']') != -1) title = title.split(']')[0]
+				return title
+		},
+    openSearchPage(search) {
+        if (search) {
+            api.openWin({
+                useWKWebView: $.getOS() == 'ios' ? true : false,
+                name: 'recmovie',
+                url: './recmovie.html',
+                animation: {
+                    type: 'movein',
+                    subType: 'from_right',
+                    duration: 300
+                },
+                pageParam: {
+                    search: search
+                },
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false,
+                slidBackEnabled: true
+            });
+        }
     },
     API: API
 }

@@ -116,36 +116,36 @@
 
         .aui-searchbar {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
-        }
-
-        .aui-searchbar input {
-            font-size: 0.7rem;
-        }
-
-        .aui-searchbar {
             height: auto!important;
+            border: none!important;
             padding: 0.8rem 0.3rem;
         }
 
         .aui-searchbar-input {
             height: auto!important;
+            border: none!important;
             font-size: 1rem;
         }
 
         .aui-searchbar-input input {
-            height: 1.8rem;
-            font-size: 0.8rem;
-            padding: 0.2rem;
+          height: auto!important;
+            font-size: 0.85rem;
+            line-height:1.25rem;
+            border: none!important;
+            padding: 0.4rem;
         }
 
         .aui-searchbar-input i.aui-iconfont {
-            font-size: 0.8rem;
-            line-height: 1.8rem;
+            font-weight: bold;
+            font-size: 0.85rem;
+            top:0.255rem;
         }
 
         .search-box {
             margin: 0 auto;
+            border: none!important;
         }
+
     </style>
 </head>
 
@@ -156,7 +156,9 @@
             <div class="aui-searchbar" id="search">
                 <div class="aui-searchbar-input aui-border-radius" id="search-bar">
                     <i class="aui-iconfont aui-icon-search"></i>
-                    <input type="search" placeholder="视频看不了？在这里全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch">
+                    <form action="" id="form" @submit.prevent="">
+                        <input type="search" placeholder="视频看不了？在这里全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch">
+                    </form>
                     <div class="aui-searchbar-clear-btn">
                         <i class="aui-iconfont aui-icon-close"></i>
                     </div>
@@ -221,10 +223,10 @@
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript" src="../script/aui-slide.js"></script>
 <script type="text/javascript" src="../script/vue.js"></script>
 <script type="text/javascript" src="../script/vue-lazyload.js"></script>
-<script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript">
     apiready = function() {
         api.setFrameAttr({
@@ -313,24 +315,8 @@
                     } else $.openWebview(title, url, true);
                 },
                 submitSearch() {
-                    if (this.search) {
-                        api.openWin({
-                            useWKWebView: $.getOS() == 'ios' ? true : false,
-                            name: 'recmovie',
-                            url: './recmovie.html',
-                            animation: {
-                                type: 'movein',
-                                subType: 'from_right',
-                                duration: 300
-                            },
-                            pageParam: {
-                                search: this.search
-                            },
-                            vScrollBarEnabled: false,
-                            hScrollBarEnabled: false,
-                            slidBackEnabled: true
-                        });
-                    }
+
+                  $.openSearchPage(this.search)
                 }
             },
             watch: {

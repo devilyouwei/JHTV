@@ -257,74 +257,107 @@
 </head>
 
 <body>
-    <section class="aui-content">
-        <img src="" class="poster" id="poster">
-    </section>
+    <div id="vue" v-cloak>
+        <!--
+        <section class="aui-tab">
+            <div class="aui-tab-item tapmode" v-for="(item,index) in tabs" :key="index" :class="activeIndex==index?'aui-active':''" tapmode @click="activeIndex=index">{{item.video_class_name}}</div>
+        </section>
+      -->
 
-    <section class="aui-flexView">
-        <a onClick="movieList()" class="aui-flex b-line" tapmode>
-            <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
-            <div class="aui-flex-box">
-                <p><em class="aui-group-three">热门电影</em></p>
-                <h3>当下最火热大片推荐</h3>
-                <p><em class="aui-group-one">智能更新</em><em class="aui-group-two">各平台热门电影</em></p>
-            </div>
-            <div class="aui-flex-support">看大片</div>
-        </a>
+        <section class="aui-content">
+            <img src="" class="poster" id="poster">
+        </section>
 
-        <a onClick="tvList()" class="aui-flex b-line" tapmode>
-            <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
-            <div class="aui-flex-box">
-                <p><em class="aui-group-three">全国电视直播</em></p>
-                <h3>在线收看高清CCTV、卫视</h3>
-                <p><em class="aui-group-one">实时更新</em><em class="aui-group-two">电视TV</em></p>
-            </div>
-            <div class="aui-flex-support">看直播</div>
-        </a>
+        <section class="aui-flexView">
+            <a onClick="movieList()" class="aui-flex b-line" tapmode>
+                <div class="aui-flex-iphone"><img src="../image/dianying.png" alt=""></div>
+                <div class="aui-flex-box">
+                    <p><em class="aui-group-three">聚合影片库</em></p>
+                    <h3>当下全平台最火热大片</h3>
+                    <p><em class="aui-group-one">智能更新</em><em class="aui-group-two">各平台电影电视剧</em></p>
+                </div>
+                <div class="aui-flex-support">看大片</div>
+            </a>
 
-        <a onClick="gameList()" class="aui-flex b-line" tapmode>
-            <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
-            <div class="aui-flex-box">
-                <p><em class="aui-group-three">游戏在线直播</em></p>
-                <h3>各类游戏在线直播</h3>
-                <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
-            </div>
-            <div class="aui-flex-support-no">看直播</div>
-        </a>
+            <a onClick="tvList()" class="aui-flex b-line" tapmode>
+                <div class="aui-flex-iphone"><img src="../image/tv.png" alt=""></div>
+                <div class="aui-flex-box">
+                    <p><em class="aui-group-three">电视直播</em></p>
+                    <h3>在线收看高清CCTV、卫视</h3>
+                    <p><em class="aui-group-one">实时更新</em><em class="aui-group-two">电视TV</em></p>
+                </div>
+                <div class="aui-flex-support">看电视</div>
+            </a>
 
-        <a onClick="girlList()" class="aui-flex b-line" tapmode>
-            <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
-            <div class="aui-flex-box">
-                <p><em class="aui-group-three">美女在线直播</em></p>
-                <h3>海量美女在线直播</h3>
-                <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
-            </div>
-            <div class="aui-flex-support-no">看直播</div>
-        </a>
+            <a class="aui-flex b-line" tapmode>
+                <div class="aui-flex-iphone"><img src="../image/game.png" alt=""></div>
+                <div class="aui-flex-box">
+                    <p><em class="aui-group-three">游戏直播</em></p>
+                    <h3>各类游戏在线直播</h3>
+                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">知名主播</em></p>
+                </div>
+                <div class="aui-flex-support-no">暂未上架</div>
+            </a>
 
-        <a onClick="fuckList()" class="aui-flex b-line" tapmode>
-            <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
-            <div class="aui-flex-box">
-                <p><em class="aui-group-three">美女写真视频</em></p>
-                <h3>海量美女写真视频</h3>
-                <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
-            </div>
-            <div class="aui-flex-support-no">观看</div>
-        </a>
-    </section>
+            <a class="aui-flex b-line" tapmode>
+                <div class="aui-flex-iphone"><img src="../image/meinv.png" alt=""></div>
+                <div class="aui-flex-box">
+                    <p><em class="aui-group-three">美女直播</em></p>
+                    <h3>海量美女在线直播</h3>
+                    <p><em class="aui-group-one">实时更新</em> <em class="aui-group-two">多才多艺</em></p>
+                </div>
+                <div class="aui-flex-support-no">暂未上架</div>
+            </a>
+
+            <a class="aui-flex b-line" tapmode>
+                <div class="aui-flex-iphone"><img src="../image/meinvxiezhen.png" alt=""></div>
+                <div class="aui-flex-box">
+                    <p><em class="aui-group-three">写真视频</em></p>
+                    <h3>海量美女写真视频</h3>
+                    <p><em class="aui-group-one">不定时更新</em> <em class="aui-group-two">狼友福利</em></p>
+                </div>
+                <div class="aui-flex-support-no">暂未上架</div>
+            </a>
+        </section>
+    </div>
 </body>
 
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
         api.setFrameAttr({
             bounces: true,
         });
-        var config = $.getConfig();
-        if (config && config.zhibo_banner) {
-          document.getElementById('poster').src = config.zhibo_banner;
-        }
+        Vue.use(VueLazyload)
+        var vue = new Vue({
+            el: '#vue',
+            data: {
+                banner: [], //轮播图
+                tabs: [], //分类
+                activeIndex: 0
+            },
+            mounted() {
+                var config = $.getConfig();
+                if (config && config.zhibo_banner) {
+                    document.getElementById('poster').src = config.zhibo_banner;
+                }
+                this.initTabs()
+            },
+            methods: {
+                initTabs() {
+                    $.post('Video/getVideoClass', {}, res => {
+                        if (res.status == 1) this.tabs = res.results.data
+                        else $.toast(res.msg)
+                    })
+                },
+                initData() {
+
+                }
+            }
+        })
         api.parseTapmode();
     }
 
@@ -344,24 +377,6 @@
             url: './tv_list.html'
         })
     }
-    // 游戏直播
-    function gameList() {
-        return $.toast('即将上线，敬请期待');
-        api.openWin({
-            useWKWebView: $.getOS() == 'ios' ? true : false,
-            name: 'gameList',
-            url: './game_list.html'
-        })
-    }
-    // 美女直播
-    function girlList() {
-        return $.toast('即将上线，敬请期待');
-        api.openWin({
-            useWKWebView: $.getOS() == 'ios' ? true : false,
-            name: 'girlList',
-            url: './girl_list.html'
-        })
-    }
 
     function movieList() {
         if (!$.getUserInfo()) return $.toast('请先登录后看大片！');
@@ -378,10 +393,6 @@
             hScrollBarEnabled: false,
             slidBackEnabled: true
         });
-    }
-
-    function fuckList() {
-        return $.toast('即将上线，敬请期待');
     }
 </script>
 

@@ -22,14 +22,25 @@
         }
 
         .goods-item {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.1) inset;
             text-align: center;
+            padding:0.3rem 0;
+            width:95%;
+        }
+        .aui-row .aui-col-xs-4:nth-child(3n+1)>.goods-item{
+          margin:0 auto 0 0;
+        }
+        .aui-row .aui-col-xs-4:nth-child(3n+2)>.goods-item{
+          margin:0 auto;
+        }
+        .aui-row .aui-col-xs-4:nth-child(3n+3)>.goods-item{
+          margin:0 0 0 auto;
         }
 
         .goods-item img {
+            border-radius: 0.3rem;
             display: block;
             width: 100%;
-            height: 12rem;
+            height: 9rem;
             object-fit: cover;
         }
 
@@ -72,6 +83,9 @@
             color: #fff;
             font-size: 0.8rem;
         }
+        img[lazy=error] {
+          border:solid 0.1rem #efefef;
+        }
     </style>
 </head>
 
@@ -79,10 +93,10 @@
     <div id="vue" v-cloak>
 
         <section class="aui-content">
-            <div class="aui-title"><i class="iconfont icon-tubiao303"></i>为您推荐最新大片</div>
+            <div class="aui-title"><i class="iconfont icon-tubiao303">&nbsp;</i>聚合视频库，当前<font color="red">{{total}}</font>部</div>
             <div class="aui-card-list-content-padded">
                 <div class="aui-row aui-row-padded">
-                    <div class="aui-col-xs-6" v-for="(item,index) in list" tapmode @click="goVideo(item.video_title,item.video_url)">
+                    <div class="aui-col-xs-4" v-for="(item,index) in list" tapmode @click="goVideo(item.video_title,item.video_url)">
                         <div class="goods-item">
                             <img v-lazy="item.video_bg_url" :key="item.video_bg_url">
                             <p class="goods-title" v-html="item.video_title">{{item.video_title}}</p>
@@ -107,7 +121,8 @@
             data: {
                 list: [],
                 page: 0,
-                count: 8,
+                count: 6,
+                total: 0,
                 search: api.pageParam.search ? api.pageParam.search : '',
                 loading: false
             },
@@ -116,14 +131,14 @@
                 api.addEventListener({
                     name: 'search'
                 }, (res, err) => {
-                    if (res && res.value && res.value.search) {
+                    if (res && res.value) {
                         this.search = res.value.search;
                     }
                 });
             },
             methods: {
                 initData() {
-                    this.getData(0, 8, '加载推荐中...');
+                    this.getData(0, 12, '加载推荐中...');
                     // 下拉刷新
                     api.setRefreshHeaderInfo({
                         bgColor: '#fff',
@@ -131,13 +146,13 @@
                         textDown: '下拉刷新...',
                         textUp: '松开人家了啦...'
                     }, () => {
-                        this.getData(0, 8);
+                        this.getData(0, 12);
                     });
                     // 上拉加载更多
                     api.addEventListener({
                         name: 'scrolltobottom'
                     }, () => {
-                        this.getData(this.page, 8);
+                        this.getData(this.page, this.count);
                     });
 
                 },
@@ -162,6 +177,7 @@
                                 this.list = this.list.concat(res.results.data);
                             }
                             this.page = res.info.page;
+                            this.total = res.info.total_count;
                         }
                     }, load);
                 },
