@@ -1,4 +1,5 @@
 var API = 'http://jhtv.devil.ren/index';
+var PLAY = 'http://jhtv.app.devil.ren/dplayer/index.php';
 
 document.addEventListener('DOMContentLoaded', function() {
     // 组织全部表单的提交事件
@@ -245,17 +246,27 @@ window.$ = {
         });
     },
     // 打开播放器
-    openPlayer: function(videoUrl) {
-        if (videoUrl) {
-            var height = 300;
+    openPlayer: function(url, title) {
+        if (url) {
+            var videoUrl = url; //平台覆盖播放
+            var height = 280;
+            var top = 45;
+            if (title) { // 资源库播放
+                videoUrl = PLAY + '?url=' + url + '&title=' + title;
+                height = api.winHeight / 3;
+                top = 0;
+            }
             var os = $.getOS();
             if (os == 'android') { // Android使用x5引擎
                 var browser = api.require('webBrowser');
                 browser.openView({
                     url: videoUrl,
+                    progress: {
+                        color: '#ff0072'
+                    },
                     rect: {
                         x: 0,
-                        y: $api.dom('header').offsetHeight - 2,
+                        y: $api.dom('header').offsetHeight - 1 + top,
                         w: api.winWidth,
                         h: height
                     }
@@ -266,13 +277,16 @@ window.$ = {
                     useWKWebView: true,
                     bgColor: 'rgba(0,0,0,0.8)',
                     url: videoUrl,
+                    scrollEnabled: false,
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false,
                     progress: {
                         type: "page",
                         color: "#ff0072"
                     },
                     rect: {
                         x: 0,
-                        y: $api.dom('header').offsetHeight - 2,
+                        y: $api.dom('header').offsetHeight - 2 + top,
                         w: api.winWidth,
                         h: height
                     }
@@ -473,7 +487,7 @@ window.$ = {
     dialogSearch: function(title) {
         title = title.split(' ')[0]
         var dialogBox = api.require('dialogBox');
-				title = this.splitText(title)
+        title = this.splitText(title)
         dialogBox.input({
             keyboardType: 'search',
             texts: {
@@ -528,40 +542,44 @@ window.$ = {
                 if (!title) return $.toast('请输入搜索内容~')
                 $.openSearchPage(title)
             }
-						var dialogBox = api.require('dialogBox');
+            var dialogBox = api.require('dialogBox');
             dialogBox.close({
                 dialogName: 'input'
             });
         });
     },
-		splitText(title){
-        if (title.indexOf('第') != -1){
-					if(title.split('第')[0]) title = title.split('第')[0]
-				}
-				for(var i=0;i<9;i++){
-					if (title.indexOf(i+'') != -1){
-						if(title.split(i+'')[0]) title = title.split(i+'')[0]
-					}
-				}
-				if (title.indexOf('-') != -1) title = title.split('-')[0]
-				if (title.indexOf(':') != -1) title = title.split(':')[0]
-				if (title.indexOf('：') != -1) title = title.split('：')[0]
-				if (title.indexOf('&') != -1) title = title.split('&')[0]
-				if (title.indexOf('#') != -1) title = title.split('#')[0]
-				if (title.indexOf('/') != -1) title = title.split('/')[0]
-				if (title.indexOf('_') != -1) title = title.split('_')[0]
+    // 智能过滤
+    splitText(title) {
+        if (title.indexOf('第') != -1) {
+            if (title.split('第')[0]) title = title.split('第')[0]
+        }
+        for (var i = 0; i < 9; i++) {
+            if (title.indexOf(i + '') != -1) {
+                if (title.split(i + '')[0]) title = title.split(i + '')[0]
+            }
+        }
+        if (title.indexOf('-') != -1) title = title.split('-')[0]
+        if (title.indexOf(':') != -1) title = title.split(':')[0]
+        if (title.indexOf('：') != -1) title = title.split('：')[0]
+        if (title.indexOf('&') != -1) title = title.split('&')[0]
+        if (title.indexOf('#') != -1) title = title.split('#')[0]
+        if (title.indexOf('/') != -1) title = title.split('/')[0]
+        if (title.indexOf('_') != -1) title = title.split('_')[0]
         if (title.indexOf('+') != -1) title = title.split('+')[0]
         if (title.indexOf('=') != -1) title = title.split('=')[0]
         if (title.indexOf('!') != -1) title = title.split('!')[0]
         if (title.indexOf('?') != -1) title = title.split('?')[0]
         if (title.indexOf('！') != -1) title = title.split('！')[0]
         if (title.indexOf('？') != -1) title = title.split('？')[0]
+        if (title.indexOf('(') != -1) title = title.split('(')[0]
+        if (title.indexOf('（') != -1) title = title.split('（')[0]
+
         if (title.indexOf('【') != -1) title = title.split('【')[1]
         if (title.indexOf('】') != -1) title = title.split('】')[0]
         if (title.indexOf('[') != -1) title = title.split('[')[1]
         if (title.indexOf(']') != -1) title = title.split(']')[0]
-				return title
-		},
+        return title
+    },
     openSearchPage(search) {
         if (search) {
             api.openWin({
@@ -581,6 +599,28 @@ window.$ = {
                 slidBackEnabled: true
             });
         }
+    },
+    setSearchHistory(item) {
+        if (!item) return;
+        var arr = this.get('search_history');
+        if (!arr) {
+            arr = []
+        } else {
+            arr = JSON.parse(arr)
+        }
+        for (var i = 0; i <= arr.length; i++) {
+            if (arr[i] == item) arr.splice(i, 1); // 删除重复项
+        }
+        arr.unshift(item)
+        this.set('search_history', JSON.stringify(arr))
+    },
+    getSearchHitory() {
+        var arr = this.get('search_history');
+        if (!arr) return [];
+        else return JSON.parse(arr);
+    },
+    clearSearchHistory() {
+        this.remove('search_history');
     },
     API: API
 }

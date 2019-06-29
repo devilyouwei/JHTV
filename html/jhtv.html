@@ -13,6 +13,7 @@
         html,
         body {
             background: #fff;
+            width: 100%;
         }
 
         header {
@@ -28,8 +29,17 @@
             color: #fff!important;
         }
 
+        #vue {
+            width: 100%;
+        }
+
+        .lists {
+            padding-top: 0.3rem;
+            padding-bottom: 0.5rem;
+        }
+
         .lists .btn-box {
-            padding: 0.3rem;
+            padding: 0.4rem;
         }
 
         .lists .btn {
@@ -41,21 +51,66 @@
             padding: 0.2rem 0;
         }
 
-        .lists {
-            padding-top: 380px;
-        }
-
-        .lists .title {
-            font-size: 1rem;
-            font-weight: bold;
-            padding: 0.5rem 0.35rem;
-            color: #000;
-        }
-
         .lists .btn.active {
             color: #fff;
             border: solid 1px #fff;
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
+        }
+
+        .info {
+            padding: 0.8rem;
+            padding-bottom:0.3rem;
+        }
+
+        .info .title {
+            font-size: 1.1rem;
+            line-height: 2rem;
+            font-weight: bold;
+            color: #585858;
+        }
+
+        .info .info-s {
+            color: #666;
+            font-size: 0.75rem;
+            text-align: left;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .info .info-s .cell:first-child {
+            width: 2.3rem;
+            min-width: 2.2rem;
+        }
+
+        .info .img-box {
+            width: 8rem;
+            min-width: 8rem;
+            vertical-align: middle;
+        }
+
+        .info .img-box img {
+            border-radius: 0.1rem;
+            width: 7rem;
+            height: 10rem;
+            vertical-align: middle;
+            float: right;
+        }
+
+        .replace {
+            padding: 8rem 0;
+            font-weight: bold;
+            color: #ccc;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .desc {
+            padding-top: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .desc .subtitle {
+            font-size: 0.7rem;
         }
     </style>
 </head>
@@ -68,10 +123,51 @@
         <div class="aui-title" id="title">&nbsp;&nbsp;</div>
     </header>
     <div id="vue" v-cloak>
-        <section class="lists">
-            <div class="title">{{title}}</div>
+        <div class="replace" v-if="replace">
+            暂无片源
+        </div>
+        <section class="info" v-if="loaded">
+            <div class="table">
+                <div class="cell">
+                    <div class="title">{{title}}</div>
+                    <div class="info-s table">
+                        <div class="cell">导演：</div>
+                        <div class="cell">{{director}}</div>
+                    </div>
+                    <div class="info-s table">
+                        <div class="cell">主演：</div>
+                        <div class="cell">{{actor}}</div>
+                    </div>
+                    <div class="info-s table">
+                        <div class="cell">类型：</div>
+                        <div class="cell">{{className}}</div>
+                    </div>
+                    <div class="info-s table">
+                        <div class="cell">地区：</div>
+                        <div class="cell">{{area}}</div>
+                    </div>
+                    <div class="info-s table">
+                        <div class="cell">语言：</div>
+                        <div class="cell">{{lang}}</div>
+                    </div>
+                    <div class="info-s table">
+                        <div class="cell">上映：</div>
+                        <div class="cell">{{release}}</div>
+                    </div>
+                </div>
+                <div class="cell img-box">
+                    <img v-lazy="bgUrl" :key="bgUrl">
+                </div>
+            </div>
+            <div class="desc">
+                <a tapmode @click.prevent="descShow=true" v-show="!descShow">点击阅读介绍</a>
+                <a tapmode @click.prevent="descShow=false" v-show="descShow">点击关闭介绍</a>
+                <div class="subtitle" v-if="descShow">{{subTitle}}</div>
+            </div>
+        </section>
+        <section class="lists" v-if="loaded">
             <div class="aui-row">
-                <div class="aui-col-xs-4" v-for="(item,index) in urls">
+                <div class="aui-col-xs-4" v-for="(item,index) in urls" :key="index">
                     <div class="btn-box">
                         <div class="btn" :class="index==activeIndex?'active':''" @click="play(index)" tapmode>
                             {{item.name}}
@@ -85,31 +181,82 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/app.js"></script>
 <script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/vue-lazyload.js"></script>
 <script type="text/javascript">
     apiready = function() {
         document.getElementById('title').innerHTML = api.pageParam.title
         $api.fixStatusBar($api.dom('header'));
-        var title = api.pageParam.title;
-        var urls = api.pageParam.urls;
+        Vue.use(VueLazyload)
         var vue = new Vue({
             el: '#vue',
             data: {
-                title: title,
-                urls: urls,
-                activeIndex: $.get(title) || 0
+                replace: false,
+                loaded: false,
+                descShow: false,
+                id: api.pageParam.id,
+                title: api.pageParam.title,
+                subTitle: '',
+                className: '',
+                bgUrl: '',
+                director: '',
+                actor: '',
+                release: '',
+                lang: '',
+                area: '',
+                score: '',
+                urls: [],
+                time: '',
+                urlsCdn: [],
+                activeIndex: null
+            },
+            mounted() {
+                this.initData();
             },
             methods: {
+                initData() {
+                    $.post('Video/getPlatformVideTypeList', {
+                        video_id: this.id
+                    }, res => {
+                        if (res.status == 1) {
+                            this.id = res.results.video_id || 0;
+                            this.title = res.results.video_title || '否晓得';
+                            this.subTitle = res.results.video_subtitle || '暂无';
+                            this.className = res.results.video_class_name || '未分类';
+                            this.bgUrl = res.results.video_bg_url;
+                            this.director = res.results.video_director || '否晓得';
+                            this.actor = res.results.video_actor || '否晓得';
+                            this.release = res.results.video_release || '否晓得';
+                            this.lang = res.results.video_lang || '否晓得';
+                            this.area = res.results.video_area || '否晓得';
+                            this.score = res.results.video_score || 0;
+                            this.urls = JSON.parse(res.results.video_url);
+                            this.urlsCdn = JSON.parse(res.results.video_url_cdn);
+                            this.activeIndex = $.get(this.title) || 0;
+                            if (!this.urls[this.activeIndex]) this.activeIndex = 0;
+                            this.loaded = true;
+                        } else {
+                            $.toast(res.msg);
+                            setTimeout(function() {
+                                closeWin();
+                            }, 1000);
+                        }
+                    }, '视频加载中')
+                },
                 play(index) {
                     this.activeIndex = index;
-                    $.set(title,index);
+                    $.set(this.title, index);
                 }
             },
             watch: {
-                activeIndex: {
-                    handler(v) {
-                        $.openPlayer('http://jhtv.app.devil.ren/dplayer/index.php?url=' + this.urls[v].url + '&title=' + this.urls[v].name);
-                    },
-                    immediate: true
+                activeIndex(v) {
+                    // 暂无视频源
+                    if (this.urls.length == 0) {
+                        document.getElementById('vue').style.paddingTop = 0;
+                        return this.replace = true;
+                    }
+                    // 启动播放器
+                    document.getElementById('vue').style.paddingTop = api.winHeight / 3 + $api.dom('header').offsetHeight + 'px';
+                    $.openPlayer(this.urls[v].url, this.title + ' ' + this.urls[v].name);
                 }
             }
         })

@@ -73,12 +73,6 @@
             padding-bottom: 0.1rem;
         }
 
-        .hot img {
-            width: 3rem;
-            display: block;
-            margin: 0 auto;
-        }
-
         .aui-slide {
             padding: 0 10px;
             border-radius: 8px;
@@ -105,14 +99,6 @@
             padding: 0.5rem 0!important;
         }
 
-        .hot {
-            color: #ff7600;
-            font-size: 0.8rem;
-        }
-
-        .more {
-            padding: 0.1rem 0.8rem;
-        }
 
         .aui-searchbar {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
@@ -128,9 +114,9 @@
         }
 
         .aui-searchbar-input input {
-          height: auto!important;
+            height: auto!important;
             font-size: 0.85rem;
-            line-height:1.25rem;
+            line-height: 1.25rem;
             border: none!important;
             padding: 0.4rem;
         }
@@ -138,32 +124,104 @@
         .aui-searchbar-input i.aui-iconfont {
             font-weight: bold;
             font-size: 0.85rem;
-            top:0.255rem;
+            top: 0.255rem;
         }
 
         .search-box {
             margin: 0 auto;
             border: none!important;
+            position: relative;
+            overflow: visible;
+            z-index: 999;
         }
 
+        .search-box .aui-searchbar {
+            overflow: visible;
+        }
+
+        .aui-searchbar-input {
+            border-radius: 0;
+        }
+
+        .search-history {
+            background: #fff;
+            position: absolute;
+            width: 100%;
+            height: 7rem;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            bottom: -7rem;
+            overflow-y: scroll;
+            padding: 0.1rem 0.8rem;
+            padding-bottom: 0.3rem;
+        }
+
+        .search-history .history-title {
+            font-size: 0.7rem;
+            color: #ccc;
+        }
+
+        .search-history .close .iconfont {
+            font-size: 0.7rem;
+            color: #ccc;
+        }
+
+        .history-box {
+            padding-top: 0.6rem;
+            width: 100%;
+            height: 5rem;
+            overflow-y: scroll;
+        }
+
+        .history-box .history-item {
+            display: inline-block;
+            font-size: 0.7rem;
+            border-radius: 0.1rem;
+            background: #f4f4f4;
+            color: #505050;
+            padding: 0.1rem 0.5rem;
+            margin-right: 0.7rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-history .history-clear {
+            font-size: 0.65rem;
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+        }
+
+        .search-history .history-clear .iconfont {
+            font-size: 0.65rem;
+        }
     </style>
 </head>
 
 <body>
-    <div id="vue" v-cloak>
-
-        <section class="search-box" id="search-box">
+    <div id="vue" v-cloak @click="searching=false">
+        <section class="search-box" id="search-box" @click.stop="">
             <div class="aui-searchbar" id="search">
-                <div class="aui-searchbar-input aui-border-radius" id="search-bar">
+                <div class="aui-searchbar-input" id="search-bar">
                     <i class="aui-iconfont aui-icon-search"></i>
                     <form action="" id="form" @submit.prevent="">
-                        <input type="search" placeholder="视频看不了？在这里全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch">
+                        <input type="search" placeholder="想看什么？在这全站搜索试试~" id="search-input" v-model="search" @keyup.enter="submitSearch(search)" @click="searching=true">
                     </form>
-                    <div class="aui-searchbar-clear-btn">
-                        <i class="aui-iconfont aui-icon-close"></i>
+                    <div class="search-history" v-show="searching">
+                        <div class="table">
+                            <div class="cell text-left">
+                                <div class="history-title">历史搜索</div>
+                            </div>
+                            <div class="cell close text-right"><i class="iconfont icon-guanbi1" @click="searching=false"></i></div>
+                        </div>
+                        <div class="history-box">
+                            <span class="history-item" v-for="(item,index) in searchHistory" :key="index" tapmode @click.prevent="submitSearch(item)">{{item}}</span>
+                        </div>
+                        <div class="history-clear">
+                            清空&nbsp;<i class="iconfont icon-shanchu" tapmode @click="clearHistory"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="aui-searchbar-btn" tapmode>取消</div>
             </div>
         </section>
         <section class="aui-content" style="background:#fff;padding-top:0.6rem;">
@@ -238,10 +296,12 @@
             el: '#vue',
             data: {
                 banner: [], //轮播图l
-                adv: [], //广告
+                adv: [], //中间banner
                 plat: [], // 可用平台
-                rec: [], //推荐
+                rec: [], //底部推荐服务
                 search: '',
+                searching: false,
+                searchHistory: $.getSearchHitory() || [],
                 launch: 0
             },
             mounted() {
@@ -314,9 +374,14 @@
                         $.openWebview(title, playUrl, true);
                     } else $.openWebview(title, url, true);
                 },
-                submitSearch() {
-
-                  $.openSearchPage(this.search)
+                submitSearch(search) {
+                    this.searching = false;
+                    $.setSearchHistory(search);
+                    $.openSearchPage(search);
+                },
+                clearHistory() {
+                    this.searching = false;
+                    $.clearSearchHistory();
                 }
             },
             watch: {
@@ -325,6 +390,12 @@
                         setTimeout(function() {
                             $.showSplash(false);
                         }, 500);
+                    }
+                },
+                searching(v) {
+                    if (v) {
+                        this.searchHistory = $.getSearchHitory() || [];
+                        if (this.searchHistory.length == 0) this.searching = false;
                     }
                 }
             }

@@ -23,17 +23,20 @@
 
         .goods-item {
             text-align: center;
-            padding:0.3rem 0;
-            width:95%;
+            padding: 0.3rem 0;
+            width: 95%;
         }
-        .aui-row .aui-col-xs-4:nth-child(3n+1)>.goods-item{
-          margin:0 auto 0 0;
+
+        .aui-row .aui-col-xs-4:nth-child(3n+1)>.goods-item {
+            margin: 0 auto 0 0;
         }
-        .aui-row .aui-col-xs-4:nth-child(3n+2)>.goods-item{
-          margin:0 auto;
+
+        .aui-row .aui-col-xs-4:nth-child(3n+2)>.goods-item {
+            margin: 0 auto;
         }
-        .aui-row .aui-col-xs-4:nth-child(3n+3)>.goods-item{
-          margin:0 0 0 auto;
+
+        .aui-row .aui-col-xs-4:nth-child(3n+3)>.goods-item {
+            margin: 0 0 0 auto;
         }
 
         .goods-item img {
@@ -83,8 +86,9 @@
             color: #fff;
             font-size: 0.8rem;
         }
+
         img[lazy=error] {
-          border:solid 0.1rem #efefef;
+            border: solid 0.1rem #efefef;
         }
     </style>
 </head>
@@ -93,10 +97,11 @@
     <div id="vue" v-cloak>
 
         <section class="aui-content">
-            <div class="aui-title"><i class="iconfont icon-tubiao303">&nbsp;</i>聚合视频库，当前<font color="red">{{total}}</font>部</div>
+            <div class="aui-title"><i class="iconfont icon-tubiao303">&nbsp;</i>聚合视频库，当前
+                <font color="red">{{total}}</font>部</div>
             <div class="aui-card-list-content-padded">
                 <div class="aui-row aui-row-padded">
-                    <div class="aui-col-xs-4" v-for="(item,index) in list" tapmode @click="goVideo(item.video_title,item.video_url)">
+                    <div class="aui-col-xs-4" v-for="(item,index) in list" :key="index" tapmode @click="goVideo(index)">
                         <div class="goods-item">
                             <img v-lazy="item.video_bg_url" :key="item.video_bg_url">
                             <p class="goods-title" v-html="item.video_title">{{item.video_title}}</p>
@@ -121,7 +126,7 @@
             data: {
                 list: [],
                 page: 0,
-                count: 6,
+                count: 9,
                 total: 0,
                 search: api.pageParam.search ? api.pageParam.search : '',
                 loading: false
@@ -138,7 +143,7 @@
             },
             methods: {
                 initData() {
-                    this.getData(0, 12, '加载推荐中...');
+                    this.getData(0, this.count, '加载视频中...');
                     // 下拉刷新
                     api.setRefreshHeaderInfo({
                         bgColor: '#fff',
@@ -146,7 +151,7 @@
                         textDown: '下拉刷新...',
                         textUp: '松开人家了啦...'
                     }, () => {
-                        this.getData(0, 12);
+                        this.getData(0, this.count);
                     });
                     // 上拉加载更多
                     api.addEventListener({
@@ -166,10 +171,6 @@
                     }, res => {
                         this.loading = false;
                         if (res.status == 1) {
-                            for (var i = 0; i < res.results.data.length; i++) {
-                                //if (res.results.data[i].video_bg_url.indexOf('http') == -1) res.results.data[i].video_bg_url = 'http:' + res.results.data[i].video_bg_url;
-                                //if (!res.results.data[i].video_subtitle || res.results.data[i].video_subtitle.indexOf('<')!=-1) res.results.data[i].video_subtitle = '暂无介绍';
-                            }
                             if (page == 0) { // 刷新
                                 this.list = [];
                                 this.list = res.results.data;
@@ -181,9 +182,10 @@
                         }
                     }, load);
                 },
-                goVideo(title, url) {
-                    if (title && url) {
-                        var urls = JSON.parse(url)
+                goVideo(index) {
+                    index = parseInt(index) || 0
+                    if (this.list[index]) {
+                        var item = this.list[index]
                         api.openWin({
                             name: 'jhtv',
                             url: './jhtv.html',
@@ -191,11 +193,16 @@
                             slideBackType: 'edge',
                             useWKWebView: $.getOS() == 'ios' ? true : false,
                             vScrollBarEnabled: false,
-                            bgColor: '#fff',
                             hScrollBarEnabled: false,
+                            animation: {
+                                type: "movein",
+                                subType: "from_right",
+                                duration: 200
+                            },
+                            bgColor: '#fff',
                             pageParam: {
-                                title: title,
-                                urls: urls
+                                id: item.video_id,
+                                title: item.video_title
                             }
                         });
 
