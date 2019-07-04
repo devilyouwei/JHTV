@@ -140,7 +140,7 @@ window.$ = {
     },
     // 传入date对象Date类型，格式String类型
     formatDate: function(date, fmt) {
-        let o = {
+        var o = {
             'M+': date.getMonth() + 1, // 月份
             'd+': date.getDate(), // 日
             'h+': date.getHours(), // 小时
@@ -150,7 +150,7 @@ window.$ = {
             'S': date.getMilliseconds() // 毫秒
         }
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
-        for (let k in o)
+        for (var k in o)
             if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
         return fmt
     },
@@ -627,23 +627,24 @@ window.$ = {
             var qq = api.require('QQPlus');
             qq.installed(function(ret, err) {
                 if (ret.status) { // 已安装，登录
-                    var qq = api.require('QQPlus');
                     qq.login(function(ret, err) {
                         if (err) return $.toast('QQ登录出错，未获得授权！')
                         var openid = ret.openId
                         qq.getUserInfo(function(ret, err) {
                             if (ret.status) {
-                                let info = {
+                                var info = {
                                     name: ret.info.nickname,
                                     city: ret.info.city,
                                     img: ret.info.figureurl_qq_2,
+                                    gender: ret.info.gender,
                                     openid: openid,
                                     type: 1,
                                     info: JSON.stringify($.device())
                                 }
                                 $.post('Login/getThirdPartyLanding', info, function(res) {
                                     if (res.status == 1) {
-                                        callback(res)
+                                        // 登陆成功
+                                        if (callback && typeof callback == 'function') callback(res.results)
                                     } else {
                                         $.toast(res.msg)
                                     }

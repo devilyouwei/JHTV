@@ -247,8 +247,17 @@
                 },
                 // plat,1 QQ,2 wechat，3 微博
                 auth(plat) {
-                    if (plat) $.authLogin(plat)
-                    else $.toast('请选择登录方式')
+                    if (plat) {
+                        $.authLogin(plat, function(user) {
+                            //登陆成功
+                            $.set('userinfo', JSON.stringify(user))
+                            api.sendEvent({
+                                name: 'refreshUserInfo'
+                            });
+                            $.setConfig();
+                            closeWin();
+                        })
+                    } else $.toast('请选择登录方式')
                 }
             },
             watch: {
