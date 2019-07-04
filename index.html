@@ -33,14 +33,14 @@
             border-top: 1px solid #e5e5e5;
             padding: 0.5rem 0;
             color: #ff6144;
-            text-align:center;
+            text-align: center;
         }
 
-        #footer .cell div{
+        #footer .cell div {
             height: auto;
             text-align: center;
             font-weight: 600;
-          font-size:0.9rem;
+            font-size: 0.9rem;
         }
 
         #footer .table .cell .iconfont {
@@ -55,7 +55,7 @@
 </head>
 
 <body>
-    <div id="wrap" class="flex-wrap flex-vertical">
+    <div id="wrap" class="flex-wrap flex-vertical" onclick="closeSearchHistory">
         <header>
             <ul>
                 <li class="border-b active">聚合视频</li>
@@ -142,7 +142,7 @@
             background: '#fff',
             rect: {
                 x: 0,
-                y: $api.dom('header').offsetHeight-2,
+                y: $api.dom('header').offsetHeight - 2,
                 w: api.winWidth,
                 h: $api.dom('#main').offsetHeight
             },
@@ -182,6 +182,12 @@
             name: 'group',
             scroll: true,
             index: index
+        });
+    }
+
+    function closeSearchHistory() {
+        api.sendEvent({
+            name: 'closeSearchHistory'
         });
     }
 </script>

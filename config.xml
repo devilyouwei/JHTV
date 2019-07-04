@@ -1,7 +1,7 @@
 <widget id="A6004592205468" version="0.0.1">
     <name>聚合视频</name>
     <description>
-      聚合视频，全网VIP免费观看
+        聚合视频，全网VIP免费观看
     </description>
     <author email="developer@apicloud.com" href="http://www.apicloud.com">devilyouwei</author>
     <content src="index.html"/>
@@ -27,7 +27,12 @@
     <permission name="internet"/>
     <permission name="bootCompleted"/>
     <permission name="hardware"/>
-    <preference name="urlScheme" value="jhtvapp" />
-    <preference name="querySchemes" value="weixin,alipay" />
-    <preference name="forbiddenSchemes" value="*" />
+    <preference name="urlScheme" value="jhtvapp"/>
+    <preference name="querySchemes" value="mqq,mqqapi"/>
+    <preference name="forbiddenSchemes" value="*"/>
+
+    <feature name="QQPlus">
+        <param name="urlScheme" value="tencent101696023"/>
+        <param name="apiKey" value="101696023"/>
+    </feature>
 </widget>

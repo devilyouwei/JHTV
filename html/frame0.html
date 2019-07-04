@@ -99,12 +99,12 @@
             padding: 0.5rem 0!important;
         }
 
-
         .aui-searchbar {
             background: linear-gradient(to right, #ff6144, #ff0072)!important;
             height: auto!important;
             border: none!important;
             padding: 0.8rem 0.3rem;
+            padding-top:0;
         }
 
         .aui-searchbar-input {
@@ -307,6 +307,13 @@
             mounted() {
                 if (api.connectionType == 'none') $.online(this.initData);
                 else this.initData();
+
+                api.addEventListener({
+                    name: 'closeSearchHistory'
+                }, (ret, err) => {
+                    this.searching = false
+                });
+
             },
             methods: {
                 initData() {

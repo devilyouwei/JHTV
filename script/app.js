@@ -622,5 +622,40 @@ window.$ = {
     clearSearchHistory() {
         this.remove('search_history');
     },
+    authLogin(plat, callback) {
+        if (plat == 1) { //qq
+            var qq = api.require('QQPlus');
+            qq.installed(function(ret, err) {
+                if (ret.status) { // 已安装，登录
+                    var qq = api.require('QQPlus');
+                    qq.login(function(ret, err) {
+                        if (err) return $.toast('QQ登录出错，未获得授权！')
+                        var openid = ret.openId
+                        qq.getUserInfo(function(ret, err) {
+                            if (ret.status) {
+                                let info = {
+                                    name: ret.info.nickname,
+                                    city: ret.info.city,
+                                    img: ret.info.figureurl_qq_2,
+                                    openid: openid,
+                                    type: 1,
+                                    info: JSON.stringify($.device())
+                                }
+                                $.post('Login/getThirdPartyLanding', info, function(res) {
+                                    if (res.status == 1) {
+                                        callback(res)
+                                    } else {
+                                        $.toast(res.msg)
+                                    }
+                                }, 'QQ登陆中...')
+                            } else $.toast('QQ获取信息失败，无授权~')
+                        });
+                    });
+                } else { // 未安装
+                    $.toast('您好像还没有安装企鹅哦~请先安装')
+                }
+            });
+        }
+    },
     API: API
 }

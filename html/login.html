@@ -167,13 +167,13 @@
             <p class="aui-font-size-12 aui-text-center aui-margin-b-15">第三方账号登录</p>
             <div class="aui-grid" style="background: none;">
                 <div class="aui-row">
-                    <div class="aui-col-xs-4">
+                    <div class="aui-col-xs-4" tapmode @click="auth(1)">
                         <i class="aui-iconfont aui-icon-qq"></i>
                     </div>
-                    <div class="aui-col-xs-4">
+                    <div class="aui-col-xs-4" tapmode @click="auth(2)">
                         <i class="aui-iconfont aui-icon-wechat"></i>
                     </div>
-                    <div class="aui-col-xs-4">
+                    <div class="aui-col-xs-4" tapmode @click="auth(3)">
                         <i class="aui-iconfont aui-icon-weibo"></i>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                 phone: '',
                 code: '',
                 invite_code: '',
-                authLogin: false,
+                authLogin: true,
                 interval: null
             },
             mounted() {},
@@ -244,6 +244,11 @@
                             }, 1000);
                         } else $.toast(res.msg);
                     }, '短信正在路上跑~');
+                },
+                // plat,1 QQ,2 wechat，3 微博
+                auth(plat) {
+                    if (plat) $.authLogin(plat)
+                    else $.toast('请选择登录方式')
                 }
             },
             watch: {
