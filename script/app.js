@@ -639,8 +639,9 @@ window.$ = {
                                     gender: ret.info.gender,
                                     openid: openid,
                                     type: 1,
-                                    info: JSON.stringify($.device())
+                                    //info: JSON.stringify($.device())
                                 }
+                                alert(JSON.stringify(info))
                                 $.post('Login/getThirdPartyLanding', info, function(res) {
                                     if (res.status == 1) {
                                         // 登陆成功
