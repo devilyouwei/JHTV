@@ -1,5 +1,5 @@
-var API = 'http://jhtv.devil.ren/index';
-var PLAY = 'http://jhtv.app.devil.ren/dplayer/index.php';
+var API = 'https://jhtv.devil.ren/index';
+var PLAY = 'https://jhtv.app.devil.ren/dplayer/index.php';
 
 document.addEventListener('DOMContentLoaded', function() {
     // 组织全部表单的提交事件
@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
     }
 })(640, 640);
+
 window.$ = {
     log: function(msg) {
         if (typeof msg == 'object') console.log(JSON.stringify(msg))
