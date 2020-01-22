@@ -390,6 +390,23 @@ window.$ = {
             if (res && callback && typeof callback == 'function') return callback(res);
         });
     },
+    getParams: function(url){
+        var url = url || location.href
+        var theRequest = {}
+        var i = url.indexOf('?')
+        if (i !== -1) url = url.substr(++i)
+        else return {}
+
+        if (url.indexOf('&') !== -1) {
+            var strs = url.split('&')
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+            }
+        } else {
+            theRequest[url.split('=')[0]] = unescape(url.split('=')[1])
+        }
+        return theRequest
+    },
     // 网络状态改变
     online: function(callback) {
         api.addEventListener({
